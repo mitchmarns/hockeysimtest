@@ -1,5 +1,30 @@
 document.addEventListener('DOMContentLoaded', () => {
   const teamSelect = document.getElementById('team-select');
+  if (Array.isArray(teams) && teams.length > 0) {
+    // Populate the dropdown with team names
+    teams.forEach((team, index) => {
+      const option = document.createElement('option');
+      option.value = index; // Use index to identify the team
+      option.textContent = team.name; // Display the team name
+      teamSelect.appendChild(option);
+    });
+
+    console.log('Team dropdown populated with:', teams);
+  } else {
+    console.error('No teams available in the teams array.');
+  }
+
+  // Handle team selection
+  teamSelect.addEventListener('change', () => {
+    const selectedIndex = teamSelect.value;
+    if (selectedIndex !== "") {
+      const selectedTeam = teams[selectedIndex];
+      console.log(`Selected Team:`, selectedTeam);
+      // Add logic here to handle selected team (e.g., populate lines or assign players)
+    }
+  });
+});
+
   const playersContainer = document.getElementById('available-players');
 
   // Fetch the players data from the JSON file
