@@ -59,11 +59,14 @@ document.addEventListener('DOMContentLoaded', () => {
         // Update players list when a new team is selected
         teamSelect.addEventListener('change', () => {
           const selectedTeamIndex = parseInt(teamSelect.value, 10);
-          localStorage.setItem('selectedTeamIndex', selectedTeamIndex); // Save selected team index
-          const selectedTeamName = savedTeams[selectedTeamIndex]?.name || '';
+          const currentTeamName = savedTeams[selectedTeamIndex]?.name || '';
 
           // Save line assignments
+          const previousTeamName = savedTeams[parseInt(localStorage.getItem('selectedTeamIndex'), 10)]?.name || '';
           saveLineAssignments(initialTeamName);
+
+          // Update localStorage for the new team
+          localStorage.setItem('selectedTeamIndex', selectedTeamIndex);
 
           // Clear player slots for the previous team
           clearPlayerSlots();
@@ -72,7 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
           updateAvailablePlayers(players, selectedTeamName);
 
           // Load new team's line
-          loadLineAssignments(selectedTeamName);
+          loadLineAssignments(currentTeamName);
           
           // Reinitialize droppable slots for the new team
           makeSlotsDroppable(players);
@@ -98,6 +101,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Save line assignments
   function saveLineAssignments(teamName) {
+    if (!teamName) {
+    console.error('Invalid team name in saveLineAssignments');
+    return;
+  }
+    
     const playerSlots = document.querySelectorAll('.player-slot');
     const lineAssignments = {};
 
@@ -112,10 +120,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const savedLines = JSON.parse(localStorage.getItem('lineAssignments')) || {};
     savedLines[teamName] = lineAssignments;
     localStorage.setItem('lineAssignments', JSON.stringify(savedLines));
+    console.log(`Saved line assignments for ${teamName}:`, lineAssignments);
   }
 
   // Load line assignments
   function loadLineAssignments(teamName) {
+    if (!teamName) {
+    console.error('Invalid team name in loadLineAssignments');
+    return;
+  }
+    
     const savedLines = JSON.parse(localStorage.getItem('lineAssignments')) || {};
     const lineAssignments = savedLines[teamName] || {};
 
@@ -134,6 +148,8 @@ document.addEventListener('DOMContentLoaded', () => {
         slot.setAttribute('data-id', player.id);
       }
     });
+    
+    console.log(`Loaded line assignments for ${teamName}:`, lineAssignments);
   }
 
   // Function to update the available players list
