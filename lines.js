@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (Array.isArray(players)) {
         // Initial population for the first team
         updateAvailablePlayers(players, initialTeamName);
-        clearPlayerSlots();
+        loadLineAssignments(initialTeamName);
         makeSlotsDroppable(players);
 
         // Update players list when a new team is selected
@@ -62,11 +62,17 @@ document.addEventListener('DOMContentLoaded', () => {
           localStorage.setItem('selectedTeamIndex', selectedTeamIndex); // Save selected team index
           const selectedTeamName = savedTeams[selectedTeamIndex]?.name || '';
 
+          // Save line assignments
+          saveLineAssignments(initialTeamName);
+
           // Clear player slots for the previous team
           clearPlayerSlots();
 
           // Update available players for selected team
           updateAvailablePlayers(players, selectedTeamName);
+
+          // Load new team's line
+          loadLineAssignments(selectedTeamName);
           
           // Reinitialize droppable slots for the new team
           makeSlotsDroppable(players);
@@ -81,17 +87,15 @@ document.addEventListener('DOMContentLoaded', () => {
   // Function to clear player slots
   function clearPlayerSlots() {
   const playerSlots = document.querySelectorAll('.player-slot');
-  playerSlots.forEach(slot => {
-    if (slot.hasAttribute('data-id')) {
-      // Clear only assigned players
-      slot.textContent = slot.getAttribute('data-position'); // Reset to the slot's position label
-      slot.removeAttribute('data-id'); // Remove the player ID
-      slot.removeAttribute('data-assigned'); // Mark the slot as unassigned
-      slot.style.backgroundColor = ''; // Reset the background color
-      slot.classList.remove('assigned'); // Remove any assigned class
-    }
-  });
-}
+    const playerSlots = document.querySelectorAll('.player-slot');
+    playerSlots.forEach(slot => {
+      slot.textContent = slot.getAttribute('data-position');
+      slot.removeAttribute('data-id');
+      slot.removeAttribute('data-assigned');
+      slot.style.backgroundColor = '';
+      slot.classList.remove('assigned');
+    });
+  }
 
   // Save line assignments
   function saveLineAssignments(teamName) {
@@ -223,6 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Disable the slot to prevent multiple assignments
         slot.setAttribute('data-assigned', 'true');
+        saveLineAssignments(teamSelect.options[teamSelect.selectedIndex].textContent);
       });
     });
   }
