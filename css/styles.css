@@ -10,4 +10,27 @@ body {
 
 .player {
   margin: 5px;
+  padding: 8px;
+  background-color: #f0f0f0;
+  margin: 5px;
+  cursor: move;
+}
+
+.player-slot {
+  width: 100px;
+  height: 50px;
+  border: 1px solid #ccc;
+  display: inline-block;
+  text-align: center;
+  vertical-align: top;
+  margin: 10px;
+  cursor: pointer;
+}
+
+.assigned {
+  background-color: lightgreen;
+}
+
+.line, .goalie-line {
+  margin-bottom: 20px;
 }
