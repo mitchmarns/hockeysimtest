@@ -39,10 +39,10 @@ document.addEventListener('DOMContentLoaded', () => {
     playerDiv.setAttribute('data-position', player.position);
 
     // Add dragstart event to the player element
-    playerDiv.addEventListener('dragstart', (event) => {
-      event.dataTransfer.setData('playerId', event.target.getAttribute('data-id'));
-      event.dataTransfer.setData('playerPosition', event.target.getAttribute('data-position'));
-    });
+playerDiv.addEventListener('dragstart', (event) => {
+  event.dataTransfer.setData('playerId', player.id); 
+  event.dataTransfer.setData('playerPosition', player.position); 
+});
 
     return playerDiv;
   }
@@ -80,49 +80,26 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     slot.addEventListener('drop', (event) => {
-      event.preventDefault();
-      const playerId = event.dataTransfer.getData('playerId');
-      const playerPosition = event.dataTransfer.getData('playerPosition');
-      const slotPosition = slot.getAttribute('data-position');
+  event.preventDefault(); // Allow dropping
 
-      // Debugging logs to check values
-  console.log('Player Position:', playerPosition);
-  console.log('Slot Position:', slotPosition);
+  // Get playerId from dataTransfer
+  const playerId = event.dataTransfer.getData('playerId'); // Retrieve playerId from drag data
+  const playerPosition = event.dataTransfer.getData('playerPosition'); // Retrieve player position
+  const slotPosition = slot.getAttribute('data-position');
 
-  // Check if player position matches slot position
-  if (playerPosition === slotPosition) {
-    const player = findPlayerById(playerId);  // Retrieve player data based on ID
+  // Find the player by ID
+  const player = players.find(p => p.id === playerId); // Ensure playerId matches the stored player ID
 
-    if (player) {
-      // Assign player to the slot
-      slot.textContent = `${player.name} (${player.position})`;
-      slot.classList.add('assigned');
-      player.assigned = true;  // Mark the player as assigned (or do any further handling)
-      updateTeamsWithAssignments();  // Update teams in localStorage
-    }
+  if (player && playerPosition === slotPosition) {
+    // Assign the player to the slot
+    slot.textContent = `${player.name} (${player.position})`;
+    slot.classList.add('assigned');
   } else {
-    // If the positions do not match, show an alert (you can customize this behavior)
     alert("Player cannot be placed in this slot!");
-    console.log(`Player with position ${playerPosition} cannot be placed in ${slotPosition} slot.`);
   }
-        slot.style.backgroundColor = '';  // Reset the slot's background color
 });
 
-      // Find the player by ID (you can use playersData or any other method)
-      const player = findPlayerById(playerId);  // Add a helper function to find player by ID
-      if (player && playerPosition === slot.getAttribute('data-position')) {
-        // Assign player to the slot
-        slot.textContent = `${player.name} (${player.position})`;
-        slot.classList.add('assigned');
-        player.assigned = true;  // Mark as assigned (or store in your teams array)
-        updateTeamsWithAssignments();  // Update teams with this new assignment
-      } else {
-        alert("Player cannot be placed in this slot!");
-      }
-
-      slot.style.backgroundColor = '';  // Reset the slot's background color
-    });
-  });
+      
 
   // Function to find a player by ID (if necessary)
   function findPlayerById(playerId) {
