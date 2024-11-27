@@ -83,6 +83,30 @@ document.addEventListener('DOMContentLoaded', () => {
       event.preventDefault();
       const playerId = event.dataTransfer.getData('playerId');
       const playerPosition = event.dataTransfer.getData('playerPosition');
+      const slotPosition = slot.getAttribute('data-position');
+
+      // Debugging logs to check values
+  console.log('Player Position:', playerPosition);
+  console.log('Slot Position:', slotPosition);
+
+  // Check if player position matches slot position
+  if (playerPosition === slotPosition) {
+    const player = findPlayerById(playerId);  // Retrieve player data based on ID
+
+    if (player) {
+      // Assign player to the slot
+      slot.textContent = `${player.name} (${player.position})`;
+      slot.classList.add('assigned');
+      player.assigned = true;  // Mark the player as assigned (or do any further handling)
+      updateTeamsWithAssignments();  // Update teams in localStorage
+    }
+  } else {
+    // If the positions do not match, show an alert (you can customize this behavior)
+    alert("Player cannot be placed in this slot!");
+    console.log(`Player with position ${playerPosition} cannot be placed in ${slotPosition} slot.`);
+  }
+        slot.style.backgroundColor = '';  // Reset the slot's background color
+});
 
       // Find the player by ID (you can use playersData or any other method)
       const player = findPlayerById(playerId);  // Add a helper function to find player by ID
