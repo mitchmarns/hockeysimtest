@@ -18,6 +18,24 @@ document.addEventListener('DOMContentLoaded', () => {
     teamSelect.appendChild(option);
   });
 
+  // Function to update the available players list
+  function updateAvailablePlayers(players, selectedTeamName) {
+    playersContainer.innerHTML = ''; // Clear existing players
+    const teamPlayers = players.filter(player => player.team === selectedTeamName);
+
+    if (teamPlayers.length === 0) {
+      const noPlayersMessage = document.createElement('div');
+      noPlayersMessage.textContent = 'No players available for this team.';
+      playersContainer.appendChild(noPlayersMessage);
+    } else {
+      teamPlayers.forEach(player => {
+        const playerDiv = createPlayerElement(player);
+        playersContainer.appendChild(playerDiv);
+      });
+    }
+  }
+
+
   // Make slots droppable only for players of the selected team
   function makeSlotsDroppable(players) {
     const playerSlots = document.querySelectorAll('.player-slot');
@@ -80,11 +98,19 @@ document.addEventListener('DOMContentLoaded', () => {
     .then(playersData => {
       const players = playersData.players;
 
-      // Render players in the available list
-      if (Array.isArray(players)) {
-        players.forEach(player => {
-          const playerDiv = createPlayerElement(player);
-          playersContainer.appendChild(playerDiv);
+if (Array.isArray(players)) {
+        // Initial population for the first team
+        const initialTeamIndex = teamSelect.value || 0;
+        updateAvailablePlayers(players, savedTeams[initialTeamIndex].name);
+
+        // Update players list when a new team is selected
+        teamSelect.addEventListener('change', () => {
+          const selectedTeamIndex = teamSelect.value;
+          const selectedTeamName = savedTeams[selectedTeamIndex].name;
+          updateAvailablePlayers(players, selectedTeamName);
+
+          // Reinitialize droppable slots for the new team
+          makeSlotsDroppable(players);
         });
 
         // Make slots droppable
