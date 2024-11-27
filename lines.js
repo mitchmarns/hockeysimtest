@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
     updateAvailablePlayers(savedTeams, selectedTeamName); // Update available players based on selected team
     makeSlotsDroppable(savedTeams); // Reinitialize droppable slots
   });
-});
+
 
   // Fetch and display available players
   fetch('./players.json')
