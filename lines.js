@@ -23,23 +23,26 @@ document.addEventListener('DOMContentLoaded', () => {
   function updateAvailablePlayers(players, selectedTeamName) {
     console.log('Selected team:', selectedTeamName);
     playersContainer.innerHTML = ''; // Clear existing players
-    
-    const teamPlayers = players.filter(player => {
+
+    // Ensure case-insensitive matching and handle null team values
+  const teamPlayers = players.filter(player => {
     console.log('Player team:', player.team); // Debug log
-    return player.team.toLowerCase() === selectedTeamName.toLowerCase() || player.team === null;
+    
+    // Check if player.team is not null and match it with selectedTeamName
+    return (player.team && player.team.toLowerCase() === selectedTeamName.toLowerCase()) || player.team === null;
   });
 
-    if (teamPlayers.length === 0) {
-      const noPlayersMessage = document.createElement('div');
-      noPlayersMessage.textContent = 'No players available for this team.';
-      playersContainer.appendChild(noPlayersMessage);
-    } else {
-      teamPlayers.forEach(player => {
-        const playerDiv = createPlayerElement(player);
-        playersContainer.appendChild(playerDiv);
-      });
-    }
+  if (teamPlayers.length === 0) {
+    const noPlayersMessage = document.createElement('div');
+    noPlayersMessage.textContent = 'No players available for this team.';
+    playersContainer.appendChild(noPlayersMessage);
+  } else {
+    teamPlayers.forEach(player => {
+      const playerDiv = createPlayerElement(player);
+      playersContainer.appendChild(playerDiv);
+    });
   }
+}
 
   // Make slots droppable only for players of the selected team
   function makeSlotsDroppable(players) {
