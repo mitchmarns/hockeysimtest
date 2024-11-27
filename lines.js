@@ -247,7 +247,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Disable the slot to prevent multiple assignments
         slot.setAttribute('data-assigned', 'true');
-        saveLineAssignments(teamSelect.options[teamSelect.selectedIndex].textContent);
       });
     });
   }
