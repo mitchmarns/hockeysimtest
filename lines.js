@@ -1,10 +1,22 @@
-document.addEventListener('DOMContentLoaded', () => {
-  // Fetch players data
-  fetch('./players.json')
-    .then(response => response.json())
-    .then(playersData => {
-      // Store players data
-      const playersContainer = document.getElementById('available-players'); // Container to display available players
+fetch('./players.json')
+  .then(response => response.json())
+  .then(playersData => {
+    const players = playersData.players; // Access the players array
+    console.log(players);  // Log the array to verify it's correct
+
+    if (Array.isArray(players)) {
+      players.forEach(player => {
+        const playerDiv = createPlayerElement(player);
+        playersContainer.appendChild(playerDiv);
+      });
+    } else {
+      console.error('Expected an array of players, but got:', players);
+    }
+  })
+  .catch(error => {
+    console.error('Error loading player data:', error);
+  });
+
 
     // Create player elements for the drag-and-drop area
       playersData.forEach(player => {
