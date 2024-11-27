@@ -79,14 +79,14 @@ document.addEventListener('DOMContentLoaded', () => {
     playersContainer.innerHTML = ''; // Clear existing players
 
     // Find the selected team object from the teams array
-  const selectedTeam = teams.find(team => team.name === selectedTeamName);
+  const selectedTeam = savedTeams.find(team => team.name === selectedTeamName);
   if (!selectedTeam) {
     console.error(`Team not found: ${selectedTeamName}`);
     return;
   }
 
-// Now filter players based on their team property
-  const teamPlayers = selectedTeam.players.filter(player => player.team === selectedTeamName);
+// Filter players based on their team property
+  const teamPlayers = players.filter(player => player.team === selectedTeamName);
   console.log('Filtered players:', teamPlayers);
 
   if (teamPlayers.length === 0) {
