@@ -1,0 +1,64 @@
+{
+  "players": [
+    {
+      "id": 1,
+      "name": "Bear Cohen",
+      "position": "Goalie",
+      "team": null,
+      "attributes": {
+        "glove": 92,
+        "stick": 89,
+        "legs": 85,
+        "speed": 78
+      }
+    },
+    {
+      "id": 11,
+      "name": "Taylor Abbott",
+      "position": "Left Winger",
+      "team": null,
+      "attributes": {
+        "shooting": 80,
+        "passing": 85,
+        "defense": 95,
+        "speed": 82
+      }
+    },
+    {
+      "id": 16,
+      "name": "Declan Thorne",
+      "position": "Right Wing",
+      "team": null,
+      "attributes": {
+        "shooting": 88,
+        "passing": 75,
+        "defense": 70,
+        "speed": 90
+        }
+      },
+    {
+      "id": 29,
+      "name": "Asher Wilde",
+      "position": "Defense",
+      "team": null,
+      "attributes": {
+        "shooting": 80,
+        "passing": 85,
+        "defense": 95,
+        "speed": 82
+      }
+    },
+    {
+      "id": 34,
+      "name": "Hunter Owens",
+      "position": "Center",
+      "team": null,
+      "attributes": {
+        "shooting": 95,
+        "passing": 90,
+        "defense": 88,
+        "speed": 87
+      }
+    }
+  ]
+}
