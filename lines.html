@@ -7,24 +7,37 @@
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
+
+<div id="available-players">
+  <!-- Available players will be populated here -->
+</div>
+  
 <div id="lines-container">
+  
+  <!-- Forward Line 1 -->
   <div class="line" id="forward-line-1">
     <h3>Forward Line 1</h3>
     <div class="player-slot" data-position="LW">LW</div>
     <div class="player-slot" data-position="C">C</div>
     <div class="player-slot" data-position="RW">RW</div>
   </div>
+
+  <!-- Defense Line 1 -->
   <div class="line" id="defense-line-1">
     <h3>Defense Pair 1</h3>
     <div class="player-slot" data-position="LD">LD</div>
     <div class="player-slot" data-position="RD">RD</div>
   </div>
+  
+  <!-- Goalies -->
   <div class="goalie-line" id="goalies">
     <h3>Goalies</h3>
     <div class="player-slot" data-position="Starter">Starter</div>
     <div class="player-slot" data-position="Backup">Backup</div>
   </div>
 </div>
+
+  
   <script src="lines.js"></script>
 </body>
 </html>
