@@ -126,16 +126,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Load line assignments
   function loadLineAssignments(teamName) {
-    if (!teamName) {
-    console.error('Invalid team name in loadLineAssignments');
-    return;
-  }
-    
     const savedLines = JSON.parse(localStorage.getItem('lineAssignments')) || {};
+    console.log('Loaded line assignments:', savedLines);
     const lineAssignments = savedLines[teamName] || {};
 
     const playerSlots = document.querySelectorAll('.player-slot');
     clearPlayerSlots(); // Clear current assignments
+
+    console.log('Player slots to update:', playerSlots);
 
     Object.entries(lineAssignments).forEach(([position, playerId]) => {
       const slot = Array.from(playerSlots).find(
@@ -143,14 +141,14 @@ document.addEventListener('DOMContentLoaded', () => {
       );
       const player = players.find(p => p.id === playerId);
 
+      console.log('Found player:', player);
+
       if (slot && player) {
         slot.textContent = `${player.name} (${player.position})`;
         slot.classList.add('assigned');
         slot.setAttribute('data-id', player.id);
       }
     });
-    
-    console.log(`Loaded line assignments for ${teamName}:`, lineAssignments);
   }
 
   // Function to update the available players list
