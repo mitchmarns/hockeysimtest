@@ -82,6 +82,8 @@ document.addEventListener('DOMContentLoaded', () => {
           // Reinitialize droppable slots for the new team
           makeSlotsDroppable(players);
         });
+      }
+    });
         
   // Function to clear player slots
   function clearPlayerSlots() {
@@ -264,5 +266,4 @@ document.addEventListener('DOMContentLoaded', () => {
     return playerDiv;
   }
 
-
-      }
+});
