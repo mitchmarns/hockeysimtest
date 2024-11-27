@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     .catch(error => {
       console.error('Error loading player data:', error);
     });
+});  
 
   // Function to create a draggable player element
   function createPlayerElement(player) {
