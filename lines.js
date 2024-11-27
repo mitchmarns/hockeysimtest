@@ -1,10 +1,11 @@
 fetch('./players.json')
   .then(response => response.json())
   .then(playersData => {
+      console.log(playersData);
     const players = playersData.players; // Access the players array
     console.log(players);  // Log the array to verify it's correct
 
-    if (Array.isArray(players)) {
+if (Array.isArray(players)) {
       players.forEach(player => {
         const playerDiv = createPlayerElement(player);
         playersContainer.appendChild(playerDiv);
@@ -19,7 +20,7 @@ fetch('./players.json')
 
 
     // Create player elements for the drag-and-drop area
-      playersData.forEach(player => {
+      players.forEach(player => {
         const playerDiv = createPlayerElement(player);
         playersContainer.appendChild(playerDiv);
       });
