@@ -91,6 +91,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // Function to clear player slots
   function clearPlayerSlots() {
   const playerSlots = document.querySelectorAll('.player-slot');
+  console.log('Clearing player slots:', playerSlots);
+    
     playerSlots.forEach(slot => {
       slot.textContent = slot.getAttribute('data-position');
       slot.removeAttribute('data-id');
