@@ -25,15 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const initialTeamName = savedTeams[initialTeamIndex]?.name || '';
   updateAvailablePlayers(players, initialTeamName);
 
-  // Listen for changes in the team dropdown
-  teamSelect.addEventListener('change', () => {
-    const selectedTeamIndex = parseInt(teamSelect.value, 10);
-    localStorage.setItem('selectedTeamIndex', selectedTeamIndex); // Save selected team index
-    const selectedTeamName = savedTeams[selectedTeamIndex]?.name || '';
-    updateAvailablePlayers(players, selectedTeamName); // Update available players based on selected team
-    makeSlotsDroppable(players); // Reinitialize droppable slots
-  });
-
   // Fetch and display available players
   fetch('./players.json')
     .then(response => response.json())
@@ -46,8 +37,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (Array.isArray(players)) {
         // Initial population for the first team
-        const initialTeamIndex = parseInt(localStorage.getItem('selectedTeamIndex'), 10) || 0;
-        const initialTeamName = savedTeams[initialTeamIndex]?.name || '';
         updateAvailablePlayers(players, initialTeamName);
 
         // Update players list when a new team is selected
@@ -178,4 +167,4 @@ document.addEventListener('DOMContentLoaded', () => {
     return playerDiv;
   }
 
-}); // <-- Make sure this closing parenthesis is at the end
+}); 
