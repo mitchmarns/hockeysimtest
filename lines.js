@@ -166,4 +166,4 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('Teams updated and saved to localStorage.');
   }
 
-});
+
