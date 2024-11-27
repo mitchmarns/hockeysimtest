@@ -60,6 +60,9 @@ document.addEventListener('DOMContentLoaded', () => {
         teamSelect.addEventListener('change', () => {
           const selectedTeamIndex = parseInt(teamSelect.value, 10);
           const currentTeamName = savedTeams[selectedTeamIndex]?.name || '';
+          console.log('Loading lines for team:', currentTeamName);
+
+          loadLineAssignments(currentTeamName);
 
           // Save line assignments
           const previousTeamIndex = parseInt(localStorage.getItem('selectedTeamIndex'), 10);
