@@ -22,15 +22,21 @@ document.addEventListener('DOMContentLoaded', () => {
       console.error('Error loading player data:', error);
     });
 
-  // Load saved teams
-  const savedTeams = localStorage.getItem('teams');
-  if (savedTeams) {
-    const teams = JSON.parse(savedTeams);
-    console.log('Loaded teams:', teams);
-    populateLines(teams);
-  } else {
-    console.error('No team data found in localStorage.');
-  }
+  // Create an auto-assign button
+  const autoAssignButton = document.createElement('button');
+  autoAssignButton.textContent = 'Auto-Assign Players';
+  document.body.appendChild(autoAssignButton);
+
+  // Event listener for auto-assign
+  autoAssignButton.addEventListener('click', () => {
+    const savedTeams = localStorage.getItem('teams');
+    if (savedTeams) {
+      const teams = JSON.parse(savedTeams);
+      populateLines(teams);
+    } else {
+      alert('No saved teams found to auto-assign.');
+    }
+  });
 
   // Function to create a draggable player element
   function createPlayerElement(player) {
@@ -52,6 +58,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Function to populate the lines based on saved teams
   function populateLines(teams) {
+    // Clear existing assignments before populating
+    const slots = document.querySelectorAll('.player-slot');
+    slots.forEach(slot => {
+      slot.textContent = slot.getAttribute('data-position');
+      slot.classList.remove('assigned');
+      slot.removeAttribute('data-id');
+    });
+
     teams.forEach(team => {
       team.players.forEach(player => {
         const slot = document.querySelector(`[data-position="${player.position}"]`);
