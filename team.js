@@ -34,11 +34,5 @@ export function assignPlayerToTeam(playerId, teamName) {
 
 // Save updated teams to localStorage
       localStorage.setItem('teams', JSON.stringify(teams));
-    } else {
-      console.error('Team is full.');
-    
-  } else {
-    console.error('Player not found or already assigned.');
-  }
-}
+
 
