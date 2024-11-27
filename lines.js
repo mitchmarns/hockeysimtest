@@ -10,7 +10,8 @@ document.addEventListener('DOMContentLoaded', () => {
   if (!localStorage.getItem('teams')) {
     localStorage.setItem('teams', JSON.stringify(savedTeams));
   }
- // Populate the team dropdown
+
+  // Populate the team dropdown
   savedTeams.forEach((team, index) => {
     const option = document.createElement('option');
     option.value = index;
@@ -34,7 +35,6 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
   }
-
 
   // Make slots droppable only for players of the selected team
   function makeSlotsDroppable(players) {
@@ -103,15 +103,16 @@ document.addEventListener('DOMContentLoaded', () => {
     .then(playersData => {
       const players = playersData.players;
 
-if (Array.isArray(players)) {
+      if (Array.isArray(players)) {
         // Initial population for the first team
-        const initialTeamIndex = teamSelect.value || 0;
-        updateAvailablePlayers(players, savedTeams[initialTeamIndex].name);
+        const initialTeamIndex = parseInt(teamSelect.value, 10) || 0;
+        const initialTeamName = savedTeams[initialTeamIndex]?.name || '';
+        updateAvailablePlayers(players, initialTeamName);
 
         // Update players list when a new team is selected
         teamSelect.addEventListener('change', () => {
-          const selectedTeamIndex = teamSelect.value;
-          const selectedTeamName = savedTeams[selectedTeamIndex].name;
+          const selectedTeamIndex = parseInt(teamSelect.value, 10);
+          const selectedTeamName = savedTeams[selectedTeamIndex]?.name || '';
           updateAvailablePlayers(players, selectedTeamName);
 
           // Reinitialize droppable slots for the new team
@@ -144,5 +145,3 @@ if (Array.isArray(players)) {
     return playerDiv;
   }
 });
-
-
