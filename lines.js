@@ -26,20 +26,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const initialTeamName = savedTeams[initialTeamIndex]?.name || '';
   updateAvailablePlayers(players, initialTeamName);
 
-  // Listen for changes in the team dropdown
-  teamSelect.addEventListener('change', () => {
-    const selectedTeamIndex = parseInt(teamSelect.value, 10);
-    localStorage.setItem('selectedTeamIndex', selectedTeamIndex); // Save selected team index
-    const selectedTeamName = savedTeams[selectedTeamIndex]?.name || '';
-    updateAvailablePlayers(savedTeams, selectedTeamName); // Update available players based on selected team
-    makeSlotsDroppable(savedTeams); // Reinitialize droppable slots
-  });
-
-
   // Fetch and display available players
   fetch('./players.json')
     .then(response => response.json())
     .then(playersData => {
+      console.log('Players data:', playersData);
       let players = playersData.players;
 
       // Load players from localStorage if they exist
@@ -56,6 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
           localStorage.setItem('selectedTeamIndex', selectedTeamIndex); // Save selected team index
           const selectedTeamName = savedTeams[selectedTeamIndex]?.name || '';
           updateAvailablePlayers(players, selectedTeamName);
+          makeSlotsDroppable(savedTeams);
 
           // Reinitialize droppable slots for the new team
           makeSlotsDroppable(players);
