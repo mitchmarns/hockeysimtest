@@ -19,16 +19,10 @@ document.addEventListener('DOMContentLoaded', () => {
     teamSelect.appendChild(option);
   });
 
-  // Ensure selected team index is set properly
-  const selectedTeamIndex = localStorage.getItem('selectedTeamIndex') 
-    ? parseInt(localStorage.getItem('selectedTeamIndex'), 10) 
-    : 0; // Default to the first team if nothing is saved
-
-  teamSelect.value = selectedTeamIndex;  // Set the dropdown to the saved value or default
-
   // Function to update the available players list
   function updateAvailablePlayers(players, selectedTeamName) {
     playersContainer.innerHTML = ''; // Clear existing players
+    
     const teamPlayers = players.filter(player => player.team === selectedTeamName || player.team === null);
 
     if (teamPlayers.length === 0) {
@@ -98,12 +92,12 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       // Assign player to the slot visually
-      slot.textContent = `${player.name} (${player.position})`; // Display player name and position
-      slot.classList.add('assigned'); // Add assigned class for visual cue
-      slot.setAttribute('data-id', player.id); // Store player ID in slot
-      slot.style.backgroundColor = ''; // Reset the background color after drop
+      slot.textContent = `${player.name} (${player.position})`; 
+      slot.classList.add('assigned'); 
+      slot.setAttribute('data-id', player.id); 
+      slot.style.backgroundColor = ''; 
 
-      // Optionally, disable the slot if you want to prevent multiple assignments
+      // Disable the slot to prevent multiple assignments
       slot.setAttribute('data-assigned', 'true');
     });
   });
@@ -144,7 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
     })
     .catch(error => console.error('Error loading player data:', error));
 
-  // Function to create a draggable player element
+  // Draggable player element
   function createPlayerElement(player) {
     const playerDiv = document.createElement('div');
     playerDiv.classList.add('player');
