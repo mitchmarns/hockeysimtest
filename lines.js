@@ -1,3 +1,6 @@
+document.addEventListener('DOMContentLoaded', () => {
+  const playersContainer = document.getElementById('available-players');
+  
 fetch('./players.json')
   .then(response => response.json())
   .then(playersData => {
@@ -14,16 +17,6 @@ if (Array.isArray(players)) {
       console.error('Expected an array of players, but got:', players);
     }
   })
-  .catch(error => {
-    console.error('Error loading player data:', error);
-  });
-
-
-    // Create player elements for the drag-and-drop area
-      players.forEach(player => {
-        const playerDiv = createPlayerElement(player);
-        playersContainer.appendChild(playerDiv);
-      });
 
   // Load saved teams
   const savedTeams = localStorage.getItem('teams');
@@ -36,7 +29,7 @@ if (Array.isArray(players)) {
         populateLines(teams);
       } else {
         console.error('No team data found in localStorage.');
-      
+  }
     })
     .catch(error => {
       console.error('Error loading player data:', error);
