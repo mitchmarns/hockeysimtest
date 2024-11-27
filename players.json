@@ -3,7 +3,7 @@
     {
       "id": 1,
       "name": "Bear Cohen",
-      "position": "Goalie",
+      "position": "Starter",
       "team": null,
       "attributes": {
         "glove": 92,
@@ -15,7 +15,7 @@
     {
       "id": 11,
       "name": "Taylor Abbott",
-      "position": "Left Winger",
+      "position": "LW",
       "team": null,
       "attributes": {
         "shooting": 80,
@@ -27,7 +27,7 @@
     {
       "id": 16,
       "name": "Declan Thorne",
-      "position": "Right Wing",
+      "position": "RW",
       "team": null,
       "attributes": {
         "shooting": 88,
@@ -39,7 +39,7 @@
     {
       "id": 29,
       "name": "Asher Wilde",
-      "position": "Defense",
+      "position": "LD",
       "team": null,
       "attributes": {
         "shooting": 80,
@@ -51,7 +51,7 @@
     {
       "id": 34,
       "name": "Hunter Owens",
-      "position": "Center",
+      "position": "C",
       "team": null,
       "attributes": {
         "shooting": 95,
