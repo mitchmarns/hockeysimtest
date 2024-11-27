@@ -21,8 +21,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Function to update the available players list
   function updateAvailablePlayers(players, selectedTeamName) {
-    playersContainer.innerHTML = ''; // Clear existing players
-    const teamPlayers = players.filter(player => player.team === selectedTeamName);
+    playersContainer.innerHTML = ''; 
+    
+    const teamPlayers = players.filter(player => player.team === selectedTeamName  || player.team === null);
 
     if (teamPlayers.length === 0) {
       const noPlayersMessage = document.createElement('div');
@@ -75,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Check if the player belongs to the selected team
-        if (player.team !== selectedTeam.name) {
+        if (player.team !== selectedTeam.name && player.team !== null) {
           alert(`Player cannot be placed in this team's lines.`);
           slot.style.backgroundColor = '';
           return;
