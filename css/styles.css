@@ -12,6 +12,11 @@ body {
   padding: 10px;
 }
 
+option {
+  color: black !important;
+  font-size: 14px !important;
+}
+
 .player {
   padding: 8px;
   margin: 5px;
