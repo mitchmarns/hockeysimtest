@@ -40,7 +40,7 @@ body {
   flex-wrap: wrap;
 }
 
-.line {
+.line, .goalie-line {
   margin: 15px;
 }
 
