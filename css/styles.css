@@ -43,7 +43,10 @@ option {
 
 .player-slot.assigned {
   background-color: #e0ffe0;
-  border: 2px solid #008000;
+  color: white;
+  font-weight: bold;
+  padding: 5px;
+  border: 2px solid #007F00;
 }
 
 #line-container {
