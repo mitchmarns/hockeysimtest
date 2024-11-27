@@ -94,9 +94,6 @@ document.addEventListener('DOMContentLoaded', () => {
         slot.classList.add('assigned');
         slot.setAttribute('data-id', player.id);
         slot.style.backgroundColor = '';
-      });
-    });
-  }
 
         // Update the team of the player in localStorage after assignment
         player.team = selectedTeam.name;
