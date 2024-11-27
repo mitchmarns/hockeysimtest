@@ -134,4 +134,4 @@ document.addEventListener('DOMContentLoaded', () => {
     localStorage.setItem('teams', JSON.stringify(teams));
     console.log('Teams updated and saved to localStorage.');
   }
-});
+
