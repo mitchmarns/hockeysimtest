@@ -185,6 +185,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Make slots droppable only for players of the selected team
   function makeSlotsDroppable(players) {
     const playerSlots = document.querySelectorAll('.player-slot');
+    
     playerSlots.forEach(slot => {
       slot.addEventListener('dragover', (event) => {
         event.preventDefault();
@@ -244,9 +245,44 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Disable the slot to prevent multiple assignments
         slot.setAttribute('data-assigned', 'true');
+        
+        // Enable the player to be dragged again
+        makePlayerDraggable(slot);
+        
       });
     });
   }
+
+  // Function to make the player element draggable
+function makePlayerDraggable(slot) {
+  const playerId = slot.getAttribute('data-id');
+  const player = players.find(p => p.id.toString() === playerId);
+  
+  if (!player) return;
+
+  slot.draggable = true;
+
+  slot.addEventListener('dragstart', (event) => {
+    event.dataTransfer.setData('playerId', player.id);
+    event.dataTransfer.setData('playerPosition', player.position);
+    slot.style.opacity = '0.5'; // To show that it is being dragged
+  });
+
+   slot.addEventListener('dragend', () => {
+    slot.style.opacity = '1'; // Reset opacity when drag ends
+  });
+}
+
+  // Remove the player from the assigned slot
+  slot.textContent = `${player.position} - ${player.name}`;
+  slot.classList.remove('assigned');
+  slot.removeAttribute('data-id');
+  slot.removeAttribute('data-assigned');
+
+  // Add the player back to the list of available players
+  updateAvailablePlayers(players, selectedTeam.name); // Ensure list is updated
+  makeSlotsDroppable(players); // Ensure droppable behavior is still active
+}
 
   // Draggable player element
   function createPlayerElement(player) {
