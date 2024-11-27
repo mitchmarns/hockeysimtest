@@ -30,3 +30,9 @@ export function assignPlayerToTeam(playerId, teamName) {
     console.error('Cannot assign player. Team might be full or player already assigned.');
   }
 }
+
+// Save players data to localStorage
+function saveToLocalStorage() {
+  localStorage.setItem('playersData', JSON.stringify(playersData));
+  localStorage.setItem('teams', JSON.stringify(teams));
+}
