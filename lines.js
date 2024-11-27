@@ -65,9 +65,6 @@ document.addEventListener('DOMContentLoaded', () => {
           // Update available players for selected team
           updateAvailablePlayers(players, selectedTeamName);
 
-          // Make slots droppable again
-          makeSlotsDroppable(savedTeams);
-
           // Reinitialize droppable slots for the new team
           makeSlotsDroppable(players);
         });
@@ -82,11 +79,14 @@ document.addEventListener('DOMContentLoaded', () => {
   function clearPlayerSlots() {
   const playerSlots = document.querySelectorAll('.player-slot');
   playerSlots.forEach(slot => {
-    slot.textContent = ''; // Clear the displayed player name
-    slot.removeAttribute('data-id'); // Remove the player ID
-    slot.removeAttribute('data-assigned'); // Mark the slot as unassigned
-    slot.style.backgroundColor = ''; // Reset the background color
-    slot.classList.remove('assigned'); // Remove any assigned class
+    if (slot.hasAttribute('data-id')) {
+      // Clear only assigned players
+      slot.textContent = slot.getAttribute('data-position'); // Reset to the slot's position label
+      slot.removeAttribute('data-id'); // Remove the player ID
+      slot.removeAttribute('data-assigned'); // Mark the slot as unassigned
+      slot.style.backgroundColor = ''; // Reset the background color
+      slot.classList.remove('assigned'); // Remove any assigned class
+    }
   });
 }
 
