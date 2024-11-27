@@ -3,41 +3,60 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>home</title>
-  <link rel="stylesheet" href="css/styles.css">
+  <title>Hockey Line Setup</title>
+  <link rel="stylesheet" href="css/styles.css"> <!-- Optional CSS -->
 </head>
 <body>
 
-<div id="available-players">
-  <!-- Available players will be populated here -->
-</div>
-  
-<div id="lines-container">
-  
-  <!-- Forward Line 1 -->
-  <div class="line" id="forward-line-1">
-    <h3>Forward Line 1</h3>
-    <div class="player-slot" data-position="LW">LW</div>
-    <div class="player-slot" data-position="C">C</div>
-    <div class="player-slot" data-position="RW">RW</div>
+  <!-- Dropdown to select a team -->
+  <label for="team-select">Select Team:</label>
+  <select id="team-select">
+    <option value="">-- Select a Team --</option>
+    <!-- Team options will be populated dynamically by JavaScript -->
+  </select>
+
+  <!-- Button to auto-assign players to lines -->
+  <button id="auto-assign">Auto Assign Players</button>
+
+  <!-- Available players container (to drag players from) -->
+  <div id="available-players">
+    <h3>Available Players</h3>
+    <!-- Available players will be populated here dynamically by JavaScript -->
   </div>
 
-  <!-- Defense Line 1 -->
-  <div class="line" id="defense-line-1">
-    <h3>Defense Pair 1</h3>
-    <div class="player-slot" data-position="LD">LD</div>
-    <div class="player-slot" data-position="RD">RD</div>
-  </div>
-  
-  <!-- Goalies -->
-  <div class="goalie-line" id="goalies">
-    <h3>Goalies</h3>
-    <div class="player-slot" data-position="Starter">Starter</div>
-    <div class="player-slot" data-position="Backup">Backup</div>
-  </div>
-</div>
+  <!-- Lines container where players can be dragged into -->
+  <div id="lines-container">
+    <!-- Forward Line 1 -->
+    <div class="line" id="forward-line-1">
+      <h3>Forward Line 1</h3>
+      <div class="player-slot" data-position="LW">LW</div>
+      <div class="player-slot" data-position="C">C</div>
+      <div class="player-slot" data-position="RW">RW</div>
+    </div>
 
-  
-  <script src="lines.js"></script>
+    <!-- Forward Line 2 -->
+    <div class="line" id="forward-line-2">
+      <h3>Forward Line 2</h3>
+      <div class="player-slot" data-position="LW">LW</div>
+      <div class="player-slot" data-position="C">C</div>
+      <div class="player-slot" data-position="RW">RW</div>
+    </div>
+
+    <!-- Defense Line 1 -->
+    <div class="line" id="defense-line-1">
+      <h3>Defense Pair 1</h3>
+      <div class="player-slot" data-position="LD">LD</div>
+      <div class="player-slot" data-position="RD">RD</div>
+    </div>
+
+    <!-- Goalies -->
+    <div class="goalie-line" id="goalies">
+      <h3>Goalies</h3>
+      <div class="player-slot" data-position="Starter">Starter</div>
+      <div class="player-slot" data-position="Backup">Backup</div>
+    </div>
+  </div>
+
+  <script src="lines.js"></script> <!-- Your JavaScript file -->
 </body>
 </html>
