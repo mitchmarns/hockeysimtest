@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     .then(playersData => {
       const players = playersData.players; // Access the players array
       const playersContainer = document.getElementById('available-players'); // Ensure you have the container
+      const teamSelect = document.getElementById('team-select');
 
       if (Array.isArray(players)) {
         players.forEach(player => {
@@ -21,6 +22,11 @@ document.addEventListener('DOMContentLoaded', () => {
     .catch(error => {
       console.error('Error loading player data:', error);
     });
+
+  // Load teams from localStorage
+  const savedTeams = localStorage.getItem('teams');
+  if (savedTeams) {
+    const teams = JSON.parse(savedTeams);
 
   // Create an auto-assign button
   const autoAssignButton = document.createElement('button');
@@ -62,6 +68,44 @@ document.addEventListener('DOMContentLoaded', () => {
     const slots = document.querySelectorAll('.player-slot');
     slots.forEach(slot => {
       slot.textContent = slot.getAttribute('data-position');
+      slot.classList.remove('assigned');
+      slot.removeAttribute('data-id');
+    });
+
+    teams.forEach(team => {
+      team.players.forEach(player => {
+        const slot = document.querySelector(`[data-position="${player.position}"]`);
+        if (slot) {
+          slot.textContent = `${player.name} (${player.position})`;
+          slot.classList.add('assigned');
+          slot.setAttribute('data-id', player.id);
+          const option = document.createElement('option');
+          option.value = index; // Use index or a unique team identifier
+          option.textContent = `Team ${index + 1}`;
+          teamSelect.appendChild(option);
+        }
+      });
+    });
+  }
+
+  / Populate lines when a team is selected
+    teamSelect.addEventListener('change', () => {
+      const selectedTeamIndex = teamSelect.value;
+      const selectedTeam = teams[selectedTeamIndex];
+      if (selectedTeam) {
+        populateLines([selectedTeam]); // Populate lines for the selected team
+      }
+    });
+  } else {
+    console.error('No team data found in localStorage.');
+  }
+
+  // Function to populate the lines based on a team
+  function populateLines(teams) {
+    // Clear existing assignments before populating
+    const slots = document.querySelectorAll('.player-slot');
+    slots.forEach(slot => {
+      slot.textContent = slot.getAttribute('data-position'); // Reset to default position
       slot.classList.remove('assigned');
       slot.removeAttribute('data-id');
     });
