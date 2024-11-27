@@ -115,7 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (Array.isArray(players)) {
         // Initial population for the first team
-        const initialTeamIndex = parseInt(teamSelect.value, 10) || 0;
+        const initialTeamIndex = parseInt(localStorage.getItem('selectedTeamIndex'), 10) || 0;
         const initialTeamName = savedTeams[initialTeamIndex]?.name || '';
         updateAvailablePlayers(players, initialTeamName);
 
