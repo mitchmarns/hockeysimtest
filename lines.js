@@ -98,11 +98,22 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+        // Update the team of the player in localStorage after assignment
+        player.team = selectedTeam.name;
+        localStorage.setItem('players', JSON.stringify(players)); // Save players with updated team
+      });
+    });
+  }
+
   // Fetch and display available players
   fetch('./players.json')
     .then(response => response.json())
     .then(playersData => {
-      const players = playersData.players;
+      let players = playersData.players;
+
+      // Load players from localStorage if they exist
+      const savedPlayers = JSON.parse(localStorage.getItem('players')) || players;
+      players = savedPlayers; // Assign saved players
 
       if (Array.isArray(players)) {
         // Initial population for the first team
