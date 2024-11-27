@@ -139,6 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
     clearPlayerSlots(); // Clear current assignments
 
     console.log('Player slots to update:', playerSlots);
+    console.log("Loaded line assignments for " + teamName + ":", lineAssignments);
 
     Object.entries(lineAssignments).forEach(([position, playerId]) => {
       const slot = Array.from(playerSlots).find(
@@ -152,6 +153,8 @@ document.addEventListener('DOMContentLoaded', () => {
         slot.textContent = `${player.name} (${player.position})`;
         slot.classList.add('assigned');
         slot.setAttribute('data-id', player.id);
+      } else {
+      console.error('Player or slot not found for position:', position);
       }
     });
   }
