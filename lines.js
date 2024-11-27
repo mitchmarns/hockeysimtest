@@ -89,6 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
       slot.removeAttribute('data-assigned'); // Mark the slot as unassigned
       slot.style.backgroundColor = ''; // Reset the background color
       slot.classList.remove('assigned'); // Remove any assigned class
+    }
   });
 }
 
