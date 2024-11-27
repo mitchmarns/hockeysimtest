@@ -62,32 +62,27 @@ document.addEventListener('DOMContentLoaded', () => {
           const currentTeamName = savedTeams[selectedTeamIndex]?.name || '';
           console.log('Loading lines for team:', currentTeamName);
 
-          loadLineAssignments(currentTeamName);
-
-          // Save line assignments
+          // Save the line assignments for the previous team before changing
           const previousTeamIndex = parseInt(localStorage.getItem('selectedTeamIndex'), 10);
-          const previousTeamName = savedTeams[parseInt(localStorage.getItem('selectedTeamIndex'), 10)]?.name || '';
-          saveLineAssignments(previousTeamName);
-
+          const previousTeamName = savedTeams[previousTeamIndex]?.name || '';
+          saveLineAssignments(previousTeamName); // Save the previous team lines
+        
           // Update localStorage for the new team
           localStorage.setItem('selectedTeamIndex', selectedTeamIndex);
-
+        
           // Clear player slots for the previous team
           clearPlayerSlots();
-
+        
           // Update available players for selected team
           updateAvailablePlayers(players, currentTeamName);
-          
+        
+          // Load the line assignments for the selected team
+          loadLineAssignments(currentTeamName);
+        
           // Reinitialize droppable slots for the new team
           makeSlotsDroppable(players);
         });
-
-      } else {
-        console.error('Expected an array of players, but got:', players);
-      }
-    })
-    .catch(error => console.error('Error loading player data:', error));
-
+        
   // Function to clear player slots
   function clearPlayerSlots() {
   const playerSlots = document.querySelectorAll('.player-slot');
