@@ -1,30 +1,23 @@
-import { teams as definedTeams } from './team.js';
+import { teams } from './team.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   const teamSelect = document.getElementById('team-select');
   const playersContainer = document.getElementById('available-players');
 
   // Load teams from `team.js` or `localStorage`
-  const savedTeams = JSON.parse(localStorage.getItem('teams')) || definedTeams;
+const savedTeams = JSON.parse(localStorage.getItem('teams')) || teams;
 
-  // Save back to localStorage if loading from `team.js`
-  if (!localStorage.getItem('teams')) {
-    localStorage.setItem('teams', JSON.stringify(savedTeams));
-  }
+savedTeams.forEach((team, index) => {
+  const option = document.createElement('option');
+  option.value = index; // Use index as the key
+  option.textContent = team.name; // Display the team name
+  teamSelect.appendChild(option);
+});
 
-  // Populate the team dropdown
-  if (Array.isArray(savedTeams) && savedTeams.length > 0) {
-    savedTeams.forEach((team, index) => {
-      const option = document.createElement('option');
-      option.value = index; // Use index as the key
-      option.textContent = team.name; // Display team name
-      teamSelect.appendChild(option);
-    });
-
-    console.log('Team dropdown populated with:', savedTeams);
-  } else {
-    console.error('No teams available to populate the dropdown.');
-  }
+// Save back to localStorage if missing
+if (!localStorage.getItem('teams')) {
+  localStorage.setItem('teams', JSON.stringify(savedTeams));
+}
 
   // Handle team selection
   teamSelect.addEventListener('change', () => {
