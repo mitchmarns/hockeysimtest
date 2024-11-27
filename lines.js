@@ -21,9 +21,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Function to update the available players list
   function updateAvailablePlayers(players, selectedTeamName) {
+    console.log('Selected team:', selectedTeamName);
     playersContainer.innerHTML = ''; // Clear existing players
     
-    const teamPlayers = players.filter(player => player.team === selectedTeamName || player.team === null);
+    const teamPlayers = players.filter(player => {
+    console.log('Player team:', player.team); // Debug log
+    return player.team.toLowerCase() === selectedTeamName.toLowerCase() || player.team === null;
+  });
 
     if (teamPlayers.length === 0) {
       const noPlayersMessage = document.createElement('div');
