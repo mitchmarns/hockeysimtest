@@ -14,6 +14,9 @@ document.addEventListener('DOMContentLoaded', () => {
       } else {
         console.error('Expected an array of players, but got:', players);
       }
+
+      // Make slots droppable after players are loaded
+      makeSlotsDroppable(players);
     })
     .catch(error => {
       console.error('Error loading player data:', error);
@@ -39,10 +42,10 @@ document.addEventListener('DOMContentLoaded', () => {
     playerDiv.setAttribute('data-position', player.position);
 
     // Add dragstart event to the player element
-playerDiv.addEventListener('dragstart', (event) => {
-  event.dataTransfer.setData('playerId', player.id); 
-  event.dataTransfer.setData('playerPosition', player.position); 
-});
+    playerDiv.addEventListener('dragstart', (event) => {
+      event.dataTransfer.setData('playerId', player.id);
+      event.dataTransfer.setData('playerPosition', player.position);
+    });
 
     return playerDiv;
   }
@@ -51,80 +54,54 @@ playerDiv.addEventListener('dragstart', (event) => {
   function populateLines(teams) {
     teams.forEach(team => {
       team.players.forEach(player => {
-        const playerDiv = document.createElement('div');
-        playerDiv.classList.add('player');
-        playerDiv.textContent = `${player.name} (${player.position})`;
-        playerDiv.setAttribute('data-id', player.id);
-        playerDiv.setAttribute('data-position', player.position);
-
-        // Append player to the appropriate line slot
         const slot = document.querySelector(`[data-position="${player.position}"]`);
         if (slot) {
           slot.textContent = `${player.name} (${player.position})`;
           slot.classList.add('assigned');
+          slot.setAttribute('data-id', player.id);
         }
       });
     });
   }
 
-// Make slots droppable
-const playerSlots = document.querySelectorAll('.player-slot');
-playerSlots.forEach(slot => {
-  slot.addEventListener('dragover', (event) => {
-    event.preventDefault();  
-    slot.style.backgroundColor = 'rgba(0, 128, 0, 0.2)';  // Highlight the slot
-  });
+  // Function to make slots droppable
+  function makeSlotsDroppable(players) {
+    const playerSlots = document.querySelectorAll('.player-slot');
+    playerSlots.forEach(slot => {
+      slot.addEventListener('dragover', (event) => {
+        event.preventDefault();
+        slot.style.backgroundColor = 'rgba(0, 128, 0, 0.2)';
+      });
 
-  slot.addEventListener('dragleave', () => {
-    slot.style.backgroundColor = '';  // Reset the slot's background color
-  });
+      slot.addEventListener('dragleave', () => {
+        slot.style.backgroundColor = '';
+      });
 
-    slot.addEventListener('drop', (event) => {
-  event.preventDefault(); // Allow dropping
+      slot.addEventListener('drop', (event) => {
+        event.preventDefault();
+        const playerId = event.dataTransfer.getData('playerId');
+        const playerPosition = event.dataTransfer.getData('playerPosition');
+        const slotPosition = slot.getAttribute('data-position');
 
-// Get playerId and playerPosition from the dataTransfer object
-    const playerId = event.dataTransfer.getData('playerId');  // Retrieve playerId from drag data
-    const playerPosition = event.dataTransfer.getData('playerPosition');  // Retrieve player position
-    const slotPosition = slot.getAttribute('data-position');  // Get the position of the slot
+        const player = players.find(p => p.id.toString() === playerId);
 
-    // Find the player by ID
-    const player = players.find(p => p.id === playerId);  // Ensure playerId matches the stored player ID
+        if (player && playerPosition === slotPosition) {
+          slot.textContent = `${player.name} (${player.position})`;
+          slot.classList.add('assigned');
+          slot.setAttribute('data-id', player.id);
+        } else {
+          alert('Player cannot be placed in this slot!');
+        }
 
-    // Check if the player can be assigned to this slot
-    if (player && playerPosition === slotPosition) {
-      // Assign the player to the slot
-      slot.textContent = `${player.name} (${player.position})`;
-      slot.classList.add('assigned');
-    } else {
-      alert("Player cannot be placed in this slot!");
-    }
-   // Reset the background color after drop
-    slot.style.backgroundColor = '';
-  });
-});
-      
-
-  // Function to find a player by ID (if necessary)
-  function findPlayerById(playerId) {
-    const playersContainer = document.getElementById('available-players');
-    const players = playersContainer.querySelectorAll('.player');
-    for (let player of players) {
-      if (player.getAttribute('data-id') === playerId) {
-        return {
-          id: player.getAttribute('data-id'),
-          name: player.textContent,
-          position: player.getAttribute('data-position')
-        };
-      }
-    }
-    return null; // Player not found
+        slot.style.backgroundColor = '';
+      });
+    });
   }
 
   // Function to update teams in localStorage
   function updateTeamsWithAssignments() {
     const teams = [];
 
-    // Collect teams' player assignments (based on the assigned slots)
     const lines = document.querySelectorAll('.line, .goalie-line');
     lines.forEach(line => {
       const teamPlayers = [];
@@ -137,13 +114,10 @@ playerSlots.forEach(slot => {
         teamPlayers.push({ id: playerId, name: playerName, position: playerPosition });
       });
 
-      // Save each team with their players
       teams.push({ line: line.id, players: teamPlayers });
     });
 
-    // Save teams to localStorage
     localStorage.setItem('teams', JSON.stringify(teams));
     console.log('Teams updated and saved to localStorage.');
   }
-
-
+});
