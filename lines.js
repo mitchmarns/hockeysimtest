@@ -58,8 +58,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const slotPosition = slot.getAttribute('data-position');
 
         // Get selected team from dropdown
-        const selectedTeamIndex = teamSelect.value;
+        const selectedTeamIndex = parseInt(teamSelect.value, 10); // Ensure it's a number
         const selectedTeam = savedTeams[selectedTeamIndex];
+        
+        if (!selectedTeam) {
+          console.error('Selected team is undefined. Please check the dropdown value or savedTeams array.');
+          return; // Prevent further execution if the selected team is invalid
+        }
 
         // Find the player in the list
         const player = players.find(p => p.id.toString() === playerId);
