@@ -3,6 +3,7 @@ import { teams } from './team.js';
 document.addEventListener('DOMContentLoaded', () => {
   const teamSelect = document.getElementById('team-select');
   const playersContainer = document.getElementById('available-players');
+  let players = [];
 
   // Load teams from `team.js` or `localStorage`
   const savedTeams = JSON.parse(localStorage.getItem('teams')) || teams;
