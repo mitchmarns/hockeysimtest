@@ -28,10 +28,14 @@ export function assignPlayerToTeam(playerId, teamName) {
     if (team.players.length < team.maxPlayers) {
       player.team = teamName;
       team.players.push(player);
-    }
 
-// Save updated teams to localStorage
-function saveToLocalStorage() {
-  localStorage.setItem('playersData', JSON.stringify(playersData));
-  localStorage.setItem('teams', JSON.stringify(teams));
+      // Save updated teams to localStorage
+      localStorage.setItem('teams', JSON.stringify(teams));
+      console.log('Teams saved to localStorage:', teams);  // Log to verify data saving
+    } else {
+      console.error('Team is full.');
+    }
+  } else {
+    console.error('Player not found or already assigned.');
+  }
 }
