@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     teamSelect.appendChild(option);
   });
 
-    // Ensure selected team is stored in localStorage and update players
+  // Ensure selected team is stored in localStorage and update players
   const initialTeamIndex = parseInt(localStorage.getItem('selectedTeamIndex'), 10) || 0;
   teamSelect.value = initialTeamIndex; // Set the dropdown to the saved team index
   const initialTeamName = savedTeams[initialTeamIndex]?.name || '';
@@ -33,98 +33,6 @@ document.addEventListener('DOMContentLoaded', () => {
     updateAvailablePlayers(players, selectedTeamName); // Update available players based on selected team
     makeSlotsDroppable(players); // Reinitialize droppable slots
   });
-});
-
-  // Function to update the available players list
-  function updateAvailablePlayers(players, selectedTeamName) {
-    console.log('Selected team:', selectedTeamName);
-    playersContainer.innerHTML = ''; // Clear existing players
-
-    // Ensure case-insensitive matching and handle null team values
-  const teamPlayers = players.filter(player => {
-    console.log('Player team:', player.team); // Debug log
-    
-    // Check if player.team is not null and match it with selectedTeamName
-    return (player.team && player.team.toLowerCase() === selectedTeamName.toLowerCase()) || player.team === null;
-  });
-
-  if (teamPlayers.length === 0) {
-    const noPlayersMessage = document.createElement('div');
-    noPlayersMessage.textContent = 'No players available for this team.';
-    playersContainer.appendChild(noPlayersMessage);
-  } else {
-    teamPlayers.forEach(player => {
-      const playerDiv = createPlayerElement(player);
-      playersContainer.appendChild(playerDiv);
-    });
-  }
-}
-
-  // Make slots droppable only for players of the selected team
-  function makeSlotsDroppable(players) {
-    const playerSlots = document.querySelectorAll('.player-slot');
-    playerSlots.forEach(slot => {
-      slot.addEventListener('dragover', (event) => {
-        event.preventDefault();
-        slot.style.backgroundColor = 'rgba(0, 128, 0, 0.2)';
-      });
-
-      slot.addEventListener('dragleave', () => {
-        slot.style.backgroundColor = '';
-      });
-
-      slot.addEventListener('drop', (event) => {
-        event.preventDefault();
-
-        // Get dragged player data
-      const playerId = event.dataTransfer.getData('playerId');
-      const playerPosition = event.dataTransfer.getData('playerPosition');
-      const slotPosition = slot.getAttribute('data-position');
-
-        // Get selected team from dropdown
-        const selectedTeamIndex = parseInt(teamSelect.value, 10);
-        const selectedTeam = savedTeams[selectedTeamIndex];
-        
-        console.log('Selected team:', selectedTeam); // Debug log
-
-        if (!selectedTeam) {
-          console.error('Selected team is undefined.');
-          return; // Prevent further execution if the selected team is invalid
-        }
-
-// Find the player in the list
-      const player = players.find(p => p.id.toString() === playerId);
-
-      if (!player) {
-        alert('Player not found.');
-        return;
-      }
-
-      // Check if the player belongs to the selected team
-      if (player.team !== selectedTeam.name) {
-        alert(`Player cannot be placed in this team's lines.`);
-        slot.style.backgroundColor = ''; // Reset the slot background
-        return;
-      }
-
-      // Check if player position matches the slot
-      if (playerPosition !== slotPosition) {
-        alert('Player cannot be placed in this position!');
-        slot.style.backgroundColor = ''; // Reset the slot background
-        return;
-      }
-
-      // Assign player to the slot visually
-      slot.textContent = `${player.name} (${player.position})`; 
-      slot.classList.add('assigned'); 
-      slot.setAttribute('data-id', player.id); 
-      slot.style.backgroundColor = ''; 
-
-      // Disable the slot to prevent multiple assignments
-      slot.setAttribute('data-assigned', 'true');
-    });
-  });
-}
 
   // Fetch and display available players
   fetch('./players.json')
@@ -161,6 +69,97 @@ document.addEventListener('DOMContentLoaded', () => {
     })
     .catch(error => console.error('Error loading player data:', error));
 
+  // Function to update the available players list
+  function updateAvailablePlayers(players, selectedTeamName) {
+    console.log('Selected team:', selectedTeamName);
+    playersContainer.innerHTML = ''; // Clear existing players
+
+    // Ensure case-insensitive matching and handle null team values
+    const teamPlayers = players.filter(player => {
+      console.log('Player team:', player.team); // Debug log
+
+      // Check if player.team is not null and match it with selectedTeamName
+      return (player.team && player.team.toLowerCase() === selectedTeamName.toLowerCase()) || player.team === null;
+    });
+
+    if (teamPlayers.length === 0) {
+      const noPlayersMessage = document.createElement('div');
+      noPlayersMessage.textContent = 'No players available for this team.';
+      playersContainer.appendChild(noPlayersMessage);
+    } else {
+      teamPlayers.forEach(player => {
+        const playerDiv = createPlayerElement(player);
+        playersContainer.appendChild(playerDiv);
+      });
+    }
+  }
+
+  // Make slots droppable only for players of the selected team
+  function makeSlotsDroppable(players) {
+    const playerSlots = document.querySelectorAll('.player-slot');
+    playerSlots.forEach(slot => {
+      slot.addEventListener('dragover', (event) => {
+        event.preventDefault();
+        slot.style.backgroundColor = 'rgba(0, 128, 0, 0.2)';
+      });
+
+      slot.addEventListener('dragleave', () => {
+        slot.style.backgroundColor = '';
+      });
+
+      slot.addEventListener('drop', (event) => {
+        event.preventDefault();
+
+        // Get dragged player data
+        const playerId = event.dataTransfer.getData('playerId');
+        const playerPosition = event.dataTransfer.getData('playerPosition');
+        const slotPosition = slot.getAttribute('data-position');
+
+        // Get selected team from dropdown
+        const selectedTeamIndex = parseInt(teamSelect.value, 10);
+        const selectedTeam = savedTeams[selectedTeamIndex];
+
+        console.log('Selected team:', selectedTeam); // Debug log
+
+        if (!selectedTeam) {
+          console.error('Selected team is undefined.');
+          return; // Prevent further execution if the selected team is invalid
+        }
+
+        // Find the player in the list
+        const player = players.find(p => p.id.toString() === playerId);
+
+        if (!player) {
+          alert('Player not found.');
+          return;
+        }
+
+        // Check if the player belongs to the selected team
+        if (player.team !== selectedTeam.name) {
+          alert(`Player cannot be placed in this team's lines.`);
+          slot.style.backgroundColor = ''; // Reset the slot background
+          return;
+        }
+
+        // Check if player position matches the slot
+        if (playerPosition !== slotPosition) {
+          alert('Player cannot be placed in this position!');
+          slot.style.backgroundColor = ''; // Reset the slot background
+          return;
+        }
+
+        // Assign player to the slot visually
+        slot.textContent = `${player.name} (${player.position})`;
+        slot.classList.add('assigned');
+        slot.setAttribute('data-id', player.id);
+        slot.style.backgroundColor = '';
+
+        // Disable the slot to prevent multiple assignments
+        slot.setAttribute('data-assigned', 'true');
+      });
+    });
+  }
+
   // Draggable player element
   function createPlayerElement(player) {
     const playerDiv = document.createElement('div');
@@ -178,4 +177,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
     return playerDiv;
   }
-});
+
+}); // <-- Make sure this closing parenthesis is at the end
