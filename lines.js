@@ -93,6 +93,46 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 }
 
+  // Save line assignments
+  function saveLineAssignments(teamName) {
+    const playerSlots = document.querySelectorAll('.player-slot');
+    const lineAssignments = {};
+
+    playerSlots.forEach(slot => {
+      const playerId = slot.getAttribute('data-id');
+      const position = slot.getAttribute('data-position');
+      if (playerId) {
+        lineAssignments[position] = parseInt(playerId, 10);
+      }
+    });
+
+    const savedLines = JSON.parse(localStorage.getItem('lineAssignments')) || {};
+    savedLines[teamName] = lineAssignments;
+    localStorage.setItem('lineAssignments', JSON.stringify(savedLines));
+  }
+
+  // Load line assignments
+  function loadLineAssignments(teamName) {
+    const savedLines = JSON.parse(localStorage.getItem('lineAssignments')) || {};
+    const lineAssignments = savedLines[teamName] || {};
+
+    const playerSlots = document.querySelectorAll('.player-slot');
+    clearPlayerSlots(); // Clear current assignments
+
+    Object.entries(lineAssignments).forEach(([position, playerId]) => {
+      const slot = Array.from(playerSlots).find(
+        s => s.getAttribute('data-position') === position
+      );
+      const player = players.find(p => p.id === playerId);
+
+      if (slot && player) {
+        slot.textContent = `${player.name} (${player.position})`;
+        slot.classList.add('assigned');
+        slot.setAttribute('data-id', player.id);
+      }
+    });
+  }
+
   // Function to update the available players list
   function updateAvailablePlayers(players, selectedTeamName) {
     console.log('Selected team:', selectedTeamName);
