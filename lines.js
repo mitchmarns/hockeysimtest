@@ -140,9 +140,3 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
-
-        slot.style.backgroundColor = '';
-      });
-    });
-  }
-});
