@@ -8,7 +8,7 @@ export const teams = [
 
 export async function loadPlayers() {
   try {
-    const response = await fetch('./data/players.json');
+    const response = await fetch('./players.json');
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
     playersData = await response.json();
   } catch (error) {
