@@ -1,13 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
   const savedTeams = localStorage.getItem('teams');
-  if (savedTeams) {
-    teams = JSON.parse(savedTeams);
-    displayTeams();
-  }
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-  const savedTeams = localStorage.getItem('teams');
 
   if (savedTeams) {
     const teams = JSON.parse(savedTeams);
