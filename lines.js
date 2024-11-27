@@ -19,6 +19,22 @@ document.addEventListener('DOMContentLoaded', () => {
     teamSelect.appendChild(option);
   });
 
+    // Ensure selected team is stored in localStorage and update players
+  const initialTeamIndex = parseInt(localStorage.getItem('selectedTeamIndex'), 10) || 0;
+  teamSelect.value = initialTeamIndex; // Set the dropdown to the saved team index
+  const initialTeamName = savedTeams[initialTeamIndex]?.name || '';
+  updateAvailablePlayers(players, initialTeamName);
+
+  // Listen for changes in the team dropdown
+  teamSelect.addEventListener('change', () => {
+    const selectedTeamIndex = parseInt(teamSelect.value, 10);
+    localStorage.setItem('selectedTeamIndex', selectedTeamIndex); // Save selected team index
+    const selectedTeamName = savedTeams[selectedTeamIndex]?.name || '';
+    updateAvailablePlayers(players, selectedTeamName); // Update available players based on selected team
+    makeSlotsDroppable(players); // Reinitialize droppable slots
+  });
+});
+
   // Function to update the available players list
   function updateAvailablePlayers(players, selectedTeamName) {
     console.log('Selected team:', selectedTeamName);
