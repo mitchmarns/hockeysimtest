@@ -1,11 +1,1 @@
-// Load players data from localStorage
-function loadFromLocalStorage() {
-  const savedPlayers = localStorage.getItem('playersData');
-  const savedTeams = localStorage.getItem('teams');
-  if (savedPlayers) {
-    playersData = JSON.parse(savedPlayers);
-  }
-  if (savedTeams) {
-    teams = JSON.parse(savedTeams);
-  }
-}
+-
