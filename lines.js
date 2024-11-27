@@ -58,20 +58,37 @@ document.addEventListener('DOMContentLoaded', () => {
           const selectedTeamIndex = parseInt(teamSelect.value, 10);
           localStorage.setItem('selectedTeamIndex', selectedTeamIndex); // Save selected team index
           const selectedTeamName = savedTeams[selectedTeamIndex]?.name || '';
+
+          // Clear player slots for the previous team
+          clearPlayerSlots();
+
+          // Update available players for selected team
           updateAvailablePlayers(players, selectedTeamName);
+
+          // Make slots droppable again
           makeSlotsDroppable(savedTeams);
 
           // Reinitialize droppable slots for the new team
           makeSlotsDroppable(players);
         });
 
-        // Make slots droppable
-        makeSlotsDroppable(players);
       } else {
         console.error('Expected an array of players, but got:', players);
       }
     })
     .catch(error => console.error('Error loading player data:', error));
+
+  // Function to clear player slots
+  function clearPlayerSlots() {
+  const playerSlots = document.querySelectorAll('.player-slot');
+  playerSlots.forEach(slot => {
+    slot.textContent = ''; // Clear the displayed player name
+    slot.removeAttribute('data-id'); // Remove the player ID
+    slot.removeAttribute('data-assigned'); // Mark the slot as unassigned
+    slot.style.backgroundColor = ''; // Reset the background color
+    slot.classList.remove('assigned'); // Remove any assigned class
+  });
+}
 
   // Function to update the available players list
   function updateAvailablePlayers(players, selectedTeamName) {
