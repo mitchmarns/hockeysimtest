@@ -59,6 +59,11 @@ document.addEventListener('DOMContentLoaded', () => {
       slot.addEventListener('drop', (event) => {
         event.preventDefault();
 
+        // Get dragged player data
+      const playerId = event.dataTransfer.getData('playerId');
+      const playerPosition = event.dataTransfer.getData('playerPosition');
+      const slotPosition = slot.getAttribute('data-position');
+
         // Get selected team from dropdown
         const selectedTeamIndex = parseInt(teamSelect.value, 10);
         const selectedTeam = savedTeams[selectedTeamIndex];
@@ -70,10 +75,39 @@ document.addEventListener('DOMContentLoaded', () => {
           return; // Prevent further execution if the selected team is invalid
         }
 
-        // Continue with the existing drop logic...
-      });
+// Find the player in the list
+      const player = players.find(p => p.id.toString() === playerId);
+
+      if (!player) {
+        alert('Player not found.');
+        return;
+      }
+
+      // Check if the player belongs to the selected team
+      if (player.team !== selectedTeam.name) {
+        alert(`Player cannot be placed in this team's lines.`);
+        slot.style.backgroundColor = ''; // Reset the slot background
+        return;
+      }
+
+      // Check if player position matches the slot
+      if (playerPosition !== slotPosition) {
+        alert('Player cannot be placed in this position!');
+        slot.style.backgroundColor = ''; // Reset the slot background
+        return;
+      }
+
+      // Assign player to the slot visually
+      slot.textContent = `${player.name} (${player.position})`; // Display player name and position
+      slot.classList.add('assigned'); // Add assigned class for visual cue
+      slot.setAttribute('data-id', player.id); // Store player ID in slot
+      slot.style.backgroundColor = ''; // Reset the background color after drop
+
+      // Optionally, disable the slot if you want to prevent multiple assignments
+      slot.setAttribute('data-assigned', 'true');
     });
-  }
+  });
+}
 
   // Fetch and display available players
   fetch('./players.json')
