@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Check if the player belongs to the selected team
-        if (player.team !== selectedTeam.name && player.team !== null) {
+        if (player.team !== selectedTeam.name) {
           alert(`Player cannot be placed in this team's lines.`);
           slot.style.backgroundColor = '';
           return;
