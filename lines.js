@@ -62,8 +62,9 @@ document.addEventListener('DOMContentLoaded', () => {
           const currentTeamName = savedTeams[selectedTeamIndex]?.name || '';
 
           // Save line assignments
+          const previousTeamIndex = parseInt(localStorage.getItem('selectedTeamIndex'), 10);
           const previousTeamName = savedTeams[parseInt(localStorage.getItem('selectedTeamIndex'), 10)]?.name || '';
-          saveLineAssignments(initialTeamName);
+          saveLineAssignments(previousTeamName);
 
           // Update localStorage for the new team
           localStorage.setItem('selectedTeamIndex', selectedTeamIndex);
@@ -72,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
           clearPlayerSlots();
 
           // Update available players for selected team
-          updateAvailablePlayers(players, selectedTeamName);
+          updateAvailablePlayers(players, currentTeamName);
 
           // Load new team's line
           loadLineAssignments(currentTeamName);
