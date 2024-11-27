@@ -33,6 +33,18 @@ document.addEventListener('DOMContentLoaded', () => {
       console.log('Players data:', playersData);
       let players = playersData.players;
 
+      // Check and assign the correct team to each player
+    players.forEach(player => {
+      if (!player.team) {
+        // If a player has no team, try to assign it by finding the correct team
+        const team = savedTeams.find(t => t.players.some(p => p.id === player.id));
+        player.team = team ? team.name : null;
+      }
+    });
+
+    // Save the updated players back to localStorage
+    localStorage.setItem('players', JSON.stringify(players));
+
       // Load players from localStorage if they exist
       const savedPlayers = JSON.parse(localStorage.getItem('players')) || players;
       players = savedPlayers; // Assign saved players
@@ -75,6 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Now filter players based on their team property
   const teamPlayers = selectedTeam.players.filter(player => player.team === selectedTeamName);
+  console.log('Filtered players:', teamPlayers);
 
   if (teamPlayers.length === 0) {
     const noPlayersMessage = document.createElement('div');
