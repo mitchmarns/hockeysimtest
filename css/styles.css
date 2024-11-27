@@ -18,26 +18,32 @@ option {
 }
 
 .player {
-  padding: 8px;
+  padding: 5px;
   margin: 5px;
-  border: 1px solid #ccc;
-  cursor: move;
+  border: 1px solid #333;
+  cursor: grab;
+}
+
+.player:active {
+  cursor: grabbing;
 }
 
 .player-slot {
-  padding: 20px;
-  margin: 10px;
-  border: 1px solid #ccc;
-  width: 100px;
+  padding: 10px;
+  margin: 5px;
+  border: 2px dashed #ccc;
+  width: 150px;
   height: 50px;
   text-align: center;
+  font-size: 14px;
   line-height: 50px;
   background-color: #f0f0f0;
   cursor: pointer;
 }
 
 .player-slot.assigned {
-  background-color: #c1e6c1;
+  background-color: #e0ffe0;
+  border: 2px solid #008000;
 }
 
 #line-container {
