@@ -6,7 +6,7 @@
       "position": "Starter",
       "assigned": false,
       "team": null,
-      "attributes": {
+      "skills": {
         "glove": 92,
         "stick": 89,
         "legs": 85,
@@ -19,7 +19,7 @@
       "position": "LW",
       "assigned": false,
       "team": null,
-      "attributes": {
+      "skills": {
         "shooting": 80,
         "passing": 85,
         "defense": 95,
@@ -32,7 +32,7 @@
       "position": "RW",
       "assigned": false,
       "team": null,
-      "attributes": {
+      "skills": {
         "shooting": 88,
         "passing": 75,
         "defense": 70,
@@ -45,7 +45,7 @@
       "position": "LD",
       "assigned": false,
       "team": null,
-      "attributes": {
+      "skills": {
         "shooting": 80,
         "passing": 85,
         "defense": 95,
@@ -58,7 +58,7 @@
       "position": "C",
       "assigned": false,
       "team": null,
-      "attributes": {
+      "skills": {
         "shooting": 95,
         "passing": 90,
         "defense": 88,
