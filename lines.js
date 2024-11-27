@@ -77,9 +77,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
           // Update available players for selected team
           updateAvailablePlayers(players, currentTeamName);
-
-          // Load new team's line
-          loadLineAssignments(currentTeamName);
           
           // Reinitialize droppable slots for the new team
           makeSlotsDroppable(players);
