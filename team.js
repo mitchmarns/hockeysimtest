@@ -33,6 +33,7 @@ export function assignPlayerToTeam(playerId, teamName) {
 
 
 // Save updated teams to localStorage
-      localStorage.setItem('teams', JSON.stringify(teams));
-
-
+function saveToLocalStorage() {
+  localStorage.setItem('playersData', JSON.stringify(playersData));
+  localStorage.setItem('teams', JSON.stringify(teams));
+}
