@@ -1,24 +1,38 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // Fetch the players data from the JSON file
+  const playersContainer = document.getElementById('available-players');
+  const teamSelect = document.getElementById('team-select');
+  const autoAssignButton = document.getElementById('auto-assign');
+  const linesContainer = document.getElementById('lines-container');
+  let players = [];
+  let teams = [];
+
+  // Fetch players and teams data from localStorage (or JSON file if needed)
+  const savedTeams = localStorage.getItem('teams');
+  if (savedTeams) {
+    teams = JSON.parse(savedTeams);
+    // Populate team selector
+    populateTeamSelector(teams);
+  } else {
+    console.error('No team data found in localStorage.');
+  }
+
+  // Load players (you may fetch them from a file or use a static list)
   fetch('./players.json')
     .then(response => response.json())
-    .then(playersData => {
-      const players = playersData.players; // Access the players array
-      const playersContainer = document.getElementById('available-players'); // Ensure you have the container
-
-      if (Array.isArray(players)) {
-        players.forEach(player => {
-          const playerDiv = createPlayerElement(player);
-          playersContainer.appendChild(playerDiv);
-        });
-      } else {
-        console.error('Expected an array of players, but got:', players);
-      }
+    .then(data => {
+      players = data.players;
+      populateAvailablePlayers(players);
     })
-    .catch(error => {
-      console.error('Error loading player data:', error);
+    .catch(error => console.error('Error loading player data:', error));
+
+  // Function to populate available players list
+  function populateAvailablePlayers(players) {
+    playersContainer.innerHTML = ''; // Clear current content
+    players.forEach(player => {
+      const playerDiv = createPlayerElement(player);
+      playersContainer.appendChild(playerDiv);
     });
-});  
+  }
 
   // Function to create a draggable player element
   function createPlayerElement(player) {
@@ -29,59 +43,70 @@ document.addEventListener('DOMContentLoaded', () => {
     playerDiv.setAttribute('data-id', player.id);
     playerDiv.setAttribute('data-position', player.position);
 
-    // Add dragstart event to the player element
+    // Add dragstart event
     playerDiv.addEventListener('dragstart', (event) => {
-      event.dataTransfer.setData('playerId', event.target.getAttribute('data-id'));
-      event.dataTransfer.setData('playerPosition', event.target.getAttribute('data-position'));
+      event.dataTransfer.setData('playerId', player.id);
+      event.dataTransfer.setData('playerPosition', player.position);
     });
 
     return playerDiv;
   }
 
-  // Load saved teams from localStorage
-  const savedTeams = localStorage.getItem('teams');
-
-  if (savedTeams) {
-    const teams = JSON.parse(savedTeams);
-    console.log('Loaded teams:', teams);
-
-    // Use this data to populate the lines with already assigned players
-    populateLines(teams);
-  } else {
-    console.error('No team data found in localStorage.');
-  }
-
-  // Function to populate the lines based on saved teams
-  function populateLines(teams) {
+  // Function to populate the team selector dropdown
+  function populateTeamSelector(teams) {
+    teamSelect.innerHTML = ''; // Clear the current options
     teams.forEach(team => {
-      team.players.forEach(player => {
-        const playerDiv = document.createElement('div');
-        playerDiv.classList.add('player');
-        playerDiv.textContent = `${player.name} (${player.position})`;
-        playerDiv.setAttribute('data-id', player.id);
-        playerDiv.setAttribute('data-position', player.position);
+      const option = document.createElement('option');
+      option.value = team.name;
+      option.textContent = team.name;
+      teamSelect.appendChild(option);
+    });
 
-        // Append player to the appropriate line slot
-        const slot = document.querySelector(`[data-position="${player.position}"]`);
-        if (slot) {
-          slot.textContent = `${player.name} (${player.position})`;
-          slot.classList.add('assigned');
+    // Automatically populate lines when a team is selected
+    teamSelect.addEventListener('change', () => {
+      const selectedTeam = teamSelect.value;
+      if (selectedTeam) {
+        const team = teams.find(t => t.name === selectedTeam);
+        if (team) {
+          populateLines(team);
         }
-      });
+      }
     });
   }
 
-  // Function to handle slots being droppable
+  // Function to populate lines with players for the selected team
+  function populateLines(team) {
+    // Clear existing lines
+    const lines = document.querySelectorAll('.line, .goalie-line');
+    lines.forEach(line => {
+      const slots = line.querySelectorAll('.player-slot');
+      slots.forEach(slot => {
+        slot.textContent = slot.getAttribute('data-position'); // Reset the slot
+        slot.classList.remove('assigned');
+      });
+    });
+
+    // Populate the lines based on the selected team's players
+    team.players.forEach(player => {
+      const slot = document.querySelector(`[data-position="${player.position}"]`);
+      if (slot) {
+        slot.textContent = `${player.name} (${player.position})`;
+        slot.classList.add('assigned');
+      }
+    });
+  }
+
+  // Make player slots droppable
   function makeSlotsDroppable() {
     const playerSlots = document.querySelectorAll('.player-slot');
     playerSlots.forEach(slot => {
       slot.addEventListener('dragover', (event) => {
-        event.preventDefault();  // Allow dropping
-        slot.style.backgroundColor = 'rgba(0, 128, 0, 0.2)';  // Highlight the slot
+        event.preventDefault();
+        slot.style.backgroundColor = 'rgba(0, 128, 0, 0.2)';  // Highlight
       });
 
       slot.addEventListener('dragleave', () => {
-        slot.style.backgroundColor = '';  // Reset the slot's background color
+        slot.style.backgroundColor = '';  // Reset highlight
       });
 
       slot.addEventListener('drop', (event) => {
@@ -89,23 +114,47 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const playerId = event.dataTransfer.getData('playerId');
         const playerPosition = event.dataTransfer.getData('playerPosition');
+        const player = players.find(p => p.id === playerId);
 
-        // Find the player by ID
-        const player = players.find(p => p.id == playerId);
-        if (player && playerPosition === slot.getAttribute('data-position')) {
-          // Assign player to the slot
+        if (player && player.position === playerPosition) {
           slot.textContent = `${player.name} (${player.position})`;
           slot.classList.add('assigned');
-          player.assigned = true;  // Mark as assigned
-
-          // Optionally, store the updated data in localStorage
           updateTeamsWithAssignments();
         } else {
-          alert("Player cannot be placed in this slot!");
+          alert("Player can't be placed here!");
         }
-
-        slot.style.backgroundColor = '';  // Reset the slot's background color
       });
+    });
+  }
+
+  // Button to auto-assign players to lines
+  autoAssignButton.addEventListener('click', () => {
+    const selectedTeam = teamSelect.value;
+    const team = teams.find(t => t.name === selectedTeam);
+    if (team) {
+      autoAssignPlayersToLines(team);
+    }
+  });
+
+  // Function to auto-assign players to lines
+  function autoAssignPlayersToLines(team) {
+    // Reset all lines first
+    const lines = document.querySelectorAll('.line, .goalie-line');
+    lines.forEach(line => {
+      const slots = line.querySelectorAll('.player-slot');
+      slots.forEach(slot => {
+        slot.textContent = slot.getAttribute('data-position');
+        slot.classList.remove('assigned');
+      });
+    });
+
+    // Automatically assign players to positions (this logic can be adjusted)
+    team.players.forEach(player => {
+      const slot = document.querySelector(`[data-position="${player.position}"]`);
+      if (slot) {
+        slot.textContent = `${player.name} (${player.position})`;
+        slot.classList.add('assigned');
+      }
     });
   }
 
@@ -135,3 +184,6 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('Teams updated and saved to localStorage.');
   }
 
+  // Call function to make slots droppable
+  makeSlotsDroppable();
+});
