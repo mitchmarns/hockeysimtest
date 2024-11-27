@@ -26,6 +26,16 @@ document.addEventListener('DOMContentLoaded', () => {
   const initialTeamName = savedTeams[initialTeamIndex]?.name || '';
   updateAvailablePlayers(players, initialTeamName);
 
+  // Listen for changes in the team dropdown
+  teamSelect.addEventListener('change', () => {
+    const selectedTeamIndex = parseInt(teamSelect.value, 10);
+    localStorage.setItem('selectedTeamIndex', selectedTeamIndex); // Save selected team index
+    const selectedTeamName = savedTeams[selectedTeamIndex]?.name || '';
+    updateAvailablePlayers(savedTeams, selectedTeamName); // Update available players based on selected team
+    makeSlotsDroppable(savedTeams); // Reinitialize droppable slots
+  });
+});
+
   // Fetch and display available players
   fetch('./players.json')
     .then(response => response.json())
@@ -64,25 +74,27 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('Selected team:', selectedTeamName);
     playersContainer.innerHTML = ''; // Clear existing players
 
-    // Ensure case-insensitive matching and handle null team values
-    const teamPlayers = players.filter(player => {
-      console.log('Player team:', player.team); // Debug log
-
-      // Check if player.team is not null and match it with selectedTeamName
-      return (player.team && player.team.toLowerCase() === selectedTeamName.toLowerCase()) || player.team === null;
-    });
-
-    if (teamPlayers.length === 0) {
-      const noPlayersMessage = document.createElement('div');
-      noPlayersMessage.textContent = 'No players available for this team.';
-      playersContainer.appendChild(noPlayersMessage);
-    } else {
-      teamPlayers.forEach(player => {
-        const playerDiv = createPlayerElement(player);
-        playersContainer.appendChild(playerDiv);
-      });
-    }
+    // Find the selected team object from the teams array
+  const selectedTeam = teams.find(team => team.name === selectedTeamName);
+  if (!selectedTeam) {
+    console.error(`Team not found: ${selectedTeamName}`);
+    return;
   }
+
+// Now filter players based on their team property
+  const teamPlayers = selectedTeam.players.filter(player => player.team === selectedTeamName);
+
+  if (teamPlayers.length === 0) {
+    const noPlayersMessage = document.createElement('div');
+    noPlayersMessage.textContent = 'No players available for this team.';
+    playersContainer.appendChild(noPlayersMessage);
+  } else {
+    teamPlayers.forEach(player => {
+      const playerDiv = createPlayerElement(player);
+      playersContainer.appendChild(playerDiv);
+    });
+  }
+}
 
   // Make slots droppable only for players of the selected team
   function makeSlotsDroppable(players) {
