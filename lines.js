@@ -36,7 +36,7 @@ if (Array.isArray(players)) {
         populateLines(teams);
       } else {
         console.error('No team data found in localStorage.');
-      }
+      
     })
     .catch(error => {
       console.error('Error loading player data:', error);
