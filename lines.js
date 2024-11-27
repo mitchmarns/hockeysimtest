@@ -264,4 +264,4 @@ document.addEventListener('DOMContentLoaded', () => {
     return playerDiv;
   }
 
-}); 
+
