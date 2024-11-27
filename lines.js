@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const initialTeamIndex = parseInt(localStorage.getItem('selectedTeamIndex'), 10) || 0;
   teamSelect.value = initialTeamIndex; // Set the dropdown to the saved team index
   const initialTeamName = savedTeams[initialTeamIndex]?.name || '';
+  
   updateAvailablePlayers(players, initialTeamName);
 
   // Fetch and display available players
@@ -52,6 +53,8 @@ document.addEventListener('DOMContentLoaded', () => {
       if (Array.isArray(players)) {
         // Initial population for the first team
         updateAvailablePlayers(players, initialTeamName);
+        clearPlayerSlots();
+        makeSlotsDroppable(players);
 
         // Update players list when a new team is selected
         teamSelect.addEventListener('change', () => {
@@ -64,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
           // Update available players for selected team
           updateAvailablePlayers(players, selectedTeamName);
-
+          
           // Reinitialize droppable slots for the new team
           makeSlotsDroppable(players);
         });
@@ -86,7 +89,6 @@ document.addEventListener('DOMContentLoaded', () => {
       slot.removeAttribute('data-assigned'); // Mark the slot as unassigned
       slot.style.backgroundColor = ''; // Reset the background color
       slot.classList.remove('assigned'); // Remove any assigned class
-    }
   });
 }
 
