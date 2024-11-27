@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
     .then(response => response.json())
     .then(playersData => {
       console.log('Players data:', playersData);
-      let players = playersData.players;
+      players = playersData.players;
 
       // Check and assign the correct team to each player
     players.forEach(player => {
@@ -131,6 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const savedLines = JSON.parse(localStorage.getItem('lineAssignments')) || {};
     console.log('Loaded line assignments:', savedLines);
     const lineAssignments = savedLines[teamName] || {};
+    console.log('Loaded line assignments for ' + teamName + ":", lineAssignments);
 
     const playerSlots = document.querySelectorAll('.player-slot');
     clearPlayerSlots(); // Clear current assignments
