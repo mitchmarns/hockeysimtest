@@ -67,38 +67,41 @@ playerDiv.addEventListener('dragstart', (event) => {
     });
   }
 
-  // Make slots droppable
-  const playerSlots = document.querySelectorAll('.player-slot');
-  playerSlots.forEach(slot => {
-    slot.addEventListener('dragover', (event) => {
-      event.preventDefault();  // Allow dropping
-      slot.style.backgroundColor = 'rgba(0, 128, 0, 0.2)';  // Highlight the slot
-    });
+// Make slots droppable
+const playerSlots = document.querySelectorAll('.player-slot');
+playerSlots.forEach(slot => {
+  slot.addEventListener('dragover', (event) => {
+    event.preventDefault();  
+    slot.style.backgroundColor = 'rgba(0, 128, 0, 0.2)';  // Highlight the slot
+  });
 
-    slot.addEventListener('dragleave', () => {
-      slot.style.backgroundColor = '';  // Reset the slot's background color
-    });
+  slot.addEventListener('dragleave', () => {
+    slot.style.backgroundColor = '';  // Reset the slot's background color
+  });
 
     slot.addEventListener('drop', (event) => {
   event.preventDefault(); // Allow dropping
 
-  // Get playerId from dataTransfer
-  const playerId = event.dataTransfer.getData('playerId'); // Retrieve playerId from drag data
-  const playerPosition = event.dataTransfer.getData('playerPosition'); // Retrieve player position
-  const slotPosition = slot.getAttribute('data-position');
+// Get playerId and playerPosition from the dataTransfer object
+    const playerId = event.dataTransfer.getData('playerId');  // Retrieve playerId from drag data
+    const playerPosition = event.dataTransfer.getData('playerPosition');  // Retrieve player position
+    const slotPosition = slot.getAttribute('data-position');  // Get the position of the slot
 
-  // Find the player by ID
-  const player = players.find(p => p.id === playerId); // Ensure playerId matches the stored player ID
+    // Find the player by ID
+    const player = players.find(p => p.id === playerId);  // Ensure playerId matches the stored player ID
 
-  if (player && playerPosition === slotPosition) {
-    // Assign the player to the slot
-    slot.textContent = `${player.name} (${player.position})`;
-    slot.classList.add('assigned');
-  } else {
-    alert("Player cannot be placed in this slot!");
-  }
+    // Check if the player can be assigned to this slot
+    if (player && playerPosition === slotPosition) {
+      // Assign the player to the slot
+      slot.textContent = `${player.name} (${player.position})`;
+      slot.classList.add('assigned');
+    } else {
+      alert("Player cannot be placed in this slot!");
+    }
+   // Reset the background color after drop
+    slot.style.backgroundColor = '';
+  });
 });
-
       
 
   // Function to find a player by ID (if necessary)
