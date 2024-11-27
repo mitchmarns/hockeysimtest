@@ -4,6 +4,7 @@
       "id": 1,
       "name": "Bear Cohen",
       "position": "Starter",
+      "assigned": false,
       "team": null,
       "attributes": {
         "glove": 92,
@@ -16,6 +17,7 @@
       "id": 11,
       "name": "Taylor Abbott",
       "position": "LW",
+      "assigned": false,
       "team": null,
       "attributes": {
         "shooting": 80,
@@ -28,6 +30,7 @@
       "id": 16,
       "name": "Declan Thorne",
       "position": "RW",
+      "assigned": false,
       "team": null,
       "attributes": {
         "shooting": 88,
@@ -40,6 +43,7 @@
       "id": 29,
       "name": "Asher Wilde",
       "position": "LD",
+      "assigned": false,
       "team": null,
       "attributes": {
         "shooting": 80,
@@ -52,6 +56,7 @@
       "id": 34,
       "name": "Hunter Owens",
       "position": "C",
+      "assigned": false,
       "team": null,
       "attributes": {
         "shooting": 95,
