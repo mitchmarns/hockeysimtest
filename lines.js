@@ -266,6 +266,22 @@ function removePlayerFromSlot(slot, player, selectedTeam) {
   // Re-enable droppable behavior for the slot
   makeSlotsDroppable(players); // Ensure droppable behavior is still active
 }
+  
+    // Draggable player element
+  function createPlayerElement(player) {
+    const playerDiv = document.createElement('div');
+    playerDiv.classList.add('player');
+    playerDiv.textContent = `${player.name} - ${player.position}`;
+    playerDiv.draggable = true;
+    playerDiv.setAttribute('data-id', player.id);
+    playerDiv.setAttribute('data-position', player.position);
+
+    // Add dragstart event to the player element
+    playerDiv.addEventListener('dragstart', (event) => {
+      event.dataTransfer.setData('playerId', player.id);
+      event.dataTransfer.setData('playerPosition', player.position);
+    });
+  
   // Function to make the player element draggable
 function makePlayerDraggable(slot) {
   const playerId = slot.getAttribute('data-id');
@@ -296,21 +312,6 @@ function makePlayerDraggable(slot) {
   updateAvailablePlayers(players, selectedTeam.name); // Ensure list is updated
   makeSlotsDroppable(players); // Ensure droppable behavior is still active
 }
-
-  // Draggable player element
-  function createPlayerElement(player) {
-    const playerDiv = document.createElement('div');
-    playerDiv.classList.add('player');
-    playerDiv.textContent = `${player.name} - ${player.position}`;
-    playerDiv.draggable = true;
-    playerDiv.setAttribute('data-id', player.id);
-    playerDiv.setAttribute('data-position', player.position);
-
-    // Add dragstart event to the player element
-    playerDiv.addEventListener('dragstart', (event) => {
-      event.dataTransfer.setData('playerId', player.id);
-      event.dataTransfer.setData('playerPosition', player.position);
-    });
 
     return playerDiv;
   }
