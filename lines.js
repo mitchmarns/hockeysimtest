@@ -316,4 +316,5 @@ function makePlayerDraggable(slot) {
     return playerDiv;
   }
 
-
+    });
+                
