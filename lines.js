@@ -1,412 +1,128 @@
-import { teams } from './team.js';
+// lines.js
+import { loadPlayers, getAvailablePlayers, assignPlayerToTeam, teams } from './team.js';
 
-document.addEventListener('DOMContentLoaded', () => {
-  const saveLinesBtn = document.getElementById('save-lines-btn');
-  const resetLinesBtn = document.getElementById('reset-lines-btn');
-  const teamSelect = document.getElementById('team-select');
-  const playersContainer = document.getElementById('available-players');
-  let players = [];
-
-  // Load teams from `team.js` or `localStorage`
-  const savedTeams = JSON.parse(localStorage.getItem('teams')) || teams;
-
-  if (!localStorage.getItem('teams')) {
-    localStorage.setItem('teams', JSON.stringify(savedTeams));
-  }
-
-  // Populate the team dropdown and initialize the selected team
-  savedTeams.forEach((team, index) => {
-    const option = document.createElement('option');
-    option.value = index;  // Value is the index of the team
-    option.textContent = team.name;
-    teamSelect.appendChild(option);
-  });
-
-  // Ensure selected team is stored in localStorage and update players
-  const initialTeamIndex = parseInt(localStorage.getItem('selectedTeamIndex'), 10) || 0;
-  teamSelect.value = initialTeamIndex; // Set the dropdown to the saved team index
-  const initialTeamName = savedTeams[initialTeamIndex]?.name || '';
-  
-  updateAvailablePlayers(players, initialTeamName);
-
-  // Button event listener to manually save line assignments
-  saveLinesBtn.addEventListener('click', () => {
-    const selectedTeamIndex = parseInt(teamSelect.value, 10);
-    console.log('Selected team index:', selectedTeamIndex);
-    const selectedTeamName = savedTeams[selectedTeamIndex]?.name;
-    console.log('Selected team name:', selectedTeamName);
-    
-    if (selectedTeamName) {
-      saveLineAssignments(selectedTeamName);  // Save the line assignments for the current team
-    } else {
-      console.error('No team selected.');
-    }
-  });
-
-  // Fetch and display available players
-  fetch('./players.json')
-    .then(response => response.json())
-    .then(playersData => {
-      console.log('Players data:', playersData);
-      players = playersData.players;
-
-      // Check and assign the correct team to each player
-    players.forEach(player => {
-      if (!player.team) {
-        // If a player has no team, try to assign it by finding the correct team
-        const team = savedTeams.find(t => t.players.some(p => p.id === player.id));
-        player.team = team ? team.name : null;
-      }
-    });
-
-    // Save the updated players back to localStorage
-    localStorage.setItem('players', JSON.stringify(players));
-
-    // Load players from localStorage if they exist
-    const savedPlayers = JSON.parse(localStorage.getItem('players')) || players;
-    players = savedPlayers; // Assign saved players
-
-    if (Array.isArray(players)) {
-      // Initial population for the first team
-      updateAvailablePlayers(players, initialTeamName);
-      loadLineAssignments(initialTeamName);
-      makeSlotsDroppable(players);
-
-      // Update players list when a new team is selected
-      teamSelect.addEventListener('change', () => {
-        const selectedTeamIndex = parseInt(teamSelect.value, 10);
-        const previousTeamIndex = parseInt(localStorage.getItem('selectedTeamIndex'), 10);
-
-        const previousTeamName = savedTeams[previousTeamIndex]?.name || '';
-        const currentTeamName = savedTeams[selectedTeamIndex]?.name || '';
-
-        console.log('Saving line assignments for previous team:', previousTeamName);
-        saveLineAssignments(previousTeamName); // Save current lines before switching teams
-
-        localStorage.setItem('selectedTeamIndex', selectedTeamIndex);
-
-        clearPlayerSlots();
-        updateAvailablePlayers(players, currentTeamName);
-        loadLineAssignments(currentTeamName);
-        makeSlotsDroppable(players);
-      });
-    }
-  });
-
-  // Button event listener to manually save line assignments
-  saveLinesBtn.addEventListener('click', () => {
-    const selectedTeamIndex = parseInt(teamSelect.value, 10);
-    const selectedTeamName = savedTeams[selectedTeamIndex]?.name || '';
-    if (selectedTeamName) {
-      saveLineAssignments(selectedTeamName);
-    } else {
-      console.error('No team selected.');
-    }
-  });
-
-  // Reset button event listener to reset line assignments
-  resetLinesBtn.addEventListener('click', () => {
-    const selectedTeamIndex = parseInt(teamSelect.value, 10);
-    const selectedTeamName = savedTeams[selectedTeamIndex]?.name || '';
-    if (selectedTeamName) {
-      resetLineAssignments(selectedTeamName); // Reset the line assignments for the current team
-    }
-  });
-
-  // Reset line assignments in the slots and clear localStorage
-  function resetLineAssignments(teamName) {
-    // Clear the player slots
-    clearPlayerSlots();
-
-    // Clear the line assignments for the selected team in localStorage
-    const savedLines = JSON.parse(localStorage.getItem('lineAssignments')) || {};
-    delete savedLines[teamName];  // Remove the specific team assignments
-    localStorage.setItem('lineAssignments', JSON.stringify(savedLines));
-
-    console.log(`Reset line assignments for ${teamName}`);
-  }
-        
-  // Function to clear player slots
-  function clearPlayerSlots() {
-    const playerSlots = document.querySelectorAll('.player-slot');
-    console.log('Clearing player slots:', playerSlots);
-    
-    playerSlots.forEach(slot => {
-      slot.textContent = slot.getAttribute('data-position');
-      slot.removeAttribute('data-id');
-      slot.removeAttribute('data-assigned');
-      slot.style.backgroundColor = '';
-      slot.classList.remove('assigned');
-    });
-  }
-
-  // Save line assignments
-  function saveLineAssignments(teamName) {
-    if (!teamName || typeof teamName !== 'string') {
-    console.error('Invalid team name in saveLineAssignments');
-    return;
-  }
-    
-    const playerSlots = document.querySelectorAll('.player-slot');
-    const lineAssignments = {};
-
-    playerSlots.forEach(slot => {
-      const playerId = slot.getAttribute('data-id');
-      const position = slot.getAttribute('data-position');
-      if (playerId) {
-        lineAssignments[position] = parseInt(playerId, 10);
-      }
-    });
-
-    const savedLines = JSON.parse(localStorage.getItem('lineAssignments')) || {};
-    savedLines[teamName] = lineAssignments;
-    localStorage.setItem('lineAssignments', JSON.stringify(savedLines));
-    console.log(`Saved line assignments for ${teamName}:`, lineAssignments);
-  }
-
-  // Load line assignments
-  function loadLineAssignments(teamName) {
-    const savedLines = JSON.parse(localStorage.getItem('lineAssignments')) || {};
-    console.log('Loaded line assignments:', savedLines);
-    const lineAssignments = savedLines[teamName] || {};
-    console.log('Loaded line assignments for ' + teamName + ":", lineAssignments);
-
-    const playerSlots = document.querySelectorAll('.player-slot');
-    clearPlayerSlots(); // Clear current assignments
-
-    console.log('Player slots to update:', playerSlots);
-    console.log("Loaded line assignments for " + teamName + ":", lineAssignments);
-
-    Object.entries(lineAssignments).forEach(([position, playerId]) => {
-      const slot = Array.from(playerSlots).find(
-        s => s.getAttribute('data-position') === position
-      );
-      const player = players.find(p => p.id === playerId);
-
-      console.log('Found player:', player);
-
-      if (slot && player) {
-        slot.textContent = `${player.name} (${player.position})`;
-        slot.classList.add('assigned');
-        slot.setAttribute('data-id', player.id);
-      } else {
-      console.error('Player or slot not found for position:', position);
-      }
-    });
-  }
-
-// Function to update the available players list
-function updateAvailablePlayers(players, selectedTeamName) {
-  console.log('Selected team:', selectedTeamName);
-  playersContainer.innerHTML = ''; // Clear existing players
-
-  // Find the selected team object from the teams array
-  const selectedTeam = savedTeams.find(team => team.name === selectedTeamName);
-  if (!selectedTeam) {
-    console.error(`Team not found: ${selectedTeamName}`);
-    return;
-  }
-
-  // Filter players based on their team property
-  const teamPlayers = players.filter(player => player.team === selectedTeamName);
-  console.log('Filtered players:', teamPlayers);
-
-  // Separate players into injured and available groups
-  const injuredPlayers = teamPlayers.filter(player => player.injured);
-  const availablePlayers = teamPlayers.filter(player => !player.injured && !player.assignedSlot); // Exclude injured and assigned players
-
-  // Display available players
-  if (availablePlayers.length > 0) {
-    availablePlayers.forEach(player => {
-      const playerDiv = createPlayerElement(player);
-      playersContainer.appendChild(playerDiv);
-    });
-  } else {
-    const noPlayersMessage = document.createElement('div');
-    noPlayersMessage.textContent = 'No players available for this team.';
-    playersContainer.appendChild(noPlayersMessage);
-  }
-
-  // Display injured players (optional)
-  if (injuredPlayers.length > 0) {
-    const injuredSection = document.createElement('div');
-    injuredSection.classList.add('injured-players');
-    injuredSection.innerHTML = '<h3>Injured Players</h3>';
-    injuredPlayers.forEach(player => {
-      const playerDiv = createPlayerElement(player);
-      playerDiv.style.color = 'gray'; // Example: Show injured players in gray
-      injuredSection.appendChild(playerDiv);
-    });
-    playersContainer.appendChild(injuredSection);
-  }
-}
-
-
-// Make slots droppable only for players of the selected team
-function makeSlotsDroppable(players) {
-  const playerSlots = document.querySelectorAll('.player-slot');
-    
-  playerSlots.forEach(slot => {
-    slot.addEventListener('dragover', (event) => {
-      event.preventDefault();
-      slot.style.backgroundColor = 'rgba(0, 128, 0, 0.2)';
-    });
-
-    slot.addEventListener('dragleave', () => {
-      slot.style.backgroundColor = '';
-    });
-
-    slot.addEventListener('drop', (event) => {
-      event.preventDefault();
-      console.log('drop triggered');
-
-      const playerId = event.dataTransfer.getData('playerId');
-      const playerPosition = event.dataTransfer.getData('playerPosition');
-      const slotPosition = slot.getAttribute('data-position');
-
-      // Find the player by ID
-      const player = players.find(p => p.id.toString() === playerId);
-
-      if (!player) {
-        alert('Player not found.');
-        return;
-      }
-
-      // Check if player position matches the slot
-      if (playerPosition !== slotPosition) {
-        alert('Player cannot be placed in this position!');
-        slot.style.backgroundColor = ''; // Reset the slot background
-        return;
-      }
-
-      // Remove the player from the available players list and add them to the slot
-      removePlayerFromAvailableList(player.id);
-      slot.setAttribute('data-id', player.id);
-      slot.classList.add('assigned');
-      slot.textContent = `${player.name} (${player.position})`;
-      slot.style.backgroundColor = '';
-
-      // Save updated player assignment to `localStorage`
-      const updatedPlayers = [...players];  // Make a copy to avoid mutation
-      const playerIndex = updatedPlayers.findIndex(p => p.id === player.id);
-      if (playerIndex !== -1) {
-        updatedPlayers[playerIndex].assignedSlot = slotPosition;  // Store assigned slot position
-      }
-
-      localStorage.setItem('players', JSON.stringify(updatedPlayers));
-
-      // Save the line assignments
-  const selectedTeamName = savedTeams[teamSelect.value]?.name;
-  saveLineAssignments(selectedTeamName);
+document.addEventListener('DOMContentLoaded', async () => {
+  await loadPlayers();
+  displayTeams();
+  setUpEventListeners();
 });
+
+function displayTeams() {
+  const container = document.getElementById('teams-container');
+  container.innerHTML = ''; // Clear container before displaying
+
+  teams.forEach(team => {
+    const teamDiv = document.createElement('div');
+    teamDiv.classList.add('team');
+    teamDiv.id = `team-${team.name}`;
+
+    const teamHeading = document.createElement('h2');
+    teamHeading.innerText = team.name;
+    teamDiv.appendChild(teamHeading);
+
+    const lineContainer = document.createElement('div');
+    lineContainer.classList.add('lines');
+    ['First Line', 'Second Line', 'Third Line', 'Fourth Line'].forEach(line => {
+      const lineDiv = createLineDiv(line, team.players);
+      lineContainer.appendChild(lineDiv);
     });
 
+    teamDiv.appendChild(lineContainer);
+    container.appendChild(teamDiv);
+  });
 }
 
-  // Remove the player from the available players list
-  function removePlayerFromAvailableList(playerId) {
-    const playerDiv = document.querySelector(`.player[data-id="${playerId}"]`);
-    if (playerDiv) {
-      playerDiv.remove(); // Remove the player element from the available players container
-    }
-  }
-  
-  // Function for draggable player element
-  function createPlayerElement(player) {
+function createLineDiv(lineName, players) {
+  const lineDiv = document.createElement('div');
+  lineDiv.classList.add('line');
+  lineDiv.id = `line-${lineName}`;
+
+  const lineTitle = document.createElement('h3');
+  lineTitle.innerText = lineName;
+  lineDiv.appendChild(lineTitle);
+
+  const lineList = document.createElement('div');
+  lineList.classList.add('line-list');
+  lineDiv.appendChild(lineList);
+
+  // Add draggable player elements to the line
+  players.forEach(player => {
     const playerDiv = document.createElement('div');
     playerDiv.classList.add('player');
-    playerDiv.textContent = `${player.name} - ${player.position}`;
-    playerDiv.draggable = true;
-    playerDiv.setAttribute('data-id', player.id);
-    playerDiv.setAttribute('data-position', player.position);
+    playerDiv.setAttribute('draggable', true);
+    playerDiv.dataset.playerId = player.id;
+    playerDiv.dataset.teamName = player.team;
+    playerDiv.dataset.lineName = lineName;
 
-    // Create injury toggle checkbox
-  const injuryToggle = document.createElement('input');
-  injuryToggle.type = 'checkbox';
-  injuryToggle.checked = player.injured; // Set checkbox based on player's injury status
-  injuryToggle.addEventListener('change', () => {
-    // Toggle the injury status in player data
-    player.injured = injuryToggle.checked;
-    updatePlayerInjuryStatus(player); // Update injury status in localStorage
+    playerDiv.innerText = `${player.name} - ${player.position}`;
+    lineList.appendChild(playerDiv);
   });
 
-  // Label for injury status
-  const injuryLabel = document.createElement('span');
-  injuryLabel.textContent = "Injured";
-  injuryLabel.style.marginLeft = '10px';
+  return lineDiv;
+}
 
-  // Append the checkbox and label to the player element
-  playerDiv.appendChild(injuryToggle);
-  playerDiv.appendChild(injuryLabel);
-
-  // Style to show injured players differently
-  if (player.injured) {
-    playerDiv.style.color = 'red';  // Example: Show injured players in red
-  } else {
-    playerDiv.style.color = ''; // Default color for non-injured players
-  }
-
-    // Add dragstart event to the player element
-    playerDiv.addEventListener('dragstart', (event) => {
-      event.dataTransfer.setData('playerId', player.id);
-      event.dataTransfer.setData('playerPosition', player.position);
+function setUpEventListeners() {
+  const lines = document.querySelectorAll('.line-list');
+  lines.forEach(line => {
+    line.addEventListener('dragover', (e) => {
+      e.preventDefault(); // Allow drop
     });
 
-        return playerDiv;
-  }
+    line.addEventListener('drop', (e) => {
+      const draggedPlayer = document.querySelector('.dragging');
+      if (draggedPlayer) {
+        const playerId = draggedPlayer.dataset.playerId;
+        const newLine = e.target.closest('.line').id.replace('line-', '');
 
-  // Function to update injury status in localStorage
-function updatePlayerInjuryStatus(player) {
-  const savedPlayers = JSON.parse(localStorage.getItem('players')) || [];
-  
-  // Find the player and update their injury status
-  const playerIndex = savedPlayers.findIndex(p => p.id === player.id);
-  if (playerIndex !== -1) {
-    savedPlayers[playerIndex].injured = player.injured;
-  }
-
-  // Save the updated players array back to localStorage
-  localStorage.setItem('players', JSON.stringify(savedPlayers));
-
-  // Optionally, re-render the available players to reflect changes
-  updateAvailablePlayers(savedPlayers, selectedTeamName);  // Update available players
-}
-  
-  // Function to make the player element draggable
-function makePlayerDraggable(slot) {
-  const playerId = slot.getAttribute('data-id');
-  const player = players.find(p => p.id.toString() === playerId);
-  
-  if (!player) return;
-
-  slot.draggable = true;
-
-  slot.addEventListener('dragstart', (event) => {
-    event.dataTransfer.setData('playerId', player.id);
-    event.dataTransfer.setData('playerPosition', player.position);
-    slot.style.opacity = '0.5'; // To show that it is being dragged
-  });
-
-   slot.addEventListener('dragend', () => {
-    slot.style.opacity = '1'; // Reset opacity when drag ends
-  });
-}
-
-// Function to handle removing the player from the assigned slot and adding back to available players
-function removePlayerFromSlot(slot, player, selectedTeam) {
-  // Remove the player from the assigned slot
-  slot.textContent = `${player.position} - ${player.name}`;
-  slot.classList.remove('assigned');
-  slot.removeAttribute('data-id');
-  slot.removeAttribute('data-assigned');
-
-  // Add the player back to the list of available players
-  updateAvailablePlayers(players, selectedTeam.name); // Ensure list is updated
-
-  // Re-enable droppable behavior for the slot
-  makeSlotsDroppable(players); // Ensure droppable behavior is still active
-
-}
+        assignPlayerToLine(playerId, newLine);
+        displayTeams(); // Re-render teams after assigning player to a line
+      }
     });
-  
+  });
 
+  const players = document.querySelectorAll('.player');
+  players.forEach(player => {
+    player.addEventListener('dragstart', () => {
+      player.classList.add('dragging');
+    });
+
+    player.addEventListener('dragend', () => {
+      player.classList.remove('dragging');
+    });
+  });
+
+  // Reset button
+  document.getElementById('reset-btn').addEventListener('click', resetLineAssignments);
+
+  // Save button
+  document.getElementById('save-btn').addEventListener('click', saveLineAssignments);
+}
+
+function assignPlayerToLine(playerId, lineName) {
+  // Find the player and update the line assignment in the team
+  const player = playersData.players.find(p => p.id === playerId);
+  if (player) {
+    player.line = lineName; // Store line assignment in player object
+
+    // Find the team this player belongs to
+    const team = teams.find(t => t.name === player.team);
+    if (team) {
+      // Re-sort the team's players based on their line assignment (optional)
+      team.players.sort((a, b) => (a.line > b.line ? 1 : -1));
+    }
+  }
+}
+
+function saveLineAssignments() {
+  // Save the current state of teams to localStorage
+  localStorage.setItem('teams', JSON.stringify(teams));
+  console.log('Line assignments saved');
+}
+
+function resetLineAssignments() {
+  // Reset all line assignments
+  playersData.players.forEach(player => {
+    delete player.line; // Remove line assignment
+  });
+  displayTeams(); // Re-render teams with no line assignments
+}
