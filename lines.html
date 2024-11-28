@@ -7,16 +7,19 @@
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-  <h1>Assign Players to Lines</h1>
+    <!-- Container for displaying available players -->
+    <div id="available-players">
+        <!-- Available players will be displayed here -->
+    </div>
 
-  <div id="available-players"></div>
+    <!-- Container for displaying teams and their line assignments -->
+    <div id="team-lines">
+        <!-- Teams and player line assignments will be displayed here -->
+    </div>
 
-  <div id="teams-container">
-    <!-- Dynamic content will be inserted here for each team -->
-  </div>
-
-  <button id="reset-btn">Reset Line Assignments</button>
-  <button id="save-btn">Save Line Assignments</button>
+    <!-- Save and Reset buttons -->
+    <button id="save">Save Assignments</button>
+    <button id="reset">Reset Assignments</button>
 
   <script type="module" src="lines.js"></script>
 </body>
