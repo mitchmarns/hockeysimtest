@@ -3,29 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="./css/styles.css">
   <title>Assign Players to Lines</title>
+  <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-  <div class="container">
-    <h1>Assign Players to Lines</h1>
+  <h1>Assign Players to Lines</h1>
 
-    <!-- Team Dropdown -->
-    <label for="team-select">Select Team:</label>
-    <select id="team-select"></select>
-
-    <!-- Player Assignment -->
-    <div id="player-container"></div>
-
-    <!-- Buttons for saving and resetting -->
-    <div class="buttons">
-      <button id="save-lines-btn">Save Line Assignments</button>
-      <button id="reset-lines-btn">Reset Line Assignments</button>
-    </div>
+  <div id="teams-container">
+    <!-- Dynamic content will be inserted here for each team -->
   </div>
 
-  <script src="team.js"></script>
-  <script src="players.json"></script>
-  <script src="app.js"></script>
+  <button id="reset-btn">Reset Line Assignments</button>
+  <button id="save-btn">Save Line Assignments</button>
+
+  <script type="module" src="app.js"></script>
 </body>
 </html>
