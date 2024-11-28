@@ -2,9 +2,10 @@
 
 import { teams } from './team.js'; // Import teams data
 
-document.addEventListener('DOMContentLoaded', () => {
-  displayTeamsForLineAssignment();
-  displayAvailablePlayers();
+document.addEventListener('DOMContentLoaded', async () => {
+  await loadPlayers(); 
+  displayTeamsForLineAssignment();  
+  displayAvailablePlayers();  
 });
 
 let players = [];  // Store player data
@@ -63,6 +64,10 @@ function displayTeamsForLineAssignment() {
 // Function to display available players
 function displayAvailablePlayers() {
   const availablePlayersContainer = document.getElementById('available-players');
+  if (!availablePlayersContainer) {
+    console.error('Available players container not found!');
+    return;
+  }
   availablePlayersContainer.innerHTML = ''; // Clear any existing content
 
   const availablePlayers = getAvailablePlayers();  // This function should return players who are not assigned to any team yet
