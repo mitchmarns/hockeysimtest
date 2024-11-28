@@ -319,5 +319,5 @@ function removePlayerFromSlot(slot, player, selectedTeam) {
 
 }
     });
-  }
+  
 });
