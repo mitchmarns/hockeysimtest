@@ -37,10 +37,19 @@ function displayAvailablePlayers() {
 // Function to display teams and their players
 function displayTeams() {
   const teamsContainer = document.getElementById('teams');
+
+  if (!Array.isArray(teams)) {
+    console.error('Teams is not an array:', teams);
+    return;
+  }
   
   // Iterate over the teams
   teams.forEach(team => {
     const teamDiv = document.getElementById(team.name); // Get the div for each team
+    if (!teamDiv) {
+      console.error(`Team div for ${team.name} not found`);
+      return;
+    }
     teamDiv.innerHTML = `<h3>${team.name}</h3>`; // Add the team name
     
     // Add each player's name and position to the team's div
