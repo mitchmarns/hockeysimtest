@@ -1,6 +1,7 @@
 import { teams } from './team.js';
 
 document.addEventListener('DOMContentLoaded', () => {
+  const saveLinesBtn = document.getElementbyId('save-lines-btn');
   const teamSelect = document.getElementById('team-select');
   const playersContainer = document.getElementById('available-players');
   let players = [];
@@ -26,6 +27,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const initialTeamName = savedTeams[initialTeamIndex]?.name || '';
   
   updateAvailablePlayers(players, initialTeamName);
+
+  // Button event listener to manually save line assignments
+  saveLinesBtn.addEventListener('click', () => {
+    const selectedTeamIndex = parseInt(teamSelect.value, 10);
+    const selectedTeamName = savedTeams[selectedTeamIndex]?.name || '';
+    if (selectedTeamName) {
+      saveLineAssignments(selectedTeamName);  // Save the line assignments for the current team
+    } else {
+      console.error('No team selected.');
+    }
+  });
 
   // Fetch and display available players
   fetch('./players.json')
