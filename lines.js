@@ -252,7 +252,23 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   }
+// Function to handle removing the player from the assigned slot and adding back to available players
+function removePlayerFromSlot(slot, player, selectedTeam) {
+  // Remove the player from the assigned slot
+  slot.textContent = `${player.position} - ${player.name}`;
+  slot.classList.remove('assigned');
+  slot.removeAttribute('data-id');
+  slot.removeAttribute('data-assigned');
 
+  // Add the player back to the list of available players
+  updateAvailablePlayers(players, selectedTeam.name); // Ensure list is updated
+
+  // Re-enable droppable behavior for the slot
+  makeSlotsDroppable(players); // Ensure droppable behavior is still active
+
+  // Enable the player to be dragged again
+  makePlayerDraggable(slot); // This seems to be a redundant call if the player is already draggable, but if needed, you can keep it
+}
   // Function to make the player element draggable
 function makePlayerDraggable(slot) {
   const playerId = slot.getAttribute('data-id');
