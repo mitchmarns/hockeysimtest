@@ -262,7 +262,7 @@ function makeSlotsDroppable(players) {
   saveLineAssignments(selectedTeamName);
 });
     });
-  });
+
 }
   
   // Function for draggable player element
