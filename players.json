@@ -99,20 +99,6 @@
         }
     },
     {
-      "id": 25,
-      "name": "Hunter Owens",
-      "position": "C",
-      "assigned": false,
-      "team": null,
-      "injured": false,
-      "skills": {
-        "shooting": 89,
-        "passing": 90,
-        "defense": 86,
-        "speed": 94
-        }
-    },
-    {
       "id": 29,
       "name": "Asher Wilde",
       "position": "LD",
