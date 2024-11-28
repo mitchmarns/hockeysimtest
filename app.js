@@ -24,7 +24,9 @@ function displayAvailablePlayers() {
   const players = getAvailablePlayers();
   players.forEach(player => {
     container.innerHTML += `
-      <div class="player">
+      <div class="player" data-id="${player.id}">
+        <img src="${player.image}" alt="${player.name}" width="50" height="50" /> <!-- Display player image -->
+        <span>#${player.id}</span> <!-- Display player jersey number -->
         ${player.name} - ${player.position}
         <button class="assign-btn" data-id="${player.id}" data-team="Rangers">Rangers</button>
         <button class="assign-btn" data-id="${player.id}" data-team="Devils">Devils</button>
