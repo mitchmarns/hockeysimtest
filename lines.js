@@ -252,20 +252,6 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   }
-// Function to handle removing the player from the assigned slot and adding back to available players
-function removePlayerFromSlot(slot, player, selectedTeam) {
-  // Remove the player from the assigned slot
-  slot.textContent = `${player.position} - ${player.name}`;
-  slot.classList.remove('assigned');
-  slot.removeAttribute('data-id');
-  slot.removeAttribute('data-assigned');
-
-  // Add the player back to the list of available players
-  updateAvailablePlayers(players, selectedTeam.name); // Ensure list is updated
-
-  // Re-enable droppable behavior for the slot
-  makeSlotsDroppable(players); // Ensure droppable behavior is still active
-}
   
     // Draggable player element
   function createPlayerElement(player) {
@@ -281,6 +267,9 @@ function removePlayerFromSlot(slot, player, selectedTeam) {
       event.dataTransfer.setData('playerId', player.id);
       event.dataTransfer.setData('playerPosition', player.position);
     });
+
+        return playerDiv;
+  }
   
   // Function to make the player element draggable
 function makePlayerDraggable(slot) {
@@ -302,6 +291,8 @@ function makePlayerDraggable(slot) {
   });
 }
 
+  // Function to handle removing the player from the assigned slot and adding back to available players
+function removePlayerFromSlot(slot, player, selectedTeam) {
   // Remove the player from the assigned slot
   slot.textContent = `${player.position} - ${player.name}`;
   slot.classList.remove('assigned');
@@ -310,11 +301,8 @@ function makePlayerDraggable(slot) {
 
   // Add the player back to the list of available players
   updateAvailablePlayers(players, selectedTeam.name); // Ensure list is updated
+
+  // Re-enable droppable behavior for the slot
   makeSlotsDroppable(players); // Ensure droppable behavior is still active
 }
-
-    return playerDiv;
-  }
-
-    });
                 
