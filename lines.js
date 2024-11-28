@@ -306,4 +306,6 @@ function removePlayerFromSlot(slot, player, selectedTeam) {
   makeSlotsDroppable(players); // Ensure droppable behavior is still active
 
 }
-                
+        });
+  }
+});
