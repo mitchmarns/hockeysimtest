@@ -7,19 +7,19 @@ function createPlayerElement(player) {
   return playerDiv;
 }
 
-// Assign Power Play (PP) and Penalty Kill (PK) units
-function assignSpecialTeams(players, lineAssignments) {
+// Assign Power Play (PP) and Penalty Kill (PK) units for a specific team
+function assignSpecialTeams(players, selectedTeamName) {
   const pp1 = [];
   const pp2 = [];
   const pk1 = [];
   const pk2 = [];
 
-  // Filter assigned players
-  const assignedPlayers = players.filter(player => player.team && !player.injured);
+  // Filter players for the selected team
+  const teamPlayers = players.filter(player => player.team === selectedTeamName && !player.injured);
 
   // Group players by position
-  const forwards = assignedPlayers.filter(player => player.position !== 'D').sort((a, b) => b.scoring - a.scoring);
-  const defensemen = assignedPlayers.filter(player => player.position === 'D').sort((a, b) => b.defense - a.defense);
+  const forwards = teamPlayers.filter(player => player.position !== 'D').sort((a, b) => b.scoring - a.scoring);
+  const defensemen = teamPlayers.filter(player => player.position === 'D').sort((a, b) => b.defense - a.defense);
 
   // Assign PP units
   pp1.push(...forwards.slice(0, 3), ...defensemen.slice(0, 2)); // Top 3 forwards and 2 defensemen
@@ -54,62 +54,47 @@ function renderSpecialTeams(specialTeams) {
   populateContainer(pk2Container, specialTeams.PK2);
 }
 
-// Initialize the special teams page
-document.addEventListener('DOMContentLoaded', () => {
-  // Retrieve players and line assignments from LocalStorage
-  const players = JSON.parse(localStorage.getItem('teamPlayers')) || [];
-  const lineAssignments = JSON.parse(localStorage.getItem('lineAssignments')) || {};
-
-  // Assign special teams
-  const specialTeams = assignSpecialTeams(players, lineAssignments);
-
-  // Render the special teams
-  renderSpecialTeams(specialTeams);
-
-  // Make players draggable (optional for manual adjustments)
-  makePlayersDraggable();
-  makeSlotsDroppable();
-});
-
-// Enable drag-and-drop for manual adjustments (optional)
-function makePlayersDraggable() {
-  const playerElements = document.querySelectorAll('.player');
-  playerElements.forEach(player => {
-    player.setAttribute('draggable', true);
-
-    player.addEventListener('dragstart', event => {
-      event.dataTransfer.setData('playerId', player.dataset.id);
-    });
-  });
-}
-
-function makeSlotsDroppable() {
-  const slots = document.querySelectorAll('.pp-unit, .pk-unit');
-  slots.forEach(slot => {
-    slot.addEventListener('dragover', event => {
-      event.preventDefault();
-    });
-
-    slot.addEventListener('drop', event => {
-      const playerId = event.dataTransfer.getData('playerId');
-      const player = players.find(p => p.id === parseInt(playerId, 10));
-      if (player) {
-        // Move the player to the new slot
-        slot.appendChild(createPlayerElement(player));
-        // Save updates to LocalStorage
-        saveSpecialTeamAssignments();
-      }
-    });
-  });
-}
-
-// Save special team assignments back to LocalStorage
-function saveSpecialTeamAssignments() {
+// Save special team assignments back to LocalStorage for a specific team
+function saveSpecialTeamAssignments(selectedTeamName) {
   const pp1 = Array.from(document.getElementById('powerplay1').children).map(el => el.dataset.id);
   const pp2 = Array.from(document.getElementById('powerplay2').children).map(el => el.dataset.id);
   const pk1 = Array.from(document.getElementById('penaltykill1').children).map(el => el.dataset.id);
   const pk2 = Array.from(document.getElementById('penaltykill2').children).map(el => el.dataset.id);
 
-  const specialTeams = { PP1: pp1, PP2: pp2, PK1: pk1, PK2: pk2 };
-  localStorage.setItem('specialTeams', JSON.stringify(specialTeams));
+  const allSpecialTeams = JSON.parse(localStorage.getItem('specialTeams')) || {};
+  allSpecialTeams[selectedTeamName] = { PP1: pp1, PP2: pp2, PK1: pk1, PK2: pk2 };
+  localStorage.setItem('specialTeams', JSON.stringify(allSpecialTeams));
+}
+
+// Initialize the special teams page
+document.addEventListener('DOMContentLoaded', () => {
+  const players = JSON.parse(localStorage.getItem('teamPlayers')) || [];
+  const allSpecialTeams = JSON.parse(localStorage.getItem('specialTeams')) || {};
+  const teamSelector = document.getElementById('team-selector');
+
+  // Load initial team
+  let selectedTeamName = teamSelector.value;
+
+  // Handle team selection change
+  teamSelector.addEventListener('change', () => {
+    selectedTeamName = teamSelector.value;
+    loadTeamSpecialTeams(players, selectedTeamName, allSpecialTeams);
+  });
+
+  // Load special teams for the initial team
+  loadTeamSpecialTeams(players, selectedTeamName, allSpecialTeams);
+});
+
+// Load special teams for a specific team
+function loadTeamSpecialTeams(players, selectedTeamName, allSpecialTeams) {
+  const lineAssignments = allSpecialTeams[selectedTeamName] || {};
+  const specialTeams = assignSpecialTeams(players, selectedTeamName);
+
+  // Merge automatic assignments with saved data
+  specialTeams.PP1 = lineAssignments.PP1 || specialTeams.PP1;
+  specialTeams.PP2 = lineAssignments.PP2 || specialTeams.PP2;
+  specialTeams.PK1 = lineAssignments.PK1 || specialTeams.PK1;
+  specialTeams.PK2 = lineAssignments.PK2 || specialTeams.PK2;
+
+  renderSpecialTeams(specialTeams);
 }
