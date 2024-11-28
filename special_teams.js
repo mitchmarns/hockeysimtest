@@ -9,29 +9,52 @@ function createPlayerElement(player) {
 
 // Assign Power Play (PP) and Penalty Kill (PK) units for a specific team
 function assignSpecialTeams(players, selectedTeamName) {
-  const pp1 = [];
-  const pp2 = [];
-  const pk1 = [];
-  const pk2 = [];
 
-  // Filter players for the selected team
+  // Filter players for the selected team and exclude injured players
   const teamPlayers = players.filter(player => player.team === selectedTeamName && !player.injured);
 
   // Group players by position
-  const forwards = teamPlayers.filter(player => player.position !== 'D').sort((a, b) => b.scoring - a.scoring);
-  const defensemen = teamPlayers.filter(player => player.position === 'D').sort((a, b) => b.defense - a.defense);
+  // Group players by position
+  const leftWings = teamPlayers.filter(player => player.position === 'LW').sort((a, b) => b.skills.shooting - a.skills.shooting);
+  const centers = teamPlayers.filter(player => player.position === 'C').sort((a, b) => b.skills.passing - a.skills.passing);
+  const rightWings = teamPlayers.filter(player => player.position === 'RW').sort((a, b) => b.skills.shooting - a.skills.shooting);
+  const defensemen = teamPlayers.filter(player => player.position === 'LD').sort((a, b) => b.skills.defense - a.skills.defense);
+  const defensemen = teamPlayers.filter(player => player.position === 'RD').sort((a, b) => b.skills.defense - a.skills.defense);
 
-  // Assign PP units
-  pp1.push(...forwards.slice(0, 3), ...defensemen.slice(0, 2)); // Top 3 forwards and 2 defensemen
-  pp2.push(...forwards.slice(3, 6), ...defensemen.slice(2, 4)); // Next 3 forwards and 2 defensemen
+  // Power Play (PP) assignments
+  const pp1 = [];
+  const pp2 = [];
 
-  // Assign PK units
-  pk1.push(...forwards.slice(0, 2), ...defensemen.slice(0, 2)); // Best defensive forwards and defensemen
-  pk2.push(...forwards.slice(2, 4), ...defensemen.slice(2, 4)); // Next-best defensive forwards and defensemen
+  // Assign PP1: Best LW, C, RW, and 2 best D
+  if (leftWings.length > 0) pp1.push(leftWings[0]);
+  if (centers.length > 0) pp1.push(centers[0]);
+  if (rightWings.length > 0) pp1.push(rightWings[0]);
+  pp1.push(...defensemen.slice(0, 2)); // Best 2 defensemen
+
+  // Assign PP2: Next best LW, C, RW, and next 2 best D
+  if (leftWings.length > 1) pp2.push(leftWings[1]);
+  if (centers.length > 1) pp2.push(centers[1]);
+  if (rightWings.length > 1) pp2.push(rightWings[1]);
+  pp2.push(...defensemen.slice(2, 4)); // Next 2 defensemen
+
+  // Penalty Kill (PK) assignments
+  const pk1 = [];
+  const pk2 = [];
+
+  // Assign PK1: Best defensive forwards and best 2 defensive defensemen
+  const defensiveForwards = teamPlayers
+    .filter(player => player.position !== 'D')
+    .sort((a, b) => b.skills.defense - a.skills.defense);
+  pk1.push(...defensiveForwards.slice(0, 2)); // Best 2 defensive forwards
+  pk1.push(...defensemen.slice(0, 2)); // Best 2 defensemen
+
+  // Assign PK2: Next best defensive forwards and next 2 defensive defensemen
+  pk2.push(...defensiveForwards.slice(2, 4)); // Next 2 defensive forwards
+  pk2.push(...defensemen.slice(2, 4)); // Next 2 defensemen
 
   return { PP1: pp1, PP2: pp2, PK1: pk1, PK2: pk2 };
 }
-
+  
 // Render the special teams on the page
 function renderSpecialTeams(specialTeams) {
   const pp1Container = document.getElementById('powerplay1');
