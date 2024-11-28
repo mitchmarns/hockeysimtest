@@ -6,6 +6,12 @@ body {
   margin-bottom: 20px;
 }
 
+#available-players-list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
 .team {
   border: 1px solid black;
   margin: 10px;
@@ -21,11 +27,21 @@ option {
   padding: 5px;
   margin: 5px;
   border: 1px solid #333;
-  cursor: grab;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
 }
 
 .player:active {
   cursor: grabbing;
+}
+
+.player:hover {
+  background-color: #e6e6e6;
+}
+
+.player span {
+  font-size: 14px;
 }
 
 .player-slot {
@@ -47,6 +63,23 @@ option {
   font-weight: bold;
   padding: 5px;
   border: 2px solid #007F00;
+}
+
+.players-box {
+  width: 300px;
+  max-height: 400px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  overflow-y: auto;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.players-box h2 {
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: 18px;
 }
 
 #line-container {
