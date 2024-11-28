@@ -12,7 +12,7 @@
         "stick": 89,
         "legs": 85,
         "speed": 78
-      }
+        }
     },
     {
       "id": 2,
@@ -26,7 +26,7 @@
         "stick": 89,
         "legs": 89,
         "speed": 80
-      }
+        }
     },
     {
       "id": 11,
@@ -40,7 +40,7 @@
         "passing": 87,
         "defense": 77,
         "speed": 88
-      }
+        }
     },
     {
       "id": 13,
@@ -82,7 +82,35 @@
         "passing": 85,
         "defense": 79,
         "speed": 86
-      }
+        }
+    },
+    {
+      "id": 24,
+      "name": "Liam Floch",
+      "position": "RW",
+      "assigned": false,
+      "team": null,
+      "injured": false,
+      "skills": {
+        "shooting": 89,
+        "passing": 90,
+        "defense": 80,
+        "speed": 89
+        }
+    },
+    {
+      "id": 25,
+      "name": "Hunter Owens",
+      "position": "C",
+      "assigned": false,
+      "team": null,
+      "injured": false,
+      "skills": {
+        "shooting": 89,
+        "passing": 90,
+        "defense": 86,
+        "speed": 94
+        }
     },
     {
       "id": 29,
@@ -96,7 +124,7 @@
         "passing": 85,
         "defense": 95,
         "speed": 82
-      }
+        }
     },
     {
       "id": 34,
@@ -110,7 +138,35 @@
         "passing": 90,
         "defense": 88,
         "speed": 87
-      }
+        }
+    },
+    {
+      "id": 37,
+      "name": "Jayden Anderson",
+      "position": "RW",
+      "assigned": false,
+      "team": null,
+      "injured": false,
+      "skills": {
+        "shooting": 91,
+        "passing": 89,
+        "defense": 79,
+        "speed": 88
+        }
+    },
+    {
+      "id": 53,
+      "name": "Zander Wallace",
+      "position": "C",
+      "assigned": false,
+      "team": null,
+      "injured": false,
+      "skills": {
+        "shooting": 88,
+        "passing": 89,
+        "defense": 82,
+        "speed": 88
+        }
     },
     {
       "id": 60,
@@ -124,7 +180,7 @@
         "stick": 84,
         "legs": 87,
         "speed": 80
-      }
+        }
     },
     {
       "id": 88,
@@ -138,7 +194,21 @@
         "passing": 92,
         "defense": 80,
         "speed": 90
-      }
-    }
+        }
+    },
+    {
+      "id": 89,
+      "name": "David Pastrnak",
+      "position": "RW",
+      "assigned": false,
+      "team": null,
+      "injured": false,
+      "skills": {
+        "shooting": 95,
+        "passing": 95,
+        "defense": 80,
+        "speed": 91
+        }
+    },
   ]
 }
