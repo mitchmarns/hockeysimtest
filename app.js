@@ -18,7 +18,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 function displayAvailablePlayers() {
   const container = document.getElementById('available-players');
+  if (!container) {
+    console.error('Container with id "available-players" not found');
+    return;
+  }
+  
   container.innerHTML = '';
+  
   const players = getAvailablePlayers();
   players.forEach(player => {
     container.innerHTML += `
