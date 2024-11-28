@@ -2,6 +2,7 @@ import { teams } from './team.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   const saveLinesBtn = document.getElementById('save-lines-btn');
+  const resetLinesBtn = document.getElementById('reset-lines-btn');
   const teamSelect = document.getElementById('team-select');
   const playersContainer = document.getElementById('available-players');
   let players = [];
@@ -91,6 +92,39 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
   });
+
+  // Button event listener to manually save line assignments
+  saveLinesBtn.addEventListener('click', () => {
+    const selectedTeamIndex = parseInt(teamSelect.value, 10);
+    const selectedTeamName = savedTeams[selectedTeamIndex]?.name || '';
+    if (selectedTeamName) {
+      saveLineAssignments(selectedTeamName);
+    } else {
+      console.error('No team selected.');
+    }
+  });
+
+  // Reset button event listener to reset line assignments
+  resetLinesBtn.addEventListener('click', () => {
+    const selectedTeamIndex = parseInt(teamSelect.value, 10);
+    const selectedTeamName = savedTeams[selectedTeamIndex]?.name || '';
+    if (selectedTeamName) {
+      resetLineAssignments(selectedTeamName); // Reset the line assignments for the current team
+    }
+  });
+
+  // Reset line assignments in the slots and clear localStorage
+  function resetLineAssignments(teamName) {
+    // Clear the player slots
+    clearPlayerSlots();
+
+    // Clear the line assignments for the selected team in localStorage
+    const savedLines = JSON.parse(localStorage.getItem('lineAssignments')) || {};
+    delete savedLines[teamName];  // Remove the specific team assignments
+    localStorage.setItem('lineAssignments', JSON.stringify(savedLines));
+
+    console.log(`Reset line assignments for ${teamName}`);
+  }
         
   // Function to clear player slots
   function clearPlayerSlots() {
