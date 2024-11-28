@@ -201,10 +201,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Remove existing player if the slot is already assigned
         if (slot.hasAttribute('data-id')) {
-          const playerId = slot.getAttribute('data-id');
-          const player = players.find(p => p.id.toString() === playerId);
+          const oldplayerId = slot.getAttribute('data-id');
+          const oldplayer = players.find(p => p.id.toString() === playerId);
       
-          if (player) {
+          if (oldplayer) {
             const selectedTeamIndex = parseInt(teamSelect.value, 10);
             const selectedTeam = savedTeams[selectedTeamIndex];
             removePlayerFromSlot(slot, player, selectedTeam);
@@ -261,17 +261,25 @@ document.addEventListener('DOMContentLoaded', () => {
         slot.setAttribute('data-id', player.id);
         slot.style.backgroundColor = '';
 
+        // Save line assignments to localStorage
+        saveLineAssignments(selectedTeam.name);
+
+        // Clear the player's original block
+      const previousSlot = document.querySelector(`.player-slot[data-id="${playerId}"]`);
+      if (previousSlot) {
+        previousSlot.textContent = previousSlot.getAttribute('data-position');
+        previousSlot.removeAttribute('data-id');
+        previousSlot.removeAttribute('data-assigned');
+        previousSlot.classList.remove('assigned');
+        previousSlot.style.backgroundColor = '';
+      }
+
         // Enable removing a player from an assigned slot
         slot.addEventListener('dragstart', (event) => {
           if (slot.hasAttribute('data-id')) {
-            const playerId = slot.getAttribute('data-id');
-            const player = players.find(p => p.id.toString() === playerId);
-    
-            if (player) {
-              event.dataTransfer.setData('playerId', player.id);
-              event.dataTransfer.setData('playerPosition', player.position);
-              slot.style.opacity = '0.5'; // Indicate drag is active
-            }
+            event.dataTransfer.setData('playerId', player.id);
+            event.dataTransfer.setData('playerPosition', player.position);
+            slot.style.opacity = '0.5'; // Indicate drag is active
           }
         });
 
