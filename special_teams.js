@@ -93,6 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
   console.log("Loaded players:", players);
   const allSpecialTeams = JSON.parse(localStorage.getItem('specialTeams')) || {};
   const teamSelector = document.getElementById('team-selector');
+  const playersContainer = document.getElementById('players-container');
 
   // Load initial team
   let selectedTeamName = teamSelector.value;
@@ -111,6 +112,12 @@ document.addEventListener('DOMContentLoaded', () => {
 function loadTeamSpecialTeams(players, selectedTeamName, allSpecialTeams) {
   const lineAssignments = allSpecialTeams[selectedTeamName] || {};
   const specialTeams = assignSpecialTeams(players, selectedTeamName);
+
+  // Update the available players container
+  const availablePlayers = players.filter(player => player.team === selectedTeamName && !player.injured);
+
+  // Populate the players container with the available players
+  populateContainer(playersContainer, availablePlayers);
 
   // Merge automatic assignments with saved data
   specialTeams.PP1 = lineAssignments.PP1 || specialTeams.PP1;
