@@ -14,13 +14,10 @@ function assignSpecialTeams(players, selectedTeamName) {
   const teamPlayers = players.filter(player => player.team === selectedTeamName && !player.injured);
 
   // Group players by position
-  // Group players by position
   const leftWings = teamPlayers.filter(player => player.position === 'LW').sort((a, b) => b.skills.shooting - a.skills.shooting);
   const centers = teamPlayers.filter(player => player.position === 'C').sort((a, b) => b.skills.passing - a.skills.passing);
   const rightWings = teamPlayers.filter(player => player.position === 'RW').sort((a, b) => b.skills.shooting - a.skills.shooting);
-  const defensemen = teamPlayers.filter(player => player.position === 'LD').sort((a, b) => b.skills.defense - a.skills.defense);
-  const defensemen = teamPlayers.filter(player => player.position === 'RD').sort((a, b) => b.skills.defense - a.skills.defense);
-
+  const defensemen = teamPlayers.filter(player => player.position === 'LD' || player.position === 'RD').sort((a, b) => b.skills.defense - a.skills.defense);
   // Power Play (PP) assignments
   const pp1 = [];
   const pp2 = [];
