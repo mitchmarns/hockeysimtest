@@ -57,31 +57,23 @@ document.addEventListener('DOMContentLoaded', () => {
         makeSlotsDroppable(players);
 
         // Update players list when a new team is selected
-        teamSelect.addEventListener('change', () => {
-          const selectedTeamIndex = parseInt(teamSelect.value, 10);
-          const currentTeamName = savedTeams[selectedTeamIndex]?.name || '';
-          console.log('Loading lines for team:', currentTeamName);
+teamSelect.addEventListener('change', () => {
+  const selectedTeamIndex = parseInt(teamSelect.value, 10);
+  const previousTeamIndex = parseInt(localStorage.getItem('selectedTeamIndex'), 10);
 
-          // Save the line assignments for the previous team before changing
-          const previousTeamIndex = parseInt(localStorage.getItem('selectedTeamIndex'), 10);
-          const previousTeamName = savedTeams[previousTeamIndex]?.name || '';
-          saveLineAssignments(previousTeamName); // Save the previous team lines
-        
-          // Update localStorage for the new team
-          localStorage.setItem('selectedTeamIndex', selectedTeamIndex);
-        
-          // Clear player slots for the previous team
-          clearPlayerSlots();
-        
-          // Update available players for selected team
-          updateAvailablePlayers(players, currentTeamName);
-        
-          // Load the line assignments for the selected team
-          loadLineAssignments(currentTeamName);
-        
-          // Reinitialize droppable slots for the new team
-          makeSlotsDroppable(players);
-        });
+  const previousTeamName = savedTeams[previousTeamIndex]?.name || '';
+  const currentTeamName = savedTeams[selectedTeamIndex]?.name || '';
+
+  console.log('Saving line assignments for previous team:', previousTeamName);
+  saveLineAssignments(previousTeamName); // Save current lines before switching teams
+
+  localStorage.setItem('selectedTeamIndex', selectedTeamIndex);
+
+  clearPlayerSlots();
+  updateAvailablePlayers(players, currentTeamName);
+  loadLineAssignments(currentTeamName);
+  makeSlotsDroppable(players);
+});
       }
     });
         
@@ -101,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Save line assignments
   function saveLineAssignments(teamName) {
-    if (!teamName) {
+    if (!teamName || typeof teamName !== 'string') {
     console.error('Invalid team name in saveLineAssignments');
     return;
   }
