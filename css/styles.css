@@ -71,21 +71,22 @@ h1 {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
-  justify-content: space-around;
+  justify-content: center;
+  padding: 20px;
 }
 
 .team {
-  width: 200px;
+  width: 220px;
   padding: 20px;
-  border: 1px solid #333;
+  border: 1px solid #ddd;
   background-color: #fff;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 5px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
 }
 
 .team h3 {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 }
 
 .team ul {
@@ -94,8 +95,10 @@ h1 {
 }
 
 .team li {
-  font-size: 16px;
-  padding: 5px 0;
+  font-size: 14px;
+  padding: 6px 12px;
+  background-color: #f4f4f4;
+  border-radius: 5px;
   text-align: center;
 }
 
