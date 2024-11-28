@@ -3,13 +3,33 @@
 import { teams } from './team.js'; // Import teams data
 
 document.addEventListener('DOMContentLoaded', () => {
+  await loadPlayers();
   displayTeamsForLineAssignment();
   displayAvailablePlayers();
 });
 
+let players = [];  // Store player data
+
+// Function to load player data from players.json
+async function loadPlayers() {
+  try {
+    const response = await fetch('./players.json');
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    const data = await response.json();
+    players = data.players; // Store players in the global variable
+  } catch (error) {
+    console.error('Error loading player data:', error);
+  }
+}
+
 // Function to display players for line assignment
 function displayTeamsForLineAssignment() {
   const container = document.getElementById('team-lines');
+  if (!container) {
+    console.error('Team container not found!');
+    return;
+  }
+  
   container.innerHTML = ''; // Clear any existing content
 
   teams.forEach(team => {
@@ -18,6 +38,8 @@ function displayTeamsForLineAssignment() {
     teamDiv.classList.add('team-container');
     
     teamDiv.innerHTML = `<h2>${team.name}</h2>`;
+
+    const teamPlayers = players.filter(player => player.team === team.name);
     team.players.forEach(player => {
       const playerDiv = document.createElement('div');
       playerDiv.classList.add('player-container');
