@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 function displayAvailablePlayers() {
   const container = document.getElementById('available-players');
   container.innerHTML = '';
+  
   const players = getAvailablePlayers();
   players.forEach(player => {
     container.innerHTML += `
@@ -33,27 +34,21 @@ function displayAvailablePlayers() {
   });
 }
 
+// Function to display teams and their players
 function displayTeams() {
-  const teamsContainer = document.getElementById('teams-container');
-  teamsContainer.innerHTML = '';  // Clear existing content
-
+  const teamsContainer = document.getElementById('teams');
+  
+  // Iterate over the teams
   teams.forEach(team => {
-    const teamDiv = document.createElement('div');
-    teamDiv.classList.add('team');
+    const teamDiv = document.getElementById(team.name); // Get the div for each team
+    teamDiv.innerHTML = `<h3>${team.name}</h3>`; // Add the team name
     
-    const teamName = document.createElement('h3');
-    teamName.textContent = team.name;
-    teamDiv.appendChild(teamName);
-    
+    // Add each player's name and position to the team's div
     team.players.forEach(player => {
-      const playerDiv = document.createElement('div');
-      playerDiv.classList.add('player');
-      playerDiv.innerHTML = `
-        <span>${player.name} - ${player.position}</span>
-      `;
-      teamDiv.appendChild(playerDiv);
+      teamDiv.innerHTML += `
+        <div class="player">
+          <span>${player.name} - ${player.position}</span>
+        </div>`;
     });
-    
-    teamsContainer.appendChild(teamDiv);
   });
 }
