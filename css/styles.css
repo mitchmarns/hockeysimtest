@@ -4,6 +4,9 @@ body {
 
 #available-players {
   margin-bottom: 20px;
+  display: flex;
+  flex-direction: column; 
+  gap: 10px;
 }
 
 #available-players-list {
@@ -16,12 +19,15 @@ body {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
+  justify-content: space-between;
 }
 
 .team {
   border: 1px solid black;
   margin: 10px;
   padding: 10px;
+  flex: 1 0 300px;  
+  box-sizing: border-box;
 }
 
 option {
@@ -36,6 +42,7 @@ option {
   cursor: pointer;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
 .player:active {
@@ -100,10 +107,12 @@ option {
 #line-container {
   display: flex;
   flex-wrap: wrap;
+  gap: 10px;
 }
 
 .line, .goalie-line {
   margin: 15px;
+  flex: 1 0 200px;
 }
 
 .line-list {
