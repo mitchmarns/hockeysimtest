@@ -203,73 +203,53 @@ function makeSlotsDroppable(players) {
     slot.addEventListener('drop', (event) => {
       event.preventDefault();
 
-      // Remove existing player if the slot is already assigned
-      if (slot.hasAttribute('data-id')) {
-        const oldplayerId = slot.getAttribute('data-id');
-        const oldplayer = players.find(p => p.id.toString() === playerId);
-      
-        if (oldplayer) {
-          const selectedTeamIndex = parseInt(teamSelect.value, 10);
-          const selectedTeam = savedTeams[selectedTeamIndex];
-          removePlayerFromSlot(slot, player, selectedTeam);
-        }
-      }
-
-      // Get dragged player data
       const playerId = event.dataTransfer.getData('playerId');
       const playerPosition = event.dataTransfer.getData('playerPosition');
       const slotPosition = slot.getAttribute('data-position');
 
-      // Get the player by ID and add them to the slot
+      // Find the player by ID
       const player = players.find(p => p.id.toString() === playerId);
-      if (player) {
-        slot.setAttribute('data-id', player.id);
-        slot.classList.add('assigned');
-        slot.textContent = `${player.name} (${player.position})`;
 
-        // Remove the player from the available players list
-          const playerDiv = document.querySelector(`[data-id='${player.id}']`);
-          if (playerDiv) {
-            playerDiv.remove();
+      if (!player) {
+        alert('Player not found.');
+        return;
+      }
 
-        // Find the player in the list
-        const player = players.find(p => p.id.toString() === playerId);
+      // Get the selected team
+      const selectedTeamIndex = parseInt(teamSelect.value, 10);
+      const selectedTeam = savedTeams[selectedTeamIndex];
 
-        if (!player) {
-          alert('Player not found.');
-          return;
-        }
+      // Check if the player belongs to the selected team
+      if (player.team !== selectedTeam.name) {
+        alert(`Player cannot be placed in this team's lines.`);
+        slot.style.backgroundColor = ''; // Reset the slot background
+        return;
+      }
 
-        // Check if the player belongs to the selected team
-        if (player.team !== selectedTeam.name) {
-          alert(`Player cannot be placed in this team's lines.`);
-          slot.style.backgroundColor = ''; // Reset the slot background
-          return;
-        }
+      // Check if player position matches the slot
+      if (playerPosition !== slotPosition) {
+        alert('Player cannot be placed in this position!');
+        slot.style.backgroundColor = ''; // Reset the slot background
+        return;
+      }
 
-        // Check if player position matches the slot
-        if (playerPosition !== slotPosition) {
-          alert('Player cannot be placed in this position!');
-          slot.style.backgroundColor = ''; // Reset the slot background
-          return;
-        }
-
-        if (slot.hasAttribute('data-assigned')) {
+      // If the slot is already assigned, alert the user
+      if (slot.hasAttribute('data-assigned')) {
         alert('Slot is already assigned. Remove the current player first.');
         slot.style.backgroundColor = '';
         return;
       }
 
-        // Assign player to the slot visually
-        slot.textContent = `${player.name} (${player.position})`;
-        slot.classList.add('assigned');
-        slot.setAttribute('data-id', player.id);
-        slot.style.backgroundColor = '';
+      // Remove the player from the available players list and add them to the slot
+      slot.setAttribute('data-id', player.id);
+      slot.classList.add('assigned');
+      slot.textContent = `${player.name} (${player.position})`;
+      slot.style.backgroundColor = '';
 
-        // Save line assignments to localStorage
-        saveLineAssignments(selectedTeam.name);
+      // Save line assignments to localStorage
+      saveLineAssignments(selectedTeam.name);
 
-        // Clear the player's original block
+      // Clear the player's original block
       const previousSlot = document.querySelector(`.player-slot[data-id="${playerId}"]`);
       if (previousSlot) {
         previousSlot.textContent = previousSlot.getAttribute('data-position');
@@ -277,31 +257,15 @@ function makeSlotsDroppable(players) {
         previousSlot.removeAttribute('data-assigned');
         previousSlot.classList.remove('assigned');
         previousSlot.style.backgroundColor = '';
-        previousSlot.draggable = false;
       }
 
-        // Drag events for new slot
-slot.addEventListener('dragstart', (event) => {
-    event.dataTransfer.setData('playerId', player.id);
-    event.dataTransfer.setData('playerPosition', player.position);
-    slot.style.opacity = '0.5'; // Indicate drag is active
-  });
-
-  slot.addEventListener('dragend', () => {
-    slot.style.opacity = '1'; // Reset slot opacity
-  });
-
-  // Mark the slot as assigned
-  slot.setAttribute('data-assigned', 'true');
-});
-      }      
-        // Enable the player to be dragged again
-        makePlayerDraggable(slot);
-        
+      // Enable dragging for the newly assigned player
+      makePlayerDraggable(slot);
     });
-  }
+  });
+}
   
-    // Draggable player element
+  // Function for draggable player element
   function createPlayerElement(player) {
     const playerDiv = document.createElement('div');
     playerDiv.classList.add('player');
@@ -339,7 +303,7 @@ function makePlayerDraggable(slot) {
   });
 }
 
-  // Function to handle removing the player from the assigned slot and adding back to available players
+// Function to handle removing the player from the assigned slot and adding back to available players
 function removePlayerFromSlot(slot, player, selectedTeam) {
   // Remove the player from the assigned slot
   slot.textContent = `${player.position} - ${player.name}`;
@@ -354,6 +318,3 @@ function removePlayerFromSlot(slot, player, selectedTeam) {
   makeSlotsDroppable(players); // Ensure droppable behavior is still active
 
 }
-        });
-
-
