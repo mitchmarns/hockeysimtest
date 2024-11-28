@@ -62,6 +62,7 @@ function renderSpecialTeams(specialTeams) {
   // Helper to populate a container with players
   function populateContainer(container, players) {
     container.innerHTML = ''; // Clear the container
+    console.log("Rendering players:", players);
     players.forEach(player => {
       const playerDiv = createPlayerElement(player);
       container.appendChild(playerDiv);
@@ -89,6 +90,7 @@ function saveSpecialTeamAssignments(selectedTeamName) {
 // Initialize the special teams page
 document.addEventListener('DOMContentLoaded', () => {
   const players = JSON.parse(localStorage.getItem('teamPlayers')) || [];
+  console.log("Loaded players:", players);
   const allSpecialTeams = JSON.parse(localStorage.getItem('specialTeams')) || {};
   const teamSelector = document.getElementById('team-selector');
 
