@@ -272,23 +272,23 @@ document.addEventListener('DOMContentLoaded', () => {
         previousSlot.removeAttribute('data-assigned');
         previousSlot.classList.remove('assigned');
         previousSlot.style.backgroundColor = '';
+        previousSlot.draggable = false;
       }
 
-        // Enable removing a player from an assigned slot
-        slot.addEventListener('dragstart', (event) => {
-          if (slot.hasAttribute('data-id')) {
-            event.dataTransfer.setData('playerId', player.id);
-            event.dataTransfer.setData('playerPosition', player.position);
-            slot.style.opacity = '0.5'; // Indicate drag is active
-          }
-        });
+        // Drag events for new slot
+slot.addEventListener('dragstart', (event) => {
+    event.dataTransfer.setData('playerId', player.id);
+    event.dataTransfer.setData('playerPosition', player.position);
+    slot.style.opacity = '0.5'; // Indicate drag is active
+  });
 
-        slot.addEventListener('dragend', () => {
-      slot.style.opacity = '1'; // Reset slot opacity
-    });
+  slot.addEventListener('dragend', () => {
+    slot.style.opacity = '1'; // Reset slot opacity
+  });
 
-        // Disable the slot to prevent multiple assignments
-        slot.setAttribute('data-assigned', 'true');
+  // Mark the slot as assigned
+  slot.setAttribute('data-assigned', 'true');
+});
         
         // Enable the player to be dragged again
         makePlayerDraggable(slot);
