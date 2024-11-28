@@ -15,6 +15,20 @@
       }
     },
     {
+      "id": 2,
+      "name": "Lukas Dostal",
+      "position": "Starter",
+      "assigned": false,
+      "team": null,
+      "injured": false,
+      "skills": {
+        "glove": 87,
+        "stick": 89,
+        "legs": 89,
+        "speed": 80
+      }
+    },
+    {
       "id": 11,
       "name": "Taylor Abbott",
       "position": "LW",
@@ -22,14 +36,14 @@
       "team": null,
       "injured": false,
       "skills": {
-        "shooting": 80,
-        "passing": 85,
-        "defense": 95,
-        "speed": 82
+        "shooting": 87,
+        "passing": 87,
+        "defense": 77,
+        "speed": 88
       }
     },
     {
-      "id": 16,
+      "id": 13,
       "name": "Declan Thorne",
       "position": "RW",
       "assigned": false,
@@ -41,7 +55,35 @@
         "defense": 70,
         "speed": 90
         }
+    },
+      {
+      "id": 18,
+      "name": "Steven Lorentz",
+      "position": "C",
+      "assigned": false,
+      "team": null,
+      "injured": false,
+      "skills": {
+        "shooting": 75,
+        "passing": 75,
+        "defense": 81,
+        "speed": 78
+        }
       },
+    {
+      "id": 23,
+      "name": "Julian Levan",
+      "position": "LW",
+      "assigned": false,
+      "team": null,
+      "injured": false,
+      "skills": {
+        "shooting": 87,
+        "passing": 85,
+        "defense": 79,
+        "speed": 86
+      }
+    },
     {
       "id": 29,
       "name": "Asher Wilde",
@@ -68,6 +110,34 @@
         "passing": 90,
         "defense": 88,
         "speed": 87
+      }
+    },
+    {
+      "id": 60,
+      "name": "Cruz Cohen",
+      "position": "Starter",
+      "assigned": false,
+      "team": null,
+      "injured": false,
+      "skills": {
+        "glove": 92,
+        "stick": 84,
+        "legs": 87,
+        "speed": 80
+      }
+    },
+    {
+      "id": 88,
+      "name": "Elias Nilsson",
+      "position": "RW",
+      "assigned": false,
+      "team": null,
+      "injured": false,
+      "skills": {
+        "shooting": 90,
+        "passing": 92,
+        "defense": 80,
+        "speed": 90
       }
     }
   ]
