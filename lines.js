@@ -293,7 +293,6 @@ slot.addEventListener('dragstart', (event) => {
         // Enable the player to be dragged again
         makePlayerDraggable(slot);
         
-      });
     });
   }
   
