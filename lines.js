@@ -265,9 +265,6 @@ function removePlayerFromSlot(slot, player, selectedTeam) {
 
   // Re-enable droppable behavior for the slot
   makeSlotsDroppable(players); // Ensure droppable behavior is still active
-
-  // Enable the player to be dragged again
-  makePlayerDraggable(slot); // This seems to be a redundant call if the player is already draggable, but if needed, you can keep it
 }
   // Function to make the player element draggable
 function makePlayerDraggable(slot) {
