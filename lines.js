@@ -228,20 +228,6 @@ function makeSlotsDroppable(players) {
         return;
       }
 
-      // Check if the player belongs to the selected team
-      if (player.team !== selectedTeam.name) {
-        alert(`Player cannot be placed in this team's lines.`);
-        slot.style.backgroundColor = ''; // Reset the slot background
-        return;
-      }
-
-      // If the slot is already assigned, alert the user
-      if (slot.hasAttribute('data-assigned')) {
-        alert('Slot is already assigned. Remove the current player first.');
-        slot.style.backgroundColor = '';
-        return;
-      }
-
       // Remove the player from the available players list and add them to the slot
       slot.setAttribute('data-id', player.id);
       slot.classList.add('assigned');
