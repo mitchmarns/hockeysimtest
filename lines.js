@@ -195,10 +195,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Function to update the available players list
-  function updateAvailablePlayers(players, selectedTeamName) {
-    console.log('Selected team:', selectedTeamName);
-    playersContainer.innerHTML = ''; // Clear existing players
+// Function to update the available players list
+function updateAvailablePlayers(players, selectedTeamName) {
+  console.log('Selected team:', selectedTeamName);
+  playersContainer.innerHTML = ''; // Clear existing players
 
   // Find the selected team object from the teams array
   const selectedTeam = savedTeams.find(team => team.name === selectedTeamName);
@@ -211,20 +211,36 @@ document.addEventListener('DOMContentLoaded', () => {
   const teamPlayers = players.filter(player => player.team === selectedTeamName);
   console.log('Filtered players:', teamPlayers);
 
-  if (teamPlayers.length === 0) {
+  // Separate players into injured and available groups
+  const injuredPlayers = teamPlayers.filter(player => player.injured);
+  const availablePlayers = teamPlayers.filter(player => !player.injured && !player.assignedSlot); // Exclude injured and assigned players
+
+  // Display available players
+  if (availablePlayers.length > 0) {
+    availablePlayers.forEach(player => {
+      const playerDiv = createPlayerElement(player);
+      playersContainer.appendChild(playerDiv);
+    });
+  } else {
     const noPlayersMessage = document.createElement('div');
     noPlayersMessage.textContent = 'No players available for this team.';
     playersContainer.appendChild(noPlayersMessage);
-  } else {
-    teamPlayers.forEach(player => {
-      const assignedPlayer = document.querySelector(`.player-slot[data-id="${player.id}"]`);
-      if (!player.assignedSlot) {
+  }
+
+  // Display injured players (optional)
+  if (injuredPlayers.length > 0) {
+    const injuredSection = document.createElement('div');
+    injuredSection.classList.add('injured-players');
+    injuredSection.innerHTML = '<h3>Injured Players</h3>';
+    injuredPlayers.forEach(player => {
       const playerDiv = createPlayerElement(player);
-      playersContainer.appendChild(playerDiv);
-      }
+      playerDiv.style.color = 'gray'; // Example: Show injured players in gray
+      injuredSection.appendChild(playerDiv);
     });
+    playersContainer.appendChild(injuredSection);
   }
 }
+
 
 // Make slots droppable only for players of the selected team
 function makeSlotsDroppable(players) {
@@ -304,6 +320,32 @@ function makeSlotsDroppable(players) {
     playerDiv.setAttribute('data-id', player.id);
     playerDiv.setAttribute('data-position', player.position);
 
+    // Create injury toggle checkbox
+  const injuryToggle = document.createElement('input');
+  injuryToggle.type = 'checkbox';
+  injuryToggle.checked = player.injured; // Set checkbox based on player's injury status
+  injuryToggle.addEventListener('change', () => {
+    // Toggle the injury status in player data
+    player.injured = injuryToggle.checked;
+    updatePlayerInjuryStatus(player); // Update injury status in localStorage
+  });
+
+  // Label for injury status
+  const injuryLabel = document.createElement('span');
+  injuryLabel.textContent = "Injured";
+  injuryLabel.style.marginLeft = '10px';
+
+  // Append the checkbox and label to the player element
+  playerDiv.appendChild(injuryToggle);
+  playerDiv.appendChild(injuryLabel);
+
+  // Style to show injured players differently
+  if (player.injured) {
+    playerDiv.style.color = 'red';  // Example: Show injured players in red
+  } else {
+    playerDiv.style.color = ''; // Default color for non-injured players
+  }
+
     // Add dragstart event to the player element
     playerDiv.addEventListener('dragstart', (event) => {
       event.dataTransfer.setData('playerId', player.id);
@@ -312,6 +354,23 @@ function makeSlotsDroppable(players) {
 
         return playerDiv;
   }
+
+  // Function to update injury status in localStorage
+function updatePlayerInjuryStatus(player) {
+  const savedPlayers = JSON.parse(localStorage.getItem('players')) || [];
+  
+  // Find the player and update their injury status
+  const playerIndex = savedPlayers.findIndex(p => p.id === player.id);
+  if (playerIndex !== -1) {
+    savedPlayers[playerIndex].injured = player.injured;
+  }
+
+  // Save the updated players array back to localStorage
+  localStorage.setItem('players', JSON.stringify(savedPlayers));
+
+  // Optionally, re-render the available players to reflect changes
+  updateAvailablePlayers(savedPlayers, selectedTeamName);  // Update available players
+}
   
   // Function to make the player element draggable
 function makePlayerDraggable(slot) {
