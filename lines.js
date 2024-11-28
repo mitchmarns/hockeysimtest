@@ -199,6 +199,18 @@ document.addEventListener('DOMContentLoaded', () => {
       slot.addEventListener('drop', (event) => {
         event.preventDefault();
 
+        // Remove existing player if the slot is already assigned
+        if (slot.hasAttribute('data-id')) {
+          const playerId = slot.getAttribute('data-id');
+          const player = players.find(p => p.id.toString() === playerId);
+      
+          if (player) {
+            const selectedTeamIndex = parseInt(teamSelect.value, 10);
+            const selectedTeam = savedTeams[selectedTeamIndex];
+            removePlayerFromSlot(slot, player, selectedTeam);
+          }
+        }
+
         // Get dragged player data
         const playerId = event.dataTransfer.getData('playerId');
         const playerPosition = event.dataTransfer.getData('playerPosition');
@@ -237,11 +249,37 @@ document.addEventListener('DOMContentLoaded', () => {
           return;
         }
 
+        if (slot.hasAttribute('data-assigned')) {
+        alert('Slot is already assigned. Remove the current player first.');
+        slot.style.backgroundColor = '';
+        return;
+      }
+
         // Assign player to the slot visually
         slot.textContent = `${player.name} (${player.position})`;
         slot.classList.add('assigned');
         slot.setAttribute('data-id', player.id);
         slot.style.backgroundColor = '';
+
+        // Enable removing a player from an assigned slot
+    slot.addEventListener('dragstart', (event) => {
+      if (slot.hasAttribute('data-id')) {
+        const playerId = slot.getAttribute('data-id');
+        const player = players.find(p => p.id.toString() === playerId);
+
+        if (player) {
+          event.dataTransfer.setData('playerId', player.id);
+          event.dataTransfer.setData('playerPosition', player.position);
+          slot.style.opacity = '0.5'; // Indicate drag is active
+        }
+      }
+    });
+
+        slot.addEventListener('dragend', () => {
+      slot.style.opacity = '1'; // Reset slot opacity
+    });
+  });
+}
 
         // Disable the slot to prevent multiple assignments
         slot.setAttribute('data-assigned', 'true');
