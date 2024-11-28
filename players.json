@@ -6,6 +6,7 @@
       "position": "Starter",
       "assigned": false,
       "team": null,
+      "injured": false,
       "skills": {
         "glove": 92,
         "stick": 89,
@@ -19,6 +20,7 @@
       "position": "LW",
       "assigned": false,
       "team": null,
+      "injured": false,
       "skills": {
         "shooting": 80,
         "passing": 85,
@@ -32,6 +34,7 @@
       "position": "RW",
       "assigned": false,
       "team": null,
+      "injured": false,
       "skills": {
         "shooting": 88,
         "passing": 75,
@@ -45,6 +48,7 @@
       "position": "LD",
       "assigned": false,
       "team": null,
+      "injured": false,
       "skills": {
         "shooting": 80,
         "passing": 85,
@@ -58,6 +62,7 @@
       "position": "C",
       "assigned": false,
       "team": null,
+      "injured": false,
       "skills": {
         "shooting": 95,
         "passing": 90,
