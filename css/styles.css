@@ -37,7 +37,7 @@ h1 {
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  height: 150px;
+  min-height: 180px;
 }
 
 .player img {
