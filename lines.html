@@ -3,94 +3,29 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hockey Line Setup</title>
-  <link rel="stylesheet" href="css/styles.css"> <!-- Optional CSS -->
+  <link rel="stylesheet" href="./css/styles.css">
+  <title>Assign Players to Lines</title>
 </head>
 <body>
+  <div class="container">
+    <h1>Assign Players to Lines</h1>
 
-  click to another team before starting and to refresh injuries
-  <!-- Dropdown to select a team -->
-<select id="team-select">
-  <option value="">Select a Team</option>
-  <!-- Teams will be populated here dynamically by JavaScript -->
-</select>
+    <!-- Team Dropdown -->
+    <label for="team-select">Select Team:</label>
+    <select id="team-select"></select>
 
-  <!-- Save Lines Button -->
-  <button id="save-lines-btn">Save Line Assignments</button>
-  <!-- Reset button to clear all line assignments -->
-  <button id="reset-lines-btn">Reset Lines</button><br>
+    <!-- Player Assignment -->
+    <div id="player-container"></div>
 
-  <!-- Link to assign pp and pk -->
-  <a href="special_teams.html" id="special-teams-link">Assign Powerplay & Penalty Kill Units</a>
-
-
-  <!-- Available players container (to drag players from) -->
-  <div id="available-players">
-    <h3>Available Players</h3>
-    <!-- Available players will be populated here dynamically by JavaScript -->
-  </div>
-
-  <!-- Lines container where players can be dragged into -->
-  <div id="lines-container">
-    
-    <!-- Forward Line 1 -->
-    <div class="line" id="forward-line-1">
-      <h3>Forward Line 1</h3>
-      <div class="player-slot" data-position="LW" id="slot1" aria-label="Left Wing Slot 1">LW</div>
-      <div class="player-slot" data-position="C" id="slot2" aria-label="Center Slot 1">C</div>
-      <div class="player-slot" data-position="RW" id="slot3" aria-label="Right Wing Slot 1">RW</div>
-    </div>
-
-    <!-- Forward Line 2 -->
-    <div class="line" id="forward-line-2">
-      <h3>Forward Line 2</h3>
-      <div class="player-slot" data-position="LW" id="slot4" aria-label="Left Wing Slot 2">LW</div>
-      <div class="player-slot" data-position="C" id="slot5" aria-label="Center Slot 2">C</div>
-      <div class="player-slot" data-position="RW" id="slot6" aria-label="Right Wing Slot 2">RW</div>
-    </div>
-
-    <!-- Forward Line 3 -->
-    <div class="line" id="forward-line-3">
-      <h3>Forward Line 3</h3>
-      <div class="player-slot" data-position="LW" id="slot7" aria-label="Left Wing Slot 3">LW</div>
-      <div class="player-slot" data-position="C" id="slot8" aria-label="Center Slot 3">C</div>
-      <div class="player-slot" data-position="RW" id="slot9" aria-label="Right Wing Slot 3">RW</div>
-    </div>
-
-    <!-- Forward Line 4 -->
-    <div class="line" id="forward-line-4">
-      <h3>Forward Line 4</h3>
-      <div class="player-slot" data-position="LW"id="slot10" aria-label="Left Wing Slot 4">LW</div>
-      <div class="player-slot" data-position="C"id="slot11" aria-label="Center Slot 4">C</div>
-      <div class="player-slot" data-position="RW"id="slot12" aria-label="Right Wing Slot 4">RW</div>
-    </div>
-
-    <!-- Defense Line 1 -->
-    <div class="line" id="defense-line-1">
-      <h3>Defense Pair 1</h3>
-      <div class="player-slot" data-position="LD"id="slot13" aria-label="Left Defense Pair 1">LD</div>
-      <div class="player-slot" data-position="RD"id="slot14" aria-label="Right Defense Pair 1">RD</div>
-    </div>
-
-    <!-- Defense Line 2 -->
-    <div class="line" id="defense-line-2">
-      <h3>Defense Pair 2</h3>
-      <div class="player-slot" data-position="LD"id="slot15" aria-label="Left Defense Pair 2">LD</div>
-      <div class="player-slot" data-position="RD"id="slot16" aria-label="Right Defense Pair 2">RD</div>
-    </div>
-
-    <!-- Goalies -->
-    <div class="goalie-line" id="goalies">
-      <h3>Goalies</h3>
-      <div class="player-slot" data-position="Starter"id="slot17" aria-label="Starting Goalie">Starter</div>
-      <div class="player-slot" data-position="Backup"id="slot18" aria-label="Backup Goalie">Backup</div>
+    <!-- Buttons for saving and resetting -->
+    <div class="buttons">
+      <button id="save-lines-btn">Save Line Assignments</button>
+      <button id="reset-lines-btn">Reset Line Assignments</button>
     </div>
   </div>
 
-
-
-
-  <script type="module" src="lines.js"></script>
-  <script type="module" src="team.js"></script>
+  <script src="team.js"></script>
+  <script src="players.json"></script>
+  <script src="app.js"></script>
 </body>
 </html>
