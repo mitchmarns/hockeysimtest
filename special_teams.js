@@ -51,6 +51,16 @@ function assignSpecialTeams(players, selectedTeamName) {
 
   return { PP1: pp1, PP2: pp2, PK1: pk1, PK2: pk2 };
 }
+
+// Helper to populate a container with players
+function populateContainer(container, players) {
+  container.innerHTML = ''; // Clear the container
+  console.log("Rendering players:", players);
+  players.forEach(player => {
+    const playerDiv = createPlayerElement(player);
+    container.appendChild(playerDiv);
+  });
+}
   
 // Render the special teams on the page
 function renderSpecialTeams(specialTeams) {
@@ -58,16 +68,6 @@ function renderSpecialTeams(specialTeams) {
   const pp2Container = document.getElementById('powerplay2');
   const pk1Container = document.getElementById('penaltykill1');
   const pk2Container = document.getElementById('penaltykill2');
-
-  // Helper to populate a container with players
-  function populateContainer(container, players) {
-    container.innerHTML = ''; // Clear the container
-    console.log("Rendering players:", players);
-    players.forEach(player => {
-      const playerDiv = createPlayerElement(player);
-      container.appendChild(playerDiv);
-    });
-  }
 
   populateContainer(pp1Container, specialTeams.PP1);
   populateContainer(pp2Container, specialTeams.PP2);
