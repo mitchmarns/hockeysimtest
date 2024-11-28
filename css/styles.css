@@ -12,6 +12,12 @@ body {
   gap: 5px;
 }
 
+#teams-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
 .team {
   border: 1px solid black;
   margin: 10px;
@@ -38,6 +44,10 @@ option {
 
 .player:hover {
   background-color: #e6e6e6;
+}
+
+.player.dragging {
+  opacity: 0.5;
 }
 
 .player span {
@@ -94,6 +104,13 @@ option {
 
 .line, .goalie-line {
   margin: 15px;
+}
+
+.line-list {
+  margin-top: 10px;
+  min-height: 100px;
+  border: 1px dashed #ccc;
+  padding: 10px;
 }
 
 button {
