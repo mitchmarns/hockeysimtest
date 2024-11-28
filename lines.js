@@ -294,7 +294,7 @@ slot.addEventListener('dragstart', (event) => {
   // Mark the slot as assigned
   slot.setAttribute('data-assigned', 'true');
 });
-        
+      }      
         // Enable the player to be dragged again
         makePlayerDraggable(slot);
         
