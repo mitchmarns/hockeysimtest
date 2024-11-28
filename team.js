@@ -39,3 +39,16 @@ export function assignPlayerToTeam(playerId, teamName) {
     console.error('Player not found or already assigned.');
   }
 }
+
+export function loadTeamsFromLocalStorage() {
+  const savedTeams = localStorage.getItem('teams');
+  if (savedTeams) {
+    const parsedTeams = JSON.parse(savedTeams);
+    parsedTeams.forEach(savedTeam => {
+      const team = teams.find(t => t.name === savedTeam.name);
+      if (team) {
+        team.players = savedTeam.players;
+      }
+    });
+  }
+}
