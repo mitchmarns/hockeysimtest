@@ -304,5 +304,6 @@ function removePlayerFromSlot(slot, player, selectedTeam) {
 
   // Re-enable droppable behavior for the slot
   makeSlotsDroppable(players); // Ensure droppable behavior is still active
+});
 }
                 
