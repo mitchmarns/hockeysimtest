@@ -183,8 +183,10 @@ document.addEventListener('DOMContentLoaded', () => {
     playersContainer.appendChild(noPlayersMessage);
   } else {
     teamPlayers.forEach(player => {
+      if (!player.assignedSlot) {
       const playerDiv = createPlayerElement(player);
       playersContainer.appendChild(playerDiv);
+      }
     });
   }
 }
@@ -205,6 +207,7 @@ function makeSlotsDroppable(players) {
 
     slot.addEventListener('drop', (event) => {
       event.preventDefault();
+      console.log('drop triggered');
 
       const playerId = event.dataTransfer.getData('playerId');
       const playerPosition = event.dataTransfer.getData('playerPosition');
@@ -218,20 +221,16 @@ function makeSlotsDroppable(players) {
         return;
       }
 
-      // Get the selected team
-      const selectedTeamIndex = parseInt(teamSelect.value, 10);
-      const selectedTeam = savedTeams[selectedTeamIndex];
-
-      // Check if the player belongs to the selected team
-      if (player.team !== selectedTeam.name) {
-        alert(`Player cannot be placed in this team's lines.`);
+      // Check if player position matches the slot
+      if (playerPosition !== slotPosition) {
+        alert('Player cannot be placed in this position!');
         slot.style.backgroundColor = ''; // Reset the slot background
         return;
       }
 
-      // Check if player position matches the slot
-      if (playerPosition !== slotPosition) {
-        alert('Player cannot be placed in this position!');
+      // Check if the player belongs to the selected team
+      if (player.team !== selectedTeam.name) {
+        alert(`Player cannot be placed in this team's lines.`);
         slot.style.backgroundColor = ''; // Reset the slot background
         return;
       }
@@ -249,21 +248,19 @@ function makeSlotsDroppable(players) {
       slot.textContent = `${player.name} (${player.position})`;
       slot.style.backgroundColor = '';
 
-      // Save line assignments to localStorage
-      saveLineAssignments(selectedTeam.name);
-
-      // Clear the player's original block
-      const previousSlot = document.querySelector(`.player-slot[data-id="${playerId}"]`);
-      if (previousSlot) {
-        previousSlot.textContent = previousSlot.getAttribute('data-position');
-        previousSlot.removeAttribute('data-id');
-        previousSlot.removeAttribute('data-assigned');
-        previousSlot.classList.remove('assigned');
-        previousSlot.style.backgroundColor = '';
+      // Save updated player assignment to `localStorage`
+      const updatedPlayers = [...players];  // Make a copy to avoid mutation
+      const playerIndex = updatedPlayers.findIndex(p => p.id === player.id);
+      if (playerIndex !== -1) {
+        updatedPlayers[playerIndex].assignedSlot = slotPosition;  // Store assigned slot position
       }
 
-      // Enable dragging for the newly assigned player
-      makePlayerDraggable(slot);
+      localStorage.setItem('players', JSON.stringify(updatedPlayers));
+
+      // Save the line assignments
+  const selectedTeamName = savedTeams[teamSelect.value]?.name;
+  saveLineAssignments(selectedTeamName);
+});
     });
   });
 }
