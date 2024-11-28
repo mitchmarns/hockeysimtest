@@ -3,7 +3,6 @@
 import { teams } from './team.js'; // Import teams data
 
 document.addEventListener('DOMContentLoaded', () => {
-  await loadPlayers();
   displayTeamsForLineAssignment();
   displayAvailablePlayers();
 });
