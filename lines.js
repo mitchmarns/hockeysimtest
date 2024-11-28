@@ -1,7 +1,7 @@
 import { teams } from './team.js';
 
 document.addEventListener('DOMContentLoaded', () => {
-  const saveLinesBtn = document.getElementbyId('save-lines-btn');
+  const saveLinesBtn = document.getElementById('save-lines-btn');
   const teamSelect = document.getElementById('team-select');
   const playersContainer = document.getElementById('available-players');
   let players = [];
