@@ -58,41 +58,41 @@ document.addEventListener('DOMContentLoaded', () => {
     // Save the updated players back to localStorage
     localStorage.setItem('players', JSON.stringify(players));
 
-      // Load players from localStorage if they exist
-      const savedPlayers = JSON.parse(localStorage.getItem('players')) || players;
-      players = savedPlayers; // Assign saved players
+    // Load players from localStorage if they exist
+    const savedPlayers = JSON.parse(localStorage.getItem('players')) || players;
+    players = savedPlayers; // Assign saved players
 
-      if (Array.isArray(players)) {
-        // Initial population for the first team
-        updateAvailablePlayers(players, initialTeamName);
-        loadLineAssignments(initialTeamName);
+    if (Array.isArray(players)) {
+      // Initial population for the first team
+      updateAvailablePlayers(players, initialTeamName);
+      loadLineAssignments(initialTeamName);
+      makeSlotsDroppable(players);
+
+      // Update players list when a new team is selected
+      teamSelect.addEventListener('change', () => {
+        const selectedTeamIndex = parseInt(teamSelect.value, 10);
+        const previousTeamIndex = parseInt(localStorage.getItem('selectedTeamIndex'), 10);
+
+        const previousTeamName = savedTeams[previousTeamIndex]?.name || '';
+        const currentTeamName = savedTeams[selectedTeamIndex]?.name || '';
+
+        console.log('Saving line assignments for previous team:', previousTeamName);
+        saveLineAssignments(previousTeamName); // Save current lines before switching teams
+
+        localStorage.setItem('selectedTeamIndex', selectedTeamIndex);
+
+        clearPlayerSlots();
+        updateAvailablePlayers(players, currentTeamName);
+        loadLineAssignments(currentTeamName);
         makeSlotsDroppable(players);
-
-        // Update players list when a new team is selected
-teamSelect.addEventListener('change', () => {
-  const selectedTeamIndex = parseInt(teamSelect.value, 10);
-  const previousTeamIndex = parseInt(localStorage.getItem('selectedTeamIndex'), 10);
-
-  const previousTeamName = savedTeams[previousTeamIndex]?.name || '';
-  const currentTeamName = savedTeams[selectedTeamIndex]?.name || '';
-
-  console.log('Saving line assignments for previous team:', previousTeamName);
-  saveLineAssignments(previousTeamName); // Save current lines before switching teams
-
-  localStorage.setItem('selectedTeamIndex', selectedTeamIndex);
-
-  clearPlayerSlots();
-  updateAvailablePlayers(players, currentTeamName);
-  loadLineAssignments(currentTeamName);
-  makeSlotsDroppable(players);
-});
-      }
-    });
+      });
+    }
+  });
         
   // Function to clear player slots
   function clearPlayerSlots() {
-  const playerSlots = document.querySelectorAll('.player-slot');
-  console.log('Clearing player slots:', playerSlots);
+    const playerSlots = document.querySelectorAll('.player-slot');
+    console.log('Clearing player slots:', playerSlots);
     
     playerSlots.forEach(slot => {
       slot.textContent = slot.getAttribute('data-position');
@@ -163,14 +163,14 @@ teamSelect.addEventListener('change', () => {
     console.log('Selected team:', selectedTeamName);
     playersContainer.innerHTML = ''; // Clear existing players
 
-    // Find the selected team object from the teams array
+  // Find the selected team object from the teams array
   const selectedTeam = savedTeams.find(team => team.name === selectedTeamName);
   if (!selectedTeam) {
     console.error(`Team not found: ${selectedTeamName}`);
     return;
   }
 
-// Filter players based on their team property
+  // Filter players based on their team property
   const teamPlayers = players.filter(player => player.team === selectedTeamName);
   console.log('Filtered players:', teamPlayers);
 
@@ -186,50 +186,51 @@ teamSelect.addEventListener('change', () => {
   }
 }
 
-  // Make slots droppable only for players of the selected team
-  function makeSlotsDroppable(players) {
-    const playerSlots = document.querySelectorAll('.player-slot');
+// Make slots droppable only for players of the selected team
+function makeSlotsDroppable(players) {
+  const playerSlots = document.querySelectorAll('.player-slot');
     
-    playerSlots.forEach(slot => {
-      slot.addEventListener('dragover', (event) => {
-        event.preventDefault();
-        slot.style.backgroundColor = 'rgba(0, 128, 0, 0.2)';
-      });
+  playerSlots.forEach(slot => {
+    slot.addEventListener('dragover', (event) => {
+      event.preventDefault();
+      slot.style.backgroundColor = 'rgba(0, 128, 0, 0.2)';
+    });
 
-      slot.addEventListener('dragleave', () => {
-        slot.style.backgroundColor = '';
-      });
+    slot.addEventListener('dragleave', () => {
+      slot.style.backgroundColor = '';
+    });
 
-      slot.addEventListener('drop', (event) => {
-        event.preventDefault();
+    slot.addEventListener('drop', (event) => {
+      event.preventDefault();
 
-        // Remove existing player if the slot is already assigned
-        if (slot.hasAttribute('data-id')) {
-          const oldplayerId = slot.getAttribute('data-id');
-          const oldplayer = players.find(p => p.id.toString() === playerId);
+      // Remove existing player if the slot is already assigned
+      if (slot.hasAttribute('data-id')) {
+        const oldplayerId = slot.getAttribute('data-id');
+        const oldplayer = players.find(p => p.id.toString() === playerId);
       
-          if (oldplayer) {
-            const selectedTeamIndex = parseInt(teamSelect.value, 10);
-            const selectedTeam = savedTeams[selectedTeamIndex];
-            removePlayerFromSlot(slot, player, selectedTeam);
-          }
+        if (oldplayer) {
+          const selectedTeamIndex = parseInt(teamSelect.value, 10);
+          const selectedTeam = savedTeams[selectedTeamIndex];
+          removePlayerFromSlot(slot, player, selectedTeam);
         }
+      }
 
-        // Get dragged player data
-        const playerId = event.dataTransfer.getData('playerId');
-        const playerPosition = event.dataTransfer.getData('playerPosition');
-        const slotPosition = slot.getAttribute('data-position');
+      // Get dragged player data
+      const playerId = event.dataTransfer.getData('playerId');
+      const playerPosition = event.dataTransfer.getData('playerPosition');
+      const slotPosition = slot.getAttribute('data-position');
 
-        // Get selected team from dropdown
-        const selectedTeamIndex = parseInt(teamSelect.value, 10);
-        const selectedTeam = savedTeams[selectedTeamIndex];
+      // Get the player by ID and add them to the slot
+      const player = players.find(p => p.id.toString() === playerId);
+      if (player) {
+        slot.setAttribute('data-id', player.id);
+        slot.classList.add('assigned');
+        slot.textContent = `${player.name} (${player.position})`;
 
-        console.log('Selected team:', selectedTeam); // Debug log
-
-        if (!selectedTeam) {
-          console.error('Selected team is undefined.');
-          return; // Prevent further execution if the selected team is invalid
-        }
+        // Remove the player from the available players list
+          const playerDiv = document.querySelector(`[data-id='${player.id}']`);
+          if (playerDiv) {
+            playerDiv.remove();
 
         // Find the player in the list
         const player = players.find(p => p.id.toString() === playerId);
