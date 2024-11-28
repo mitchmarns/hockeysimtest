@@ -31,7 +31,10 @@ document.addEventListener('DOMContentLoaded', () => {
   // Button event listener to manually save line assignments
   saveLinesBtn.addEventListener('click', () => {
     const selectedTeamIndex = parseInt(teamSelect.value, 10);
-    const selectedTeamName = savedTeams[selectedTeamIndex]?.name || '';
+    console.log('Selected team index:', selectedTeamIndex);
+    const selectedTeamName = savedTeams[selectedTeamIndex]?.name;
+    console.log('Selected team name:', selectedTeamName);
+    
     if (selectedTeamName) {
       saveLineAssignments(selectedTeamName);  // Save the line assignments for the current team
     } else {
