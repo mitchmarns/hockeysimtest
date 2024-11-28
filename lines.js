@@ -280,9 +280,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 }
-
-        // Disable the slot to prevent multiple assignments
-        slot.setAttribute('data-assigned', 'true');
         
         // Enable the player to be dragged again
         makePlayerDraggable(slot);
