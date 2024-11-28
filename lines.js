@@ -217,6 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
     playersContainer.appendChild(noPlayersMessage);
   } else {
     teamPlayers.forEach(player => {
+      const assignedPlayer = document.querySelector(`.player-slot[data-id="${player.id}"]`);
       if (!player.assignedSlot) {
       const playerDiv = createPlayerElement(player);
       playersContainer.appendChild(playerDiv);
@@ -263,6 +264,7 @@ function makeSlotsDroppable(players) {
       }
 
       // Remove the player from the available players list and add them to the slot
+      removePlayerFromAvailableList(player.id);
       slot.setAttribute('data-id', player.id);
       slot.classList.add('assigned');
       slot.textContent = `${player.name} (${player.position})`;
@@ -284,6 +286,14 @@ function makeSlotsDroppable(players) {
     });
 
 }
+
+  // Remove the player from the available players list
+  function removePlayerFromAvailableList(playerId) {
+    const playerDiv = document.querySelector(`.player[data-id="${playerId}"]`);
+    if (playerDiv) {
+      playerDiv.remove(); // Remove the player element from the available players container
+    }
+  }
   
   // Function for draggable player element
   function createPlayerElement(player) {
