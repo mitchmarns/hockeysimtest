@@ -211,5 +211,5 @@ function enableDragAndDrop() {
           
           displayAvailablePlayers();
           displayTeamLines();
-        }
+        });
     });
