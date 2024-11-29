@@ -3,16 +3,30 @@ import { loadPlayers, loadTeamsFromLocalStorage, teams } from './team.js';
 document.addEventListener('DOMContentLoaded', async () => {
   await loadPlayers();
   loadTeamsFromLocalStorage();
+  initializeTeamLines();
   displayAvailablePlayers();
   displayTeamLines();
   enableDragAndDrop();
 });
 
+// lines structure loaded
+function initializeTeamLines() {
+  teams.forEach(team => {
+    if (!team.lines) {
+      team.lines = {
+        forwards: Array(4).fill(null).map(() => ({ LW: null, C: null, RW: null })),
+        defense: Array(3).fill(null).map(() => ({ LD: null, RD: null })),
+        goalies: { Starter: null, Backup: null },
+      };
+    }
+  });
+}
+
+// display available players
 function displayAvailablePlayers() {
   const container = document.getElementById('available-players-list');
   container.innerHTML = '';
 
-  // display unassigned players
   teams.forEach(team => {
     team.players.forEach(player => {
       if (!player.line) { 
@@ -31,6 +45,7 @@ function displayAvailablePlayers() {
   });
 }
 
+// display team lines and populate slots with assigned players
 function displayTeamLines() {
   teams.forEach(team => {
     const teamLines = document.getElementById(`${team.name}-lines`);
@@ -54,42 +69,75 @@ function displayTeamLines() {
     `;
     teamLines.appendChild(defenseLinesContainer);
 
-    // Add Goalie Line
+// Add Goalie Line
     const goalieLineContainer = document.createElement('div');
     goalieLineContainer.innerHTML = `
       <h4>Goalies</h4>
       <div class="lines">
-        <div class="player-slot" data-team="${team.name}" data-role="Starter"></div>
-        <div class="player-slot" data-team="${team.name}" data-role="Backup"></div>
+        ${['Starter', 'Backup'].map(role => {
+          const assignedPlayerId = team.lines.goalies[role];
+          const assignedPlayer = assignedPlayerId
+            ? team.players.find(p => p.id === assignedPlayerId)
+            : null;
+
+          return `
+            <div class="player-slot" data-team="${team.name}" data-role="${role}">
+              ${assignedPlayer ? `
+                <img src="${assignedPlayer.image}" alt="${assignedPlayer.name}" />
+                <span>${assignedPlayer.name}</span>
+              ` : ''}
+            </div>
+          `;
+        }).join('')}
       </div>
     `;
     teamLines.appendChild(goalieLineContainer);
   });
 }
 
+// generate slots
 function generateLineSlots(team, category, linesCount, positions) {
   let html = '';
   for (let i = 1; i <= linesCount; i++) {
     html += `<div class="line">
-      ${positions.map(pos => `
-        <div class="player-slot" data-team="${team.name}" data-line="${category} Line ${i}" data-role="${pos}"></div>
-      `).join('')}
+      ${positions.map(pos => {
+        const lineNumber = i - 1; // Convert to 0-based index
+        const assignedPlayerId =
+          category === 'Forward' ? team.lines.forwards[lineNumber][pos] :
+          category === 'Defense' ? team.lines.defense[lineNumber][pos] :
+          null;
+
+        const assignedPlayer = assignedPlayerId
+          ? team.players.find(p => p.id === assignedPlayerId)
+          : null;
+
+        return `
+          <div class="player-slot" data-team="${team.name}" data-line="${category} Line ${i}" data-role="${pos}">
+            ${assignedPlayer ? `
+              <img src="${assignedPlayer.image}" alt="${assignedPlayer.name}" />
+              <span>${assignedPlayer.name}</span>
+            ` : ''}
+          </div>
+        `;
+      }).join('')}
     </div>`;
   }
   return html;
 }
 
+// drag and drop functionality
 function enableDragAndDrop() {
   const slotElements = document.querySelectorAll('.player-slot');
 
-  // Drag and drop functionality for each player
+  // drag start
   document.addEventListener('dragstart', e => {
     if (e.target.classList.contains('player')) {
       e.dataTransfer.setData('playerId', e.target.dataset.id);
-      e.dataTransfer.setData('playerTeam', e.target.dataset.team); // Store the team name
+      e.dataTransfer.setData('playerTeam', e.target.dataset.team); 
     }
   });
 
+  // drag and drop
   slotElements.forEach(slot => {
     slot.addEventListener('dragover', e => {
       e.preventDefault();
@@ -110,49 +158,40 @@ function enableDragAndDrop() {
       e.preventDefault();
       slot.classList.remove('dragover');
 
-      const playerId = e.dataTransfer.getData('playerId');
-      const player = teams.flatMap(t => t.players).find(p => p.id === parseInt(playerId));
+      const playerId = parseInt(e.dataTransfer.getData('playerId'));
+      const player = teams.flatMap(t => t.players).find(p => p.id === playerId);
 
       if (player) {
         const teamName = slot.dataset.team;
         const role = slot.dataset.role;
         const line = slot.dataset.line;
 
-        // Ensure the drop matches the team
-        if (player.team === teamName) {
-          // Assign the player to the line
-          player.line = { teamName, role, line };
+        const team = teams.find(t => t.name === teamName);
+        const lineNumber = line ? parseInt(line.split(' ')[1]) - 1 : null;
 
-          // Update the `lines` structure in `teams`
-          const team = teams.find(t => t.name === teamName);
-          if (team) {
-            if (line.includes('Forward')) {
-              const lineNumber = parseInt(line.split(' ')[1]) - 1; // Get line index (0-based)
-              team.lines.forwards[lineNumber][role] = player.id; // Assign player to role
-            } else if (line.includes('Defense')) {
-              const lineNumber = parseInt(line.split(' ')[1]) - 1;
-              team.lines.defense[lineNumber][role] = player.id;
-            } else if (role === 'Starter' || role === 'Backup') {
-              team.lines.goalies[role] = player.id;
-            }
-          }
+        // Assign player to the correct line and role
+        if (line.includes('Forward')) {
+          team.lines.forwards[lineNumber][role] = player.id;
+        } else if (line.includes('Defense')) {
+          team.lines.defense[lineNumber][role] = player.id;
+        } else if (role === 'Starter' || role === 'Backup') {
+          team.lines.goalies[role] = player.id;
+        }
 
-          // Find the corresponding slot and add the player
-          slot.innerHTML = `
-            <img src="${player.image}" alt="${player.name}" />
-            <span>${player.name}</span>
-          `;
-          
-          slot.setAttribute('data-player-id', player.id);
+        player.line = { teamName, role, line }; // Update player assignment
+        player.assigned = true;
+
+        // Update slot UI
+        slot.innerHTML = `
+          <img src="${player.image}" alt="${player.name}" />
+          <span>${player.name}</span>
+        `;
 
           // Save to localStorage and refresh display
           localStorage.setItem('teams', JSON.stringify(teams));
           
           displayAvailablePlayers();
           displayTeamLines();
-        } else {
-          alert('This player does not belong to the selected team.');
-        }
       }
     });
   });
