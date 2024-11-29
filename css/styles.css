@@ -87,7 +87,8 @@ h1 {
 }
 
 .player-slot {
-  width: 100px;
+  width: 33%;
+  gap: 20px;
   height: 120px;
   display: flex;
   flex-direction: column;
