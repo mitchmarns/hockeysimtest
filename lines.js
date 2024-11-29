@@ -185,6 +185,7 @@ function enableDragAndDrop() {
           } else if (role === 'Starter' || role === 'Backup') {
             team.lines.goalies[role] = player.id;  
           }
+        }
 
         player.line = { teamName, role, line }; 
         player.assigned = true;
