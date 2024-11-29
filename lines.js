@@ -166,7 +166,19 @@ function enableDragAndDrop() {
         const teamName = slot.dataset.team;
         const role = slot.dataset.role;
         const line = slot.dataset.line;
-        const lineNumber = parseInt(line.split(' ')[1]) - 1;
+
+        // parse line number
+        const lineParts = line.split(' '); 
+        let lineNumber = NaN;
+        
+        if (lineParts.length === 3 && !isNaN(parseInt(lineParts[2]))) {
+          lineNumber = parseInt(lineParts[2]) - 1; // Convert to 0-based index
+        }
+
+        if (isNaN(lineNumber)) {
+          console.error(`Invalid line number format for line: "${line}"`);
+          return; // Exit early if the line number is invalid
+        }
 
         const team = teams.find(t => t.name === teamName);
 
