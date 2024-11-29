@@ -1,6 +1,9 @@
 let playersData = { players: [] }; // Default structure
 export const teams = [
-  { name: "Rangers", players: [], maxPlayers: 23,
+  { 
+    name: "Rangers", 
+    players: [], 
+    maxPlayers: 23,
     lines: {
       forwards: [
         { LW: null, C: null, RW: null },
@@ -69,11 +72,11 @@ export const teams = [
 export async function loadPlayers() {
   try {
     const savedPlayers = localStorage.getItem('playersData');
+    
     if (savedPlayers) {
       const data = JSON.parse(savedPlayers);
       playersData.players = data.players || [];
       console.log('Players loaded from localStorage:', playersData);
-      
     } else {
       const response = await fetch('./players.json');
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
@@ -109,8 +112,9 @@ export function assignPlayerToTeam(playerId, teamName) {
 
       // Save updated teams to localStorage
       localStorage.setItem('teams', JSON.stringify(teams));
-      console.log('Teams saved to localStorage:', teams);  
       localStorage.setItem('playersData', JSON.stringify(playersData));
+
+      console.log("Player assigned and data saved:", { player, teams });
     } else {
       console.error('Team is full.');
     }
@@ -123,18 +127,31 @@ export function loadTeamsFromLocalStorage() {
   const savedTeams = localStorage.getItem('teams');
   if (savedTeams) {
     const parsedTeams = JSON.parse(savedTeams);
+    
     parsedTeams.forEach(savedTeam => {
       const team = teams.find(t => t.name === savedTeam.name);
       if (team) {
-        savedTeam.players.forEach(savedPlayer => {
-          const player = team.players.find(p => p.id === savedPlayer.id);
+
+        team.players = savedTeam.players.map((savedPlayer) => {
+          const player = playersData.players.find((p) => p.id === savedPlayer.id);
           if (player) {
-            player.line = savedPlayer.line || player.line; 
-            player.assigned = savedPlayer.assigned !== undefined ? savedPlayer.assigned : player.assigned; // Correctly load the assigned status
+            player.line = savedPlayer.line || null;
+            player.assigned = savedPlayer.assigned !== undefined ? savedPlayer.assigned : false;
+            player.team = savedPlayer.team || null;
           }
+          return player;
         });
+
+        // Update team lines
         team.lines = savedTeam.lines || team.lines;
       }
     });
+
+    console.log("Teams loaded from localStorage:", teams);
   }
+}
+
+// Export all players for use
+export function getPlayers() {
+  return playersData.players;
 }
