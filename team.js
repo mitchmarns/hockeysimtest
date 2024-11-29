@@ -103,6 +103,8 @@ export function assignPlayerToTeam(playerId, teamName) {
   if (player && team && !player.team) {
     if (team.players.length < team.maxPlayers) {
       player.team = teamName;
+      player.assigned = true;
+
       team.players.push(player);
 
       // Save updated teams to localStorage
