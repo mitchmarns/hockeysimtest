@@ -83,7 +83,7 @@ function displayTeamLines() {
           return `
             <div class="player-slot" data-team="${team.name}" data-role="${role}">
               ${assignedPlayer ? `
-                <img src="${assignedPlayer.image}" alt="${assignedPlayer.name}" />
+                <img src="${assignedPlayer.image}" alt="${assignedPlayer.name}" /><br>
                 <span>${assignedPlayer.name}</span>
               ` : ''}
             </div>
