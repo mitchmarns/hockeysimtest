@@ -70,19 +70,21 @@ export async function loadPlayers() {
   try {
     const savedPlayers = localStorage.getItem('playersData');
     if (savedPlayers) {
-      playersData = JSON.parse(savedPlayers);
+      const data = JSON.parse(savedPlayers);
+      playersData.players = data.players || [];
       console.log('Players loaded from localStorage:', playersData);
       
     } else {
       const response = await fetch('./players.json');
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-      playersData = await response.json();
+      const data = await response.json();
+      playersData.players = data.players || [];
 
       localStorage.setItem('playersData', JSON.stringify(playersData));
       console.log('Players loaded from players.json:', playersData);
 }
-    if (!Array.isArray(playersData)) {
-      throw new Error('playersData is not an array');
+    if (!Array.isArray(playersData.players)) {
+      throw new Error('playersData.players is not an array');
     }
 
   } catch (error) {
