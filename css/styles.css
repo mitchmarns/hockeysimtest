@@ -66,42 +66,6 @@ h1 {
   background-color: #45a049;
 }
 
-/* Teams Section */
-#teams {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  justify-content: center;
-  padding: 20px;
-}
-
-.team {
-  width: 220px;
-  padding: 10px;
-  border: 1px solid #ddd;
-  background-color: #fff;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-}
-
-.team h3 {
-  text-align: center;
-  margin-bottom: 24px;
-}
-
-.team ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-.team li {
-  font-size: 14px;
-  padding: 6px 12px;
-  background-color: #f4f4f4;
-  border-radius: 5px;
-  text-align: center;
-}
-
 /* Assign Button Styling */
 button.assign-btn {
   padding: 5px 10px;
