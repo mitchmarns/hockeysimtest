@@ -63,7 +63,7 @@ function displayTeams() {
     team.players.forEach(player => {
       teamDiv.innerHTML += `
         <div class="player">
-          <span>${player.name} - ${player.position}</span>
+          <span>#${player.id} ${player.name} - ${player.position}</span>
         </div>`;
     });
   });
