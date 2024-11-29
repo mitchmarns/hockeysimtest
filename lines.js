@@ -125,17 +125,18 @@ function generateLineSlots(team, category, linesCount, positions) {
   return html;
 }
 
+// drag start
+document.addEventListener('dragstart', e => {
+  const playerBox = e.target.closest('.player');
+  if (playerBox) {
+    e.dataTransfer.setData('playerId', playerBox.dataset.id);
+    e.dataTransfer.setData('playerTeam', playerBox.dataset.team);
+  }
+});
+
 // drag and drop functionality
 function enableDragAndDrop() {
   const slotElements = document.querySelectorAll('.player-slot');
-
-  // drag start
-  document.addEventListener('dragstart', e => {
-    if (e.target.classList.contains('player')) {
-      e.dataTransfer.setData('playerId', e.target.dataset.id);
-      e.dataTransfer.setData('playerTeam', e.target.dataset.team); 
-    }
-  });
 
   // drag and drop
   slotElements.forEach(slot => {
@@ -187,6 +188,14 @@ function enableDragAndDrop() {
           }
         }
 
+        // Clear previous slot
+          if (player.line) {
+            const previousSlot = document.querySelector(`[data-player-id="${player.id}"]`);
+            if (previousSlot) {
+              previousSlot.innerHTML = '';  // Clear previous assignment
+            }
+          }
+
         player.line = { teamName, role, line }; 
         player.assigned = true;
 
@@ -195,13 +204,14 @@ function enableDragAndDrop() {
           <img src="${player.image}" alt="${player.name}" />
           <span>${player.name}</span>
         `;
+      }
 
           // Save to localStorage and refresh display
           localStorage.setItem('teams', JSON.stringify(teams));
           
           displayAvailablePlayers();
           displayTeamLines();
-      }
-    }
+        }
+    });
   });
-  });
+}
