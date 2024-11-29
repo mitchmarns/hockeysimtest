@@ -20,8 +20,13 @@ h1 {
 
 /* avaliable players section */
 #available-players {
+  display: flex;
+  flex-wrap: wrap;
+  gap:20px;
+  justify-content: center;
+  align-items: flex-start;
   width: 100%;
-  margin-bottom: 20px;
+  margin-bottom: 20px 0;
 }
 
 #available-players h2 {
@@ -45,10 +50,13 @@ h1 {
   text-align: center;
   border-radius: 5px;
   display: flex;
+  flex: 1 1 calc(25% - 20px);
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
   min-height: 10px;
+  max-width: 200px;
+  transition: transform 0.3s ease;
 }
 
 .player img {
@@ -61,6 +69,7 @@ h1 {
 .player span {
   font-size: 12px;
   margin: 5px 0;
+  display: block;
 }
 
 .player:hover {
