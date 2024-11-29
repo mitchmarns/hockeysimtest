@@ -92,7 +92,7 @@ h1 {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   background: #e0e0e0;
   border-style: 1px dashed #ccc;
   overflow: hidden;
