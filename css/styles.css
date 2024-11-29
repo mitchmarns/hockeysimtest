@@ -30,9 +30,11 @@ h1 {
 }
 
 #available-players-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); /* 4 equal-width columns */
   gap: 20px;
   width: 100%;
-}
+  box-sizing: border-box;
 
 #available-players h2 {
   font-size: 24px;
