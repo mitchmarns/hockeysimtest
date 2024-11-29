@@ -218,3 +218,13 @@ button.assign-btn:disabled {
   background-color: #e6e6e6; /* Light gray on hover */
   border-color: #888;
 }
+
+.player.dragging img {
+  opacity: 0.5;  
+  cursor: move;  
+}
+
+.player-slot.dragover {
+  background-color: #f0f0f0; 
+  border: 2px dashed #000;  
+}
