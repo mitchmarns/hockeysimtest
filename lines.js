@@ -128,6 +128,7 @@ function enableDragAndDrop() {
             <img src="${player.image}" alt="${player.name}" />
             <span>${player.name}</span>
           `;
+          slot.setAttribute('data-player-id', player.id);
 
           // Save to localStorage and refresh display
           localStorage.setItem('teams', JSON.stringify(teams));
