@@ -12,13 +12,15 @@ function displayAvailablePlayers() {
   const container = document.getElementById('available-players-list');
   container.innerHTML = '';
 
+  // display unassigned players
   teams.forEach(team => {
     team.players.forEach(player => {
-      if (!player.line) { // Player isn't assigned to a line
+      if (!player.line) { 
         const playerBox = document.createElement('div');
         playerBox.className = 'player';
         playerBox.setAttribute('draggable', 'true');
         playerBox.dataset.id = player.id;
+        playerBox.dataset.team = team.name;
         playerBox.innerHTML = `
           <img src="${player.image}" alt="${player.name}" />
           <span>${player.name} - ${player.position}</span>
@@ -78,40 +80,57 @@ function generateLineSlots(team, category, linesCount, positions) {
 }
 
 function enableDragAndDrop() {
-  // Handle player drag-start
+  const slotElements = document.querySelectorAll('.player-slot');
+
+  // Drag and drop functionality for each player
   document.addEventListener('dragstart', e => {
     if (e.target.classList.contains('player')) {
       e.dataTransfer.setData('playerId', e.target.dataset.id);
+      e.dataTransfer.setData('playerTeam', e.target.dataset.team); // Store the team name
     }
   });
 
-  // Handle drag-over and drop on player slots
-  document.addEventListener('dragover', e => {
-    if (e.target.classList.contains('player-slot')) {
+  slotElements.forEach(slot => {
+    slot.addEventListener('dragover', e => {
       e.preventDefault();
-    }
-  });
+      const slotTeam = slot.dataset.team;
+      const draggedTeam = e.dataTransfer.getData('playerTeam');
 
-  document.addEventListener('drop', e => {
-    if (e.target.classList.contains('player-slot')) {
+      // Allow drop only if the team matches
+      if (slotTeam === draggedTeam) {
+        slot.classList.add('dragover');
+      }
+    });
+
+    slot.addEventListener('dragleave', () => {
+      slot.classList.remove('dragover');
+    });
+
+    slot.addEventListener('drop', e => {
       e.preventDefault();
+      slot.classList.remove('dragover');
 
       const playerId = e.dataTransfer.getData('playerId');
       const player = teams.flatMap(t => t.players).find(p => p.id === parseInt(playerId));
 
       if (player) {
-        const teamName = e.target.dataset.team;
-        const role = e.target.dataset.role;
-        const line = e.target.dataset.line;
+        const teamName = slot.dataset.team;
+        const role = slot.dataset.role;
+        const line = slot.dataset.line;
 
-        // Assign player to the line
-        player.line = { teamName, role, line };
+        // Ensure the drop matches the team
+        if (player.team === teamName) {
+          // Assign the player to the line
+          player.line = { teamName, role, line };
 
-        // Save updated teams to localStorage and refresh UI
-        localStorage.setItem('teams', JSON.stringify(teams));
-        displayAvailablePlayers();
-        displayTeamLines();
+          // Save to localStorage and refresh display
+          localStorage.setItem('teams', JSON.stringify(teams));
+          displayAvailablePlayers();
+          displayTeamLines();
+        } else {
+          alert('This player does not belong to the selected team.');
+        }
       }
-    }
+    });
   });
 }
