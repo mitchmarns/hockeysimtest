@@ -26,6 +26,17 @@ h1 {
   margin-bottom: 20px;
 }
 
+#available-players h2 {
+  font-size: 24px;
+  margin-bottom: 15px;
+}
+
+#available-players-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
 .player {
   padding: 10px;
   border: 1px solid #333;
@@ -43,7 +54,7 @@ h1 {
 .player img {
   width: 50px;
   height: 50px;
-  border-radius: 50%; /* If you want a round image */
+  border-radius: 50%; /* round image */
   margin-bottom: 10px;
 }
 
@@ -52,13 +63,20 @@ h1 {
   margin: 5px 0;
 }
 
+.player:hover {
+  transform: translateY(-5px); /* Lift effect */
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2); /* Highlight player on hover */
+}
+
 .player button {
   margin-top: 10px;
   background-color: #4CAF50;
   color: white;
-  bborder-radius: 5px;
+  border: none;
+  border-radius: 5px;
   cursor: pointer;
   padding: 5px 10px;
+  transition: background-color 0.3s;
 }
 
 .player button:hover {
@@ -142,10 +160,18 @@ button.assign-btn:disabled {
 }
 
 /* Line Assignment */
-#available-players-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
+#lines-container {
+  margin-top: 40px;
+}
+
+.team-lines {
+  margin-bottom: 40px;
+}
+
+.team-lines h3 {
+  font-size: 22px;
+  margin-bottom: 15px;
+  text-align: center;
 }
 
 .lines {
