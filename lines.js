@@ -29,6 +29,7 @@ function displayAvailablePlayers() {
 
   teams.forEach(team => {
     team.players.forEach(player => {
+      console.log(`Checking player: ${player.name}, team: ${player.team}, line: ${player.line}`);
       if (!player.team && !player.line) { 
         const playerBox = document.createElement('div');
         playerBox.className = 'player';
