@@ -30,7 +30,7 @@ function displayAvailablePlayers() {
   teams.forEach(team => {
     team.players.forEach(player => {
       console.log(`Checking player: ${player.name}, team: ${player.team}, line: ${player.line}`);
-      if (!player.team && !player.line) { 
+      if (!player.team) { 
         const playerBox = document.createElement('div');
         playerBox.className = 'player';
         playerBox.setAttribute('draggable', 'true');
