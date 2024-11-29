@@ -142,8 +142,50 @@ button.assign-btn:disabled {
 }
 
 /* Line Assignment */
-#available-players-list, .lines {
+#available-players-list {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+}
+
+.lines {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background-color: #f9f9f9;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+
+.line {
+  display: flex;
+  justify-content: space-between; /* Spreads slots evenly */
+  gap: 10px; /* Adds space between individual slots */
+  padding: 10px;
+  background-color: #fff; /* White background for lines */
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Styling for each player slot */
+.player-slot {
+  flex: 1; /* Ensures slots are equal width */
+  min-height: 60px; /* Adjust this for desired slot height */
+  border: 2px dashed #aaa; /* Dashed border for empty slots */
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: #666;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+/* Hover effect on player slots */
+.player-slot:hover {
+  background-color: #e6e6e6; /* Light gray on hover */
+  border-color: #888;
 }
