@@ -114,7 +114,7 @@ function generateLineSlots(team, category, linesCount, positions) {
         return `
           <div class="player-slot" data-team="${team.name}" data-line="${category} Line ${i}" data-role="${pos}">
             ${assignedPlayer ? `
-              <img src="${assignedPlayer.image}" alt="${assignedPlayer.name}" />
+              <img src="${assignedPlayer.image}" alt="${assignedPlayer.name}" /><br>
               <span>${assignedPlayer.name}</span>
             ` : ''}
           </div>
@@ -214,7 +214,7 @@ function enableDragAndDrop() {
         // Update slot UI
         slot.innerHTML = `
           <div class="player">
-            <img src="${player.image}" alt="${player.name}" />
+            <img src="${player.image}" alt="${player.name}" /><br>
             <span>${player.name}</span>
           </div>
         `;
