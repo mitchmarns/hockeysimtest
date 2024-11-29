@@ -167,7 +167,15 @@ function enableDragAndDrop() {
         const role = slot.dataset.role;
         const line = slot.dataset.line;
 
-        // parse line number
+        const team = teams.find(t => t.name === teamName);
+
+      if (!team) {
+        console.error(`Team "${teamName}" not found.`);
+        return;
+      }
+        
+      if (line) {
+        // forward and defense lines
         const lineParts = line.split(' '); 
         let lineNumber = NaN;
         
@@ -180,14 +188,11 @@ function enableDragAndDrop() {
           return; // Exit early if the line number is invalid
         }
 
-        const team = teams.find(t => t.name === teamName);
-
-        if (team) {
-          if (line.includes('Forward')) {
-            if (team.lines.forwards[lineNumber]) {
-              team.lines.forwards[lineNumber][role] = player.id; 
-            } else {
-              console.error(`Line number ${lineNumber} does not exist in team ${teamName}`);
+        if (line.includes('Forward')) {
+          if (team.lines.forwards[lineNumber]) {
+            team.lines.forwards[lineNumber][role] = player.id; 
+          } else {
+            console.error(`Line number ${lineNumber} does not exist in team ${teamName}`);
             }
           } else if (line.includes('Defense')) {
             if (team.lines.defense[lineNumber]) {
@@ -195,10 +200,16 @@ function enableDragAndDrop() {
             } else {
               console.error(`Line number ${lineNumber} does not exist in team ${teamName}`);
             }
-          } else if (role === 'Starter' || role === 'Backup') {
-            team.lines.goalies[role] = player.id;  
           }
-        }
+        } else if (role === 'Starter' || role === 'Backup') {
+            // goalie lines
+            if (team.lines.goalies[role] !== undefined) {
+              team.lines.goalies[role] = player.id;
+            } else {
+              console.error(`Invalid goalie role: "${role}"`);
+              return;
+            }
+          }
 
         // Clear previous slot
           if (player.line) {
@@ -208,13 +219,13 @@ function enableDragAndDrop() {
             }
           }
 
-        player.line = { teamName, role, line }; 
+        player.line = { teamName, role, line: line || 'Goalie Line' }; 
         player.assigned = true;
 
         // Update slot UI
         slot.innerHTML = `
           <div class="player">
-            <img src="${player.image}" alt="${player.name}" /><br>
+            <img src="${player.image}" alt="${player.name}" />
             <span>${player.name}</span>
           </div>
         `;
