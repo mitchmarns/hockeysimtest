@@ -213,8 +213,10 @@ function enableDragAndDrop() {
 
         // Update slot UI
         slot.innerHTML = `
-          <img src="${player.image}" alt="${player.name}" />
-          <span>${player.name}</span>
+          <div class="player">
+            <img src="${player.image}" alt="${player.name}" />
+            <span>${player.name}</span>
+          </div>
         `;
       }
 
