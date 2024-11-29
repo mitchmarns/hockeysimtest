@@ -201,6 +201,6 @@ function enableDragAndDrop() {
           displayAvailablePlayers();
           displayTeamLines();
       }
-    });
+    }
   });
-}
+
