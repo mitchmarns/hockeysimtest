@@ -136,106 +136,103 @@ document.addEventListener('dragstart', e => {
 
 // drag and drop functionality
 function enableDragAndDrop() {
-  const slotElements = document.querySelectorAll('.player-slot');
+  const container = document.getElementById('lines-container');
 
-  // drag and drop
-  slotElements.forEach(slot => {
-    slot.addEventListener('dragover', e => {
-      e.preventDefault();
-      const slotTeam = slot.dataset.team;
-      const draggedTeam = e.dataTransfer.getData('playerTeam');
+  // Handle dragover
+  container.addEventListener('dragover', (e) => {
+    e.preventDefault();
 
-      // Allow drop only if the team matches
-      if (slotTeam === draggedTeam) {
-        slot.classList.add('dragover');
-      }
+    const slot = e.target.closest('.player-slot');
+    if (!slot) return;
+
+    const slotTeam = slot.dataset.team;
+    const draggedTeam = e.dataTransfer.getData('playerTeam');
+
+    if (slotTeam === draggedTeam) {
+      slot.classList.add('dragover');
+    }
+  });
+
+    // Handle dragleave
+    container.addEventListener('dragleave', (e) => {
+      const slot = e.target.closest('.player-slot');
+      if (slot) slot.classList.remove('dragover');
     });
 
-    slot.addEventListener('dragleave', () => {
-      slot.classList.remove('dragover');
-    });
+  // Handle drop
+  container.addEventListener('drop', (e) => {
+    e.preventDefault();
 
-    slot.addEventListener('drop', e => {
-      e.preventDefault();
-      slot.classList.remove('dragover');
+    const slot = e.target.closest('.player-slot');
+    if (!slot) return;
 
-      const playerId = parseInt(e.dataTransfer.getData('playerId'));
-      const player = teams.flatMap(t => t.players).find(p => p.id === playerId);
+    slot.classList.remove('dragover');
 
-      if (player) {
-        const teamName = slot.dataset.team;
-        const role = slot.dataset.role;
-        const line = slot.dataset.line;
+    const playerId = parseInt(e.dataTransfer.getData('playerId'));
+    const player = teams.flatMap((t) => t.players).find((p) => p.id === playerId);
 
-        const team = teams.find(t => t.name === teamName);
+    if (player) {
+      const teamName = slot.dataset.team;
+      const role = slot.dataset.role;
+      const line = slot.dataset.line;
+
+      const team = teams.find((t) => t.name === teamName);
 
       if (!team) {
         console.error(`Team "${teamName}" not found.`);
         return;
       }
-        
+
       if (line) {
-        // forward and defense lines
-        const lineParts = line.split(' '); 
+        const lineParts = line.split(' ');
         let lineNumber = NaN;
-        
+
         if (lineParts.length === 3 && !isNaN(parseInt(lineParts[2]))) {
           lineNumber = parseInt(lineParts[2]) - 1; // Convert to 0-based index
         }
 
         if (isNaN(lineNumber)) {
           console.error(`Invalid line number format for line: "${line}"`);
-          return; // Exit early if the line number is invalid
+          return;
         }
 
         if (line.includes('Forward')) {
           if (team.lines.forwards[lineNumber]) {
-            team.lines.forwards[lineNumber][role] = player.id; 
+            team.lines.forwards[lineNumber][role] = player.id;
           } else {
             console.error(`Line number ${lineNumber} does not exist in team ${teamName}`);
-            }
-          } else if (line.includes('Defense')) {
-            if (team.lines.defense[lineNumber]) {
-              team.lines.defense[lineNumber][role] = player.id; 
-            } else {
-              console.error(`Line number ${lineNumber} does not exist in team ${teamName}`);
-            }
           }
-        } else if (role === 'Starter' || role === 'Backup') {
-            // goalie lines
-            if (team.lines.goalies[role] !== undefined) {
-              team.lines.goalies[role] = player.id;
-            } else {
-              console.error(`Invalid goalie role: "${role}"`);
-              return;
-            }
+        } else if (line.includes('Defense')) {
+          if (team.lines.defense[lineNumber]) {
+            team.lines.defense[lineNumber][role] = player.id;
+          } else {
+            console.error(`Line number ${lineNumber} does not exist in team ${teamName}`);
           }
-
-        // Clear previous slot
-          if (player.line) {
-            const previousSlot = document.querySelector(`[data-player-id="${player.id}"]`);
-            if (previousSlot) {
-              previousSlot.innerHTML = '';  // Clear previous assignment
-            }
-          }
-
-        player.line = { teamName, role, line: line || 'Goalie Line' }; 
-        player.assigned = true;
-
-        // Update slot UI
-        slot.innerHTML = `
-          <div class="player">
-            <img src="${player.image}" alt="${player.name}" />
-            <span>${player.name}</span>
-          </div>
-        `;
+        }
+      } else if (role === 'Starter' || role === 'Backup') {
+        if (team.lines.goalies[role] !== undefined) {
+          team.lines.goalies[role] = player.id;
+        } else {
+          console.error(`Invalid goalie role: "${role}"`);
+          return;
+        }
       }
+
+      // Update player's status
+      player.line = { teamName, role, line: line || 'Goalie Line' };
+      player.assigned = true;
+
+      // Update slot UI
+      slot.innerHTML = `
+        <div class="player">
+          <img src="${player.image}" alt="${player.name}" />
+          <span>${player.name}</span>
+        </div>
+      `;
+      
 
           // Save to localStorage and refresh display
           localStorage.setItem('teams', JSON.stringify(teams));
-          
-          displayAvailablePlayers();
-          displayTeamLines();
-        });
+        }
     });
 }
