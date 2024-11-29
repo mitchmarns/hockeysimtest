@@ -70,23 +70,21 @@ export async function loadPlayers() {
   try {
     const savedPlayers = localStorage.getItem('playersData');
     if (savedPlayers) {
-      playersData = JSON.parse(savedPlayers); // Load players from localStorage
-      // Ensure the assigned property is initialized to false if not already set
-      playersData.forEach(player => {
-        if (player.assigned === undefined) {
-          player.assigned = false;  // Set to false if it's not defined
-        }
-      });
+      playersData = JSON.parse(savedPlayers);
+      console.log('Players loaded from localStorage:', playersData);
+      
     } else {
       const response = await fetch('./players.json');
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
       playersData = await response.json();
-      // Ensure the assigned property is initialized for each player
-      playersData.forEach(player => {
-        player.assigned = false; // Set to false for all players initially
-      });
-      localStorage.setItem('playersData', JSON.stringify(playersData)); // Save players to localStorage
+
+      localStorage.setItem('playersData', JSON.stringify(playersData));
+      console.log('Players loaded from players.json:', playersData);
+}
+    if (!Array.isArray(playersData)) {
+      throw new Error('playersData is not an array');
     }
+
   } catch (error) {
     console.error('Error loading player data:', error);
   }
