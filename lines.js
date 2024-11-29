@@ -78,35 +78,40 @@ function generateLineSlots(team, category, linesCount, positions) {
 }
 
 function enableDragAndDrop() {
-  const playerElements = document.querySelectorAll('.player');
-  const slotElements = document.querySelectorAll('.player-slot');
-
-  playerElements.forEach(player => {
-    player.addEventListener('dragstart', e => {
-      e.dataTransfer.setData('playerId', player.dataset.id);
-    });
+  // Handle player drag-start
+  document.addEventListener('dragstart', e => {
+    if (e.target.classList.contains('player')) {
+      e.dataTransfer.setData('playerId', e.target.dataset.id);
+    }
   });
 
-  slotElements.forEach(slot => {
-    slot.addEventListener('dragover', e => e.preventDefault());
-    slot.addEventListener('drop', e => {
+  // Handle drag-over and drop on player slots
+  document.addEventListener('dragover', e => {
+    if (e.target.classList.contains('player-slot')) {
       e.preventDefault();
+    }
+  });
+
+  document.addEventListener('drop', e => {
+    if (e.target.classList.contains('player-slot')) {
+      e.preventDefault();
+
       const playerId = e.dataTransfer.getData('playerId');
       const player = teams.flatMap(t => t.players).find(p => p.id === parseInt(playerId));
 
       if (player) {
-        const teamName = slot.dataset.team;
-        const role = slot.dataset.role;
-        const line = slot.dataset.line;
+        const teamName = e.target.dataset.team;
+        const role = e.target.dataset.role;
+        const line = e.target.dataset.line;
 
-        // Assign the player to the line
+        // Assign player to the line
         player.line = { teamName, role, line };
 
-        // Save to localStorage and refresh display
+        // Save updated teams to localStorage and refresh UI
         localStorage.setItem('teams', JSON.stringify(teams));
         displayAvailablePlayers();
         displayTeamLines();
       }
-    });
+    }
   });
 }
