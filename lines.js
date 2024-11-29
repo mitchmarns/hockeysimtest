@@ -155,6 +155,7 @@ function enableDragAndDrop() {
 
     // Handle dragleave
     container.addEventListener('dragleave', (e) => {
+      
       const slot = e.target.closest('.player-slot');
       if (slot) slot.classList.remove('dragover');
     });
@@ -224,7 +225,7 @@ function enableDragAndDrop() {
 
       // Update slot UI
       slot.innerHTML = `
-        <div class="player">
+        <div class="player-slot">
           <img src="${player.image}" alt="${player.name}" />
           <span>${player.name}</span>
         </div>
