@@ -34,6 +34,11 @@ function displayAvailablePlayers() {
         <button class="assign-btn" data-id="${player.id}" data-team="Sabres">Sabres</button>
       </div>`;
   });
+
+  // If no players are available, show a message
+  if (players.length === 0) {
+    container.innerHTML = '<p>No players available to assign.</p>';
+  }
 }
 
 // Function to display teams and their players
