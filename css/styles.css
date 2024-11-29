@@ -65,6 +65,15 @@ h1 {
   background-color: #45a049;
 }
 
+.player-slot {
+  background: #e0e0e0;
+  border-style: dashed;
+}
+
+.player-slot:hover {
+  background: #d0d0d0;
+}
+
 /* Teams Section */
 #teams {
   display: flex;
@@ -130,4 +139,11 @@ button.assign-btn:hover {
 button.assign-btn:disabled {
   background-color: #ccc;
   cursor: not-allowed;
+}
+
+/* Line Assignment */
+#available-players-list, .lines {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
 }
