@@ -23,7 +23,7 @@ function displayAvailablePlayers() {
         playerBox.dataset.team = team.name;
         playerBox.innerHTML = `
           <img src="${player.image}" alt="${player.name}" />
-          <span>${player.name} - ${player.position}</span>
+          <span>${player.name} - ${player.team} ${player.position}</span>
         `;
         container.appendChild(playerBox);
       }
@@ -122,6 +122,12 @@ function enableDragAndDrop() {
         if (player.team === teamName) {
           // Assign the player to the line
           player.line = { teamName, role, line };
+
+          // Find the corresponding slot and add the player
+          slot.innerHTML = `
+            <img src="${player.image}" alt="${player.name}" />
+            <span>${player.name}</span>
+          `;
 
           // Save to localStorage and refresh display
           localStorage.setItem('teams', JSON.stringify(teams));
