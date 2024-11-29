@@ -29,7 +29,7 @@ function displayAvailablePlayers() {
 
   teams.forEach(team => {
     team.players.forEach(player => {
-      if (!player.assigned) { 
+      if (!player.line || !player.assigned) { 
         const playerBox = document.createElement('div');
         playerBox.className = 'player';
         playerBox.setAttribute('draggable', 'true');
