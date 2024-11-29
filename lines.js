@@ -1,4 +1,4 @@
-import { loadPlayers, teams } from './team.js';
+import { loadPlayers, loadTeamsFromLocalStorage, teams } from './team.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
   await loadPlayers();
@@ -227,26 +227,4 @@ function enableDragAndDrop() {
           displayTeamLines();
         });
     });
-}
-
-function loadTeamsFromLocalStorage() {
-  const savedTeams = JSON.parse(localStorage.getItem('teams'));
-  if (savedTeams) {
-    savedTeams.forEach(savedTeam => {
-      const team = teams.find(t => t.name === savedTeam.name);
-      if (team) {
-        // Load players and their assigned lines from saved team data
-        savedTeam.players.forEach(savedPlayer => {
-          const player = team.players.find(p => p.id === savedPlayer.id);
-          if (player) {
-            player.line = savedPlayer.line; // Set player's assigned line
-            player.assigned = savedPlayer.assigned; // Mark as assigned
-          }
-        });
-
-        // Ensure the team's line data is correctly initialized
-        team.lines = savedTeam.lines;
-      }
-    });
-  }
 }
