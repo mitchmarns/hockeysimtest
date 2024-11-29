@@ -118,8 +118,8 @@ export function loadTeamsFromLocalStorage() {
         savedTeam.players.forEach(savedPlayer => {
           const player = team.players.find(p => p.id === savedPlayer.id);
           if (player) {
-            player.line = savedPlayer.line; // Set the player's assigned line
-            player.assigned = savedPlayer.assigned; // Mark as assigned
+            player.line = savedPlayer.line || player.line; // Set the player's assigned line
+            player.assigned = savedPlayer.assigned !== undefined ? savedPlayer.assigned : player.assigned; // Mark as assigned
           }
         });
 
