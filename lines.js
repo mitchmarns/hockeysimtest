@@ -165,20 +165,28 @@ function enableDragAndDrop() {
         const teamName = slot.dataset.team;
         const role = slot.dataset.role;
         const line = slot.dataset.line;
+        const lineNumber = parseInt(line.split(' ')[1]) - 1;
 
         const team = teams.find(t => t.name === teamName);
-        const lineNumber = line ? parseInt(line.split(' ')[1]) - 1 : null;
 
-        // Assign player to the correct line and role
-        if (line.includes('Forward')) {
-          team.lines.forwards[lineNumber][role] = player.id;
-        } else if (line.includes('Defense')) {
-          team.lines.defense[lineNumber][role] = player.id;
-        } else if (role === 'Starter' || role === 'Backup') {
-          team.lines.goalies[role] = player.id;
-        }
+        if (team) {
+          if (line.includes('Forward')) {
+            if (team.lines.forwards[lineNumber]) {
+              team.lines.forwards[lineNumber][role] = player.id; 
+            } else {
+              console.error(`Line number ${lineNumber} does not exist in team ${teamName}`);
+            }
+          } else if (line.includes('Defense')) {
+            if (team.lines.defense[lineNumber]) {
+              team.lines.defense[lineNumber][role] = player.id; 
+            } else {
+              console.error(`Line number ${lineNumber} does not exist in team ${teamName}`);
+            }
+          } else if (role === 'Starter' || role === 'Backup') {
+            team.lines.goalies[role] = player.id;  
+          }
 
-        player.line = { teamName, role, line }; // Update player assignment
+        player.line = { teamName, role, line }; 
         player.assigned = true;
 
         // Update slot UI
