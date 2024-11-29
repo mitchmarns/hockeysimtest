@@ -1,9 +1,69 @@
 let playersData = { players: [] }; // Default structure
 export const teams = [
-  { name: "Rangers", players: [], maxPlayers: 23 },
-  { name: "Devils", players: [], maxPlayers: 23 },
-  { name: "Islanders", players: [], maxPlayers: 23 },
-  { name: "Sabres", players: [], maxPlayers: 23 }
+  { name: "Rangers", players: [], maxPlayers: 23,
+    lines: {
+      forwards: [
+        { line: 1, LW: null, C: null, RW: null },
+        { line: 2, LW: null, C: null, RW: null },
+        { line: 3, LW: null, C: null, RW: null },
+        { line: 4, LW: null, C: null, RW: null },
+      ],
+      defense: [
+        { line: 1, LD: null, RD: null },
+        { line: 2, LD: null, RD: null },
+        { line: 3, LD: null, RD: null },
+      ],
+      goalies: { Starter: null, Backup: null },
+    },
+  },
+  { name: "Devils", players: [], maxPlayers: 23,
+    lines: {
+      forwards: [
+        { line: 1, LW: null, C: null, RW: null },
+        { line: 2, LW: null, C: null, RW: null },
+        { line: 3, LW: null, C: null, RW: null },
+        { line: 4, LW: null, C: null, RW: null },
+      ],
+      defense: [
+        { line: 1, LD: null, RD: null },
+        { line: 2, LD: null, RD: null },
+        { line: 3, LD: null, RD: null },
+      ],
+      goalies: { Starter: null, Backup: null },
+    },
+  },
+  { name: "Islanders", players: [], maxPlayers: 23,
+      lines: {
+      forwards: [
+        { line: 1, LW: null, C: null, RW: null },
+        { line: 2, LW: null, C: null, RW: null },
+        { line: 3, LW: null, C: null, RW: null },
+        { line: 4, LW: null, C: null, RW: null },
+      ],
+      defense: [
+        { line: 1, LD: null, RD: null },
+        { line: 2, LD: null, RD: null },
+        { line: 3, LD: null, RD: null },
+      ],
+      goalies: { Starter: null, Backup: null },
+    },
+  },
+  { name: "Sabres", players: [], maxPlayers: 23,
+      lines: {
+      forwards: [
+        { line: 1, LW: null, C: null, RW: null },
+        { line: 2, LW: null, C: null, RW: null },
+        { line: 3, LW: null, C: null, RW: null },
+        { line: 4, LW: null, C: null, RW: null },
+      ],
+      defense: [
+        { line: 1, LD: null, RD: null },
+        { line: 2, LD: null, RD: null },
+        { line: 3, LD: null, RD: null },
+      ],
+      goalies: { Starter: null, Backup: null },
+    },
+  }
 ];
 
 export async function loadPlayers() {
