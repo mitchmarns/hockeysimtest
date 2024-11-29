@@ -28,6 +28,7 @@ h1 {
 
 .player {
   padding: 10px;
+  font-size: 15px;
   border: 1px solid #333;
   background-color: #f9f9f9;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
