@@ -114,17 +114,7 @@ export function loadTeamsFromLocalStorage() {
     parsedTeams.forEach(savedTeam => {
       const team = teams.find(t => t.name === savedTeam.name);
       if (team) {
-        // Load player assignments and their line data
-        savedTeam.players.forEach(savedPlayer => {
-          const player = team.players.find(p => p.id === savedPlayer.id);
-          if (player) {
-            player.line = savedPlayer.line || player.line; // Set the player's assigned line
-            player.assigned = savedPlayer.assigned !== undefined ? savedPlayer.assigned : player.assigned; // Mark as assigned
-          }
-        });
-
-        // Ensure the team line assignments (forwards, defense, goalies) are loaded correctly
-        team.lines = savedTeam.lines;
+        team.players = savedTeam.players;
       }
     });
   }
