@@ -71,17 +71,26 @@ export async function loadPlayers() {
     const savedPlayers = localStorage.getItem('playersData');
     if (savedPlayers) {
       playersData = JSON.parse(savedPlayers); // Load players from localStorage
+      // Ensure the assigned property is initialized to false if not already set
+      playersData.forEach(player => {
+        if (player.assigned === undefined) {
+          player.assigned = false;  // Set to false if it's not defined
+        }
+      });
     } else {
       const response = await fetch('./players.json');
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
       playersData = await response.json();
+      // Ensure the assigned property is initialized for each player
+      playersData.forEach(player => {
+        player.assigned = false; // Set to false for all players initially
+      });
       localStorage.setItem('playersData', JSON.stringify(playersData)); // Save players to localStorage
-            console.log('Players loaded from players.json:', playersData);  // Debugging log
-          }
-        } catch (error) {
-          console.error('Error loading player data:', error);
-        }
-      }
+    }
+  } catch (error) {
+    console.error('Error loading player data:', error);
+  }
+}
 
 export function getAvailablePlayers() {
   return playersData.players.filter(player => !player.team);
