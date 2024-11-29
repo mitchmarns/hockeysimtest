@@ -7,25 +7,88 @@
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-
   <h1>Assign Players to Lines</h1>
-  
-    <!-- Container for displaying available players -->
-    <h2>Available Players (Not Assigned to Teams)</h2>
-    <div id="available-players">
-        <!-- Available players will be displayed here -->
+
+  <!-- Available Players Section -->
+  <section id="available-players">
+    <h2>Available Players</h2>
+    <div id="available-players-list"></div>
+  </section>
+
+  <!-- Team Lines Assignment Section -->
+  <section id="lines-container">
+    <h2>Lines by Team</h2>
+
+    <!-- Rangers -->
+    <div class="team-lines" id="Rangers-lines">
+      <h3>Rangers</h3>
+      <div class="lines-category">
+        <h4>Forward Lines</h4>
+        <div class="lines" id="Rangers-forward-lines"></div>
+      </div>
+      <div class="lines-category">
+        <h4>Defense Lines</h4>
+        <div class="lines" id="Rangers-defense-lines"></div>
+      </div>
+      <div class="lines-category">
+        <h4>Goalies</h4>
+        <div class="lines" id="Rangers-goalie-line"></div>
+      </div>
     </div>
 
-    <!-- Container for displaying teams and their line assignments -->
-    <h2>Teams and Line Assignments</h2>
-    <div id="team-lines">
-        <!-- Teams and player line assignments will be displayed here -->
+    <!-- Repeat similar structure for other teams -->
+    <div class="team-lines" id="Devils-lines">
+      <h3>Devils</h3>
+      <div class="lines-category">
+        <h4>Forward Lines</h4>
+        <div class="lines" id="Devils-forward-lines"></div>
+      </div>
+      <div class="lines-category">
+        <h4>Defense Lines</h4>
+        <div class="lines" id="Devils-defense-lines"></div>
+      </div>
+      <div class="lines-category">
+        <h4>Goalies</h4>
+        <div class="lines" id="Devils-goalie-line"></div>
+      </div>
     </div>
 
-    <!-- Save and Reset buttons -->
-    <button id="save">Save Assignments</button>
-    <button id="reset">Reset Assignments</button>
+    <!-- Islanders -->
+    <div class="team-lines" id="Islanders-lines">
+      <h3>Islanders</h3>
+      <div class="lines-category">
+        <h4>Forward Lines</h4>
+        <div class="lines" id="Islanders-forward-lines"></div>
+      </div>
+      <div class="lines-category">
+        <h4>Defense Lines</h4>
+        <div class="lines" id="Islanders-defense-lines"></div>
+      </div>
+      <div class="lines-category">
+        <h4>Goalies</h4>
+        <div class="lines" id="Islanders-goalie-line"></div>
+      </div>
+    </div>
 
-  <script type="module" src="lines.js"></script>
+    <!-- Sabres -->
+    <div class="team-lines" id="Sabres-lines">
+      <h3>Sabres</h3>
+      <div class="lines-category">
+        <h4>Forward Lines</h4>
+        <div class="lines" id="Sabres-forward-lines"></div>
+      </div>
+      <div class="lines-category">
+        <h4>Defense Lines</h4>
+        <div class="lines" id="Sabres-defense-lines"></div>
+      </div>
+      <div class="lines-category">
+        <h4>Goalies</h4>
+        <div class="lines" id="Sabres-goalie-line"></div>
+      </div>
+    </div>
+
+  </section>
+
+  <script type="module" src="app.js"></script>
 </body>
 </html>
