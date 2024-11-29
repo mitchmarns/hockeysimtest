@@ -8,9 +8,15 @@ export const teams = [
 
 export async function loadPlayers() {
   try {
-    const response = await fetch('./players.json');
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-    playersData = await response.json();
+    const savedPlayers = localStorage.getItem('playersData');
+    if (savedPlayers) {
+      playersData = JSON.parse(savedPlayers); // Load players from localStorage
+    } else {
+      const response = await fetch('./players.json');
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      playersData = await response.json();
+      localStorage.setItem('playersData', JSON.stringify(playersData)); // Save players to localStorage
+    }
   } catch (error) {
     console.error('Error loading player data:', error);
   }
@@ -31,7 +37,8 @@ export function assignPlayerToTeam(playerId, teamName) {
 
       // Save updated teams to localStorage
       localStorage.setItem('teams', JSON.stringify(teams));
-      console.log('Teams saved to localStorage:', teams);  // Log to verify data saving
+      console.log('Teams saved to localStorage:', teams);  
+      localStorage.setItem('playersData', JSON.stringify(playersData));
     } else {
       console.error('Team is full.');
     }
