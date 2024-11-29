@@ -30,7 +30,6 @@ h1 {
 }
 
 #available-players-list {
-  display: grid;
   gap: 20px;
   width: 100%;
 }
