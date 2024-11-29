@@ -25,14 +25,14 @@ h1 {
   gap: 20px; /* Space between the columns */
   margin-bottom: 20px;
   width: 100%;
+  padding: 0 10px;
+  box-sizing: border-box;
 }
 
 #available-players-list {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
   gap: 20px;
   width: 100%;
-  box-sizing: border-box;
 }
 
 #available-players h2 {
