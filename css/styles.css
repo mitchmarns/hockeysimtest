@@ -86,20 +86,32 @@ h1 {
 
 .team h3 {
   text-align: center;
-  margin-bottom: 24px;
+  font-size: 18px;
+  margin-bottom: 10px;
+  color: #333;
+  text-transform: uppercase;
 }
 
 .team ul {
   list-style-type: none;
   padding: 0;
+  margin: 0;
 }
 
 .team li {
   font-size: 14px;
-  padding: 6px 12px;
-  background-color: #f4f4f4;
+  padding: 10px;
+  margin: 5px 0;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
   border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   text-align: center;
+  color: #555;
+}
+
+.team li:last-child {
+  margin-bottom: 0; /* Removes margin on the last item */
 }
 
 /* Assign Button Styling */
