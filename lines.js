@@ -123,15 +123,31 @@ function enableDragAndDrop() {
           // Assign the player to the line
           player.line = { teamName, role, line };
 
+          // Update the `lines` structure in `teams`
+          const team = teams.find(t => t.name === teamName);
+          if (team) {
+            if (line.includes('Forward')) {
+              const lineNumber = parseInt(line.split(' ')[1]) - 1; // Get line index (0-based)
+              team.lines.forwards[lineNumber][role] = player.id; // Assign player to role
+            } else if (line.includes('Defense')) {
+              const lineNumber = parseInt(line.split(' ')[1]) - 1;
+              team.lines.defense[lineNumber][role] = player.id;
+            } else if (role === 'Starter' || role === 'Backup') {
+              team.lines.goalies[role] = player.id;
+            }
+          }
+
           // Find the corresponding slot and add the player
           slot.innerHTML = `
             <img src="${player.image}" alt="${player.name}" />
             <span>${player.name}</span>
           `;
+          
           slot.setAttribute('data-player-id', player.id);
 
           // Save to localStorage and refresh display
           localStorage.setItem('teams', JSON.stringify(teams));
+          
           displayAvailablePlayers();
           displayTeamLines();
         } else {
