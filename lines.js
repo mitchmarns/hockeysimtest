@@ -2,7 +2,6 @@ import { loadPlayers, loadTeamsFromLocalStorage, teams } from './team.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
   await loadPlayers();
-  loadTeamsFromLocalStorage();
   initializeTeamLines();
   displayAvailablePlayers();
   displayTeamLines();
