@@ -114,7 +114,14 @@ export function loadTeamsFromLocalStorage() {
     parsedTeams.forEach(savedTeam => {
       const team = teams.find(t => t.name === savedTeam.name);
       if (team) {
-        team.players = savedTeam.players;
+        savedTeam.players.forEach(savedPlayer => {
+          const player = team.players.find(p => p.id === savedPlayer.id);
+          if (player) {
+            player.line = savedPlayer.line || player.line; 
+            player.assigned = savedPlayer.assigned !== undefined ? savedPlayer.assigned : player.assigned; // Correctly load the assigned status
+          }
+        });
+        team.lines = savedTeam.lines || team.lines;
       }
     });
   }
