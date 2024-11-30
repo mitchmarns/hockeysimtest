@@ -1,5 +1,7 @@
 import { loadPlayers, loadTeamsFromLocalStorage, teams } from './team.js';
 
+let players = [];
+
 async function fetchPlayers() {
   try {
     const response = await fetch('players.json');
@@ -17,15 +19,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   displayTeamLines();
   enableDragAndDrop();
 });
-
-let players = [];
-
-fetch('players.json')
-  .then((response) => response.json())
-  .then((data) => {
-    players = data; // Make sure `players` is globally accessible
-  })
-  .catch((error) => console.error('Error loading players:', error));
 
 // lines structure loaded
 function initializeTeamLines() {
