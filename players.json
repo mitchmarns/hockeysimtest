@@ -7,6 +7,7 @@
       "assigned": false,
       "team": null,
       "injured": false,
+      "healthyScratch": false,
       "image": "https://assets.nhle.com/mugs/nhl/20242025/BOS/8480280.png",
       "skills": {
         "glove": 92,
@@ -22,6 +23,7 @@
       "assigned": false,
       "team": null,
       "injured": false,
+      "healthyScratch": false,
       "image": "https://assets.nhle.com/mugs/nhl/20242025/ANA/8480843.png",
       "skills": {
         "glove": 87,
@@ -37,6 +39,7 @@
       "assigned": false,
       "team": null,
       "injured": false,
+      "healthyScratch": false,
       "image": "https://assets.nhle.com/mugs/nhl/20242025/ANA/8481533.png",
       "skills": {
         "shooting": 87,
@@ -52,6 +55,7 @@
       "assigned": false,
       "team": null,
       "injured": false,
+      "healthyScratch": false,
       "image": "https://assets.nhle.com/mugs/nhl/20242025/TOR/8478483.png",
       "skills": {
         "shooting": 88,
@@ -67,6 +71,7 @@
       "assigned": false,
       "team": null,
       "injured": false,
+      "healthyScratch": false,
       "image": "https://assets.nhle.com/mugs/nhl/20242025/TOR/8478904.png",
       "skills": {
         "shooting": 75,
@@ -82,6 +87,7 @@
       "assigned": false,
       "team": null,
       "injured": false,
+      "healthyScratch": false,
       "image": "https://assets.nhle.com/mugs/nhl/20242025/TOR/8482720.png",
       "skills": {
         "shooting": 87,
@@ -97,6 +103,7 @@
       "assigned": false,
       "team": null,
       "injured": false,
+      "healthyScratch": false,
       "image": "https://assets.nhle.com/mugs/nhl/20242025/CAR/8482093.png",
       "skills": {
         "shooting": 89,
@@ -112,6 +119,7 @@
       "assigned": false,
       "team": null,
       "injured": false,
+      "healthyScratch": false,
       "image": "https://assets.nhle.com/mugs/nhl/20242025/SEA/8478407.png",
       "skills": {
         "shooting": 80,
@@ -127,6 +135,7 @@
       "assigned": false,
       "team": null,
       "injured": false,
+      "healthyScratch": false,
       "image": "https://assets.nhle.com/mugs/nhl/20242025/TOR/8479318.png",
       "skills": {
         "shooting": 95,
@@ -142,6 +151,7 @@
       "assigned": false,
       "team": null,
       "injured": false,
+      "healthyScratch": false,
       "image": "https://assets.nhle.com/mugs/nhl/20242025/CAR/8480830.png",
       "skills": {
         "shooting": 91,
@@ -157,6 +167,7 @@
       "assigned": false,
       "team": null,
       "injured": false,
+      "healthyScratch": false,
       "image": "https://assets.nhle.com/mugs/nhl/20242025/DAL/8482740.png",
       "skills": {
         "shooting": 88,
@@ -172,6 +183,7 @@
       "assigned": false,
       "team": null,
       "injured": false,
+      "healthyScratch": false,
       "image": "https://assets.nhle.com/mugs/nhl/20242025/TOR/8479361.png",
       "skills": {
         "glove": 92,
@@ -187,6 +199,7 @@
       "assigned": false,
       "team": null,
       "injured": false,
+      "healthyScratch": false,
       "image": "https://assets.nhle.com/mugs/nhl/20242025/TOR/8477939.png",
       "skills": {
         "shooting": 90,
@@ -202,6 +215,7 @@
       "assigned": false,
       "team": null,
       "injured": false,
+      "healthyScratch": false,
       "image": "https://assets.nhle.com/mugs/nhl/20242025/BOS/8477956.png",
       "skills": {
         "shooting": 95,
