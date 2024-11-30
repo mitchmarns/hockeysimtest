@@ -336,7 +336,7 @@ function enableDragAndDrop() {
     } else if (role === 'Starter' || role === 'Backup') {
       team.lines.goalies[role] = player.id;
     }
-
+});
     // Update player's status
     player.line = { teamName, role, line: line || 'Goalie Line' };
     player.assigned = true;
@@ -366,18 +366,6 @@ function enableDragAndDrop() {
       localStorage.setItem('teams', JSON.stringify(teams)); // Save changes
     });
   }
-    // Save changes
-    localStorage.setItem('teams', JSON.stringify(teams));
-    
-    // Update slot UI
-      slot.innerHTML = `
-        <div class="player-slot">
-          <img src="${player.image}" alt="${player.name}" />
-          <span>${player.name}</span>
-          <button class="remove-btn">Remove</button>
-        </div>
-      `;
-      
 
           // Save to localStorage and refresh display
           localStorage.setItem('teams', JSON.stringify(teams));
