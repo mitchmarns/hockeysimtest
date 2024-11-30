@@ -175,27 +175,7 @@ document.addEventListener('click', (e) => {
       return; // Exit if the player is not found
     }
 
-    // Remove player from the line
-    const { teamName, line, role } = player.line || {};
-    const team = teams.find((t) => t.name === teamName);
-
-    if (team && line) {
-      if (line.includes('Forward')) {
-        const lineIndex = parseInt(line.split(' ')[2]) - 1;
-        if (team.lines.forwards[lineIndex]) {
-          team.lines.forwards[lineIndex][role] = null;
-        }
-      } else if (line.includes('Defense')) {
-        const lineIndex = parseInt(line.split(' ')[2]) - 1;
-        if (team.lines.defense[lineIndex]) {
-          team.lines.defense[lineIndex][role] = null;
-        }
-      } else if (line === 'Goalie Line') {
-        if (team.lines.goalies[role] !== undefined) {
-          team.lines.goalies[role] = null;
-        }
-      }
-    }
+    // paste here
 
         // Remove player from the team assignment
           player.line = null;
