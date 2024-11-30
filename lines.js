@@ -9,6 +9,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   enableDragAndDrop();
 });
 
+let players = [];
+
 fetch('players.json')
   .then((response) => response.json())
   .then((data) => {
