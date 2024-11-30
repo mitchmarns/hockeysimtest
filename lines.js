@@ -163,19 +163,14 @@ function generateLineSlots(team, category, linesCount, positions) {
   return html;
 }
 
-// remove button
+// remove button clicks
 document.addEventListener('click', (e) => {
   if (e.target && e.target.classList.contains('remove-btn')) {
-    const playerElement = e.target.closest('.player-slot');
-    if (!playerElement) return;
+    const playerSlot = e.target.closest('.player-slot');
+    const playerId = parseInt(playerSlot.dataset.playerId, 10);
 
-    const playerId = parseInt(playerElement.dataset.playerId, 10);
-    const player = teams.flatMap(t => t.players).find((p) => p.id === playerId);
-
-     if (player) {
-         console.error(`Player with ID ${playerId} not found.`);
-      return; // Exit if the player is not found
-    }
+    const player = players.find(p => p.id === playerId);
+    if (!player) return;
 
         // Remove player from the team assignment
           player.line = null;
@@ -183,18 +178,9 @@ document.addEventListener('click', (e) => {
           
           // Move the player back to available players
           playerElement.parentElement.innerHTML = '';
+          localStorage.setItem('teams', JSON.stringify(teams));
           displayAvailablePlayers();
           displayTeamLines();
-
-          // Update localStorage
-          localStorage.setItem('teams', JSON.stringify(teams));
-    
-    if (e.target && e.target.classList.contains('injured-toggle')) {
-      const playerElement = e.target.closest('.player');
-      const playerId = parseInt(playerElement.dataset.id);
-      const player = teams.flatMap(t => t.players).find(p => p.id === playerId);
-
-    }
   }
 });
         
