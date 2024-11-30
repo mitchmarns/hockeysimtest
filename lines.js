@@ -290,14 +290,16 @@ function enableDragAndDrop() {
     const playerId = parseInt(e.dataTransfer.getData('playerId'));
     const player = teams.flatMap((t) => t.players).find((p) => p.id === playerId);
 
-    if (player) {
+    if (!player) {
+      console.error('Player not found');
+      return; // Exit if player is not found
+    }
     // Prevent drop if player is injured or scratched
     if (player.injured || player.healthyScratch) {
       alert('This player cannot be placed on lines because they are injured or scratched.');
       return;
     }
 
-    if (player) {
       const teamName = slot.dataset.team;
       const role = slot.dataset.role;
       const line = slot.dataset.line;
