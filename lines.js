@@ -167,10 +167,6 @@ document.addEventListener('click', (e) => {
     // Remove player from the line
     const { teamName, line, role } = player.line || {};
     const team = teams.find((t) => t.name === teamName);
-    
-      // Remove player from the line
-    const { teamName, line, role } = player.line || {};
-    const team = teams.find((t) => t.name === teamName);
 
     if (team && line) {
       if (line.includes('Forward')) {
