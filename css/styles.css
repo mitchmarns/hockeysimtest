@@ -86,11 +86,6 @@ h1 {
   display: block;
 }
 
-.player:hover {
-  transform: translateY(-5px); /* Lift effect */
-  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2); /* Highlight player on hover */
-}
-
 .player button {
   margin-top: 10px;
   background-color: #4CAF50;
