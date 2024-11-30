@@ -198,6 +198,21 @@ button.assign-btn:disabled {
   cursor: not-allowed;
 }
 
+.remove-btn {
+  margin-top: 5px;
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 5px 10px;
+  font-size: 12px;
+}
+
+.remove-btn:hover {
+  background-color: #e60000;
+}
+
 /* Line Assignment */
 #lines-container {
   margin-top: 40px;
