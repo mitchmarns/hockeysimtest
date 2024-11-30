@@ -286,7 +286,7 @@ function enableDragAndDrop() {
       const slot = e.target.closest('.player-slot');
       if (slot) slot.classList.remove('dragover');
     });
-  }
+  
   // Handle drop
   container.addEventListener('drop', (e) => {
     e.preventDefault();
