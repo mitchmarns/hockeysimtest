@@ -81,13 +81,16 @@ function displayTeamLines() {
             : null;
 
           return `
-            <div class="player-slot" data-team="${team.name}" data-role="${role}">
-              ${assignedPlayer ? `
-                <img src="${assignedPlayer.image}" alt="${assignedPlayer.name}" /><br>
-                <span>${assignedPlayer.name}</span>
-              ` : ''}
+        <div class="player-slot" data-team="${team.name}" data-role="${role}">
+          ${assignedPlayer ? `
+            <div class="player-slot" data-player-id="${assignedPlayer.id}">
+              <img src="${assignedPlayer.image}" alt="${assignedPlayer.name}" /><br>
+              <span>${assignedPlayer.name}</span><br>
+              <button class="remove-btn">Remove</button>
             </div>
-          `;
+          ` : ''}
+        </div>
+      `;
         }).join('')}
       </div>
     `;
