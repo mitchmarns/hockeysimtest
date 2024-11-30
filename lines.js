@@ -31,7 +31,7 @@ function displayAvailablePlayers() {
     team.players.forEach(player => {
       if (!player.team || !player.line) { 
         const playerBox = document.createElement('div');
-        playerBox.className = `player ${player.injured ? 'injured' : ''} ${player.healthyScratch ? 'scratch' : ''}`;
+        playerBox.className = player ${player.injured ? 'injured' : ''} ${player.healthyScratch ? 'scratch' : ''};
         
         // Disable dragging for injured or scratched players
         if (player.injured || player.healthyScratch) {
@@ -42,7 +42,7 @@ function displayAvailablePlayers() {
         
         playerBox.dataset.id = player.id;
         playerBox.dataset.team = team.name;
-        playerBox.innerHTML = `
+        playerBox.innerHTML = 
           <img src="${player.image}" alt="${player.name}" />
           <span>${player.name} - ${player.team} ${player.position}</span>
           <div class="player-actions">
@@ -57,7 +57,7 @@ function displayAvailablePlayers() {
               <span class="text-label">Scratch</span>
             </label>
           </div>
-        `;
+        ;
         container.appendChild(playerBox);
       }
     });
@@ -67,30 +67,30 @@ function displayAvailablePlayers() {
 // display team lines and populate slots with assigned players
 function displayTeamLines() {
   teams.forEach(team => {
-    const teamLines = document.getElementById(`${team.name}-lines`);
+    const teamLines = document.getElementById(${team.name}-lines);
 
     // Clear existing content
     teamLines.innerHTML = '';
 
     // Add Forward Lines
     const forwardLinesContainer = document.createElement('div');
-    forwardLinesContainer.innerHTML = `
+    forwardLinesContainer.innerHTML = 
       <h4>Forward Lines</h4>
       ${generateLineSlots(team, 'Forward', 4, ['LW', 'C', 'RW'])}
-    `;
+    ;
     teamLines.appendChild(forwardLinesContainer);
 
     // Add Defense Lines
     const defenseLinesContainer = document.createElement('div');
-    defenseLinesContainer.innerHTML = `
+    defenseLinesContainer.innerHTML = 
       <h4>Defense Lines</h4>
       ${generateLineSlots(team, 'Defense', 3, ['LD', 'RD'])}
-    `;
+    ;
     teamLines.appendChild(defenseLinesContainer);
 
 // Add Goalie Line
     const goalieLineContainer = document.createElement('div');
-    goalieLineContainer.innerHTML = `
+    goalieLineContainer.innerHTML = 
       <h4>Goalies</h4>
       <div class="lines">
         ${['Starter', 'Backup'].map(role => {
@@ -99,20 +99,20 @@ function displayTeamLines() {
             ? team.players.find(p => p.id === assignedPlayerId)
             : null;
 
-          return `
+          return 
         <div class="player-slot" data-team="${team.name}" data-role="${role}">
-          ${assignedPlayer ? `
+          ${assignedPlayer ? 
             <div class="player-slot" data-player-id="${assignedPlayer.id}">
               <img src="${assignedPlayer.image}" alt="${assignedPlayer.name}" /><br>
               <span>${assignedPlayer.name}</span><br>
               <button class="remove-btn">Remove</button>
             </div>
-          ` : ''}
+           : ''}
         </div>
-      `;
+      ;
         }).join('')}
       </div>
-    `;
+    ;
     teamLines.appendChild(goalieLineContainer);
   });
 }
@@ -121,7 +121,7 @@ function displayTeamLines() {
 function generateLineSlots(team, category, linesCount, positions) {
   let html = '';
   for (let i = 1; i <= linesCount; i++) {
-    html += `<div class="line">
+    html += <div class="line">
       ${positions.map(pos => {
         const lineNumber = i - 1; // Convert to 0-based index
         const assignedPlayerId =
@@ -133,19 +133,19 @@ function generateLineSlots(team, category, linesCount, positions) {
           ? team.players.find(p => p.id === assignedPlayerId)
           : null;
 
-        return `
+        return 
           <div class="player-slot" data-team="${team.name}" data-line="${category} Line ${i}" data-role="${pos}">
-            ${assignedPlayer ? `
+            ${assignedPlayer ? 
             <div class="player-slot" data-player-id="${assignedPlayer.id}">
               <img src="${assignedPlayer.image}" alt="${assignedPlayer.name}" /><br>
               <span>${assignedPlayer.name}</span><br>
               <button class="remove-btn">Remove</button>
             </div>
-            ` : ''}
+             : ''}
           </div>
-        `;
+        ;
       }).join('')}
-    </div>`;
+    </div>;
   }
   return html;
 }
@@ -160,7 +160,7 @@ document.addEventListener('click', (e) => {
     const player = teams.flatMap(t => t.players).find(p => p.id === playerId);
 
      if (player) {
-         console.error(`Player with ID ${playerId} not found.`);
+         console.error(Player with ID ${playerId} not found.);
       return; // Exit if the player is not found
     }
 
@@ -169,14 +169,26 @@ document.addEventListener('click', (e) => {
     const team = teams.find((t) => t.name === teamName);
 
     if (team && line) {
-      const lineIndex = parseInt(line.split(' ')[2]) - 1;
-      if (line.includes('Forward')) team.lines.forwards[lineIndex][role] = null;
-      else if (line.includes('Defense')) team.lines.defense[lineIndex][role] = null;
-      else if (line === 'Goalie Line') team.lines.goalies[role] = null;
+      if (line.includes('Forward')) {
+        const lineIndex = parseInt(line.split(' ')[2]) - 1;
+        if (team.lines.forwards[lineIndex]) {
+          team.lines.forwards[lineIndex][role] = null;
+        }
+      } else if (line.includes('Defense')) {
+        const lineIndex = parseInt(line.split(' ')[2]) - 1;
+        if (team.lines.defense[lineIndex]) {
+          team.lines.defense[lineIndex][role] = null;
+        }
+      } else if (line === 'Goalie Line') {
+        if (team.lines.goalies[role] !== undefined) {
+          team.lines.goalies[role] = null;
+        }
+      }
     }
 
-    player.line = null;
-    player.assigned = false;
+        // Remove player from the team assignment
+          player.line = null;
+          player.assigned = false;
           
           // Move the player back to available players
           displayAvailablePlayers();
@@ -184,7 +196,14 @@ document.addEventListener('click', (e) => {
 
           // Update localStorage
           localStorage.setItem('teams', JSON.stringify(teams));
+    
+    if (e.target && e.target.classList.contains('injured-toggle')) {
+      const playerElement = e.target.closest('.player');
+      const playerId = parseInt(playerElement.dataset.id);
+      const player = teams.flatMap(t => t.players).find(p => p.id === playerId);
+
     }
+  }
 });
         
 // toggle button
@@ -194,19 +213,34 @@ document.addEventListener('change', (e) => {
     const player = teams.flatMap(t => t.players).find(p => p.id === playerId);
 
     if (player) {
-      player[toggleType] = e.target.checked;
+      player.injured = e.target.checked;
       if (player.injured) {
         player.healthyScratch = false; // Ensure it's not both injured and scratched
         player.line = null; // Remove the player from any assigned line
       }
 
-      // Update localStorage and re-render
       localStorage.setItem('teams', JSON.stringify(teams));
       displayAvailablePlayers();
       displayTeamLines();
     }
+  } else if (e.target.classList.contains('scratch-toggle')) {
+    const playerId = parseInt(e.target.dataset.id);
+    const player = teams.flatMap((t) => t.players).find((p) => p.id === playerId);
+
+    if (player) {
+      player.healthyScratch = e.target.checked;
+      if (player.healthyScratch) {
+        player.injured = false; // Ensure it's not both scratched and injured
+        player.line = null; // Remove the player from any assigned line
+      }
+
+      localStorage.setItem('teams', JSON.stringify(teams));
+      
+      displayAvailablePlayers();
+      displayTeamLines();
+    }
   }
-  });
+});
 
 
 // drag start
@@ -240,6 +274,12 @@ function enableDragAndDrop() {
     e.preventDefault();
     const slot = e.target.closest('.player-slot');
     if (!slot) return;
+
+    const slotTeam = slot.dataset.team;
+    const draggedTeam = e.dataTransfer.getData('playerTeam');
+    if (slotTeam === draggedTeam) {
+      slot.classList.add('dragover');
+    }
   });
 
   // Handle dragleave
@@ -280,7 +320,7 @@ function enableDragAndDrop() {
     const team = teams.find((t) => t.name === teamName);
 
     if (!team) {
-      console.error(`Team "${teamName}" not found.`);
+      console.error(Team "${teamName}" not found.);
       return;
     }
 
@@ -308,11 +348,11 @@ function enableDragAndDrop() {
     // Update slot UI
     const playerSlot = document.createElement('div');
     playerSlot.classList.add('player-slot');
-    playerSlot.innerHTML = `
+    playerSlot.innerHTML = 
       <img src="${player.image}" alt="${player.name}" />
       <span>${player.name}</span>
       <button class="remove-btn">Remove</button>
-    `;
+    ;
     slot.innerHTML = '';
     slot.appendChild(playerSlot);
 
