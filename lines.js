@@ -196,12 +196,6 @@ document.addEventListener('click', (e) => {
 
           // Update localStorage
           localStorage.setItem('teams', JSON.stringify(teams));
-    
-    if (e.target && e.target.classList.contains('injured-toggle')) {
-      const playerElement = e.target.closest('.player');
-      const playerId = parseInt(playerElement.dataset.id);
-      const player = teams.flatMap(t => t.players).find(p => p.id === playerId);
-
     }
   }
 });
