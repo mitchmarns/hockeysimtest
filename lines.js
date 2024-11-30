@@ -31,13 +31,17 @@ function displayAvailablePlayers() {
     team.players.forEach(player => {
       if (!player.team || !player.line) { 
         const playerBox = document.createElement('div');
-        playerBox.className = 'player';
+        playerBox.className = `player ${player.injured ? 'injured' : ''} ${player.healthyScratch ? 'scratch' : ''}`;
         playerBox.setAttribute('draggable', 'true');
         playerBox.dataset.id = player.id;
         playerBox.dataset.team = team.name;
         playerBox.innerHTML = `
           <img src="${player.image}" alt="${player.name}" />
           <span>${player.name} - ${player.team} ${player.position}</span>
+          <div class="player-actions">
+            <button class="injured-toggle">${player.injured ? 'Mark Healthy' : 'Mark Injured'}</button>
+            <button class="scratch-toggle">${player.healthyScratch ? 'Remove Scratch' : 'Mark Scratch'}</button>
+          </div>
         `;
         container.appendChild(playerBox);
       }
@@ -87,6 +91,8 @@ function displayTeamLines() {
               <img src="${assignedPlayer.image}" alt="${assignedPlayer.name}" /><br>
               <span>${assignedPlayer.name}</span><br>
               <button class="remove-btn">Remove</button>
+              <button class="injured-toggle">${assignedPlayer.injured ? 'Mark Healthy' : 'Mark Injured'}</button>
+        <button class="scratch-toggle">${assignedPlayer.healthyScratch ? 'Remove Scratch' : 'Mark Scratch'}</button>
             </div>
           ` : ''}
         </div>
@@ -121,6 +127,8 @@ function generateLineSlots(team, category, linesCount, positions) {
               <img src="${assignedPlayer.image}" alt="${assignedPlayer.name}" /><br>
               <span>${assignedPlayer.name}</span><br>
               <button class="remove-btn">Remove</button>
+              <button class="injured-toggle">${assignedPlayer.injured ? 'Mark Healthy' : 'Mark Injured'}</button>
+        <button class="scratch-toggle">${assignedPlayer.healthyScratch ? 'Remove Scratch' : 'Mark Scratch'}</button>
             </div>
             ` : ''}
           </div>
@@ -133,6 +141,33 @@ function generateLineSlots(team, category, linesCount, positions) {
 
 // remove button
 document.addEventListener('click', (e) => {
+  if (e.target && e.target.classList.contains('injured-toggle')) {
+    const playerElement = e.target.closest('.player');
+    const playerId = parseInt(playerElement.dataset.id);
+    const player = teams.flatMap(t => t.players).find(p => p.id === playerId);
+
+    if (player) {
+      player.injured = !player.injured;
+      player.healthyScratch = false; // Ensure it's not both injured and a scratch
+      displayAvailablePlayers();
+      displayTeamLines();
+      localStorage.setItem('teams', JSON.stringify(teams));
+    }
+  } else if (e.target && e.target.classList.contains('scratch-toggle')) {
+    const playerElement = e.target.closest('.player');
+    const playerId = parseInt(playerElement.dataset.id);
+    const player = teams.flatMap(t => t.players).find(p => p.id === playerId);
+
+    if (player) {
+      player.healthyScratch = !player.healthyScratch;
+      player.injured = false; // Ensure it's not both a scratch and injured
+      displayAvailablePlayers();
+      displayTeamLines();
+      localStorage.setItem('teams', JSON.stringify(teams));
+    }
+  }
+});
+
   if (e.target && e.target.classList.contains('remove-btn')) {
     const playerElement = e.target.closest('.player-slot');
     if (!playerElement) return;
@@ -288,6 +323,9 @@ function enableDragAndDrop() {
         <div class="player-slot">
           <img src="${player.image}" alt="${player.name}" />
           <span>${player.name}</span>
+          <button class="remove-btn">Remove</button>
+          <button class="injured-toggle">${assignedPlayer.injured ? 'Mark Healthy' : 'Mark Injured'}</button>
+        <button class="scratch-toggle">${assignedPlayer.healthyScratch ? 'Remove Scratch' : 'Mark Scratch'}</button>
         </div>
       `;
       
