@@ -180,6 +180,11 @@ document.addEventListener('click', (e) => {
             }
           }
         }
+      }
+    }
+  }
+}
+    });
 
         // Remove player from the team assignment
           player.line = null;
@@ -191,10 +196,7 @@ document.addEventListener('click', (e) => {
 
           // Update localStorage
           localStorage.setItem('teams', JSON.stringify(teams));
-        }
-      }
-    }
-  });    
+        
 // toggle button
 document.addEventListener('change', (e) => {
   if (e.target.classList.contains('injured-toggle')) {
@@ -257,7 +259,7 @@ function enableDragAndDrop() {
       const slot = e.target.closest('.player-slot');
       if (slot) slot.classList.remove('dragover');
     });
-
+  }
   // Handle drop
   container.addEventListener('drop', (e) => {
     e.preventDefault();
@@ -316,7 +318,8 @@ function enableDragAndDrop() {
           return;
         }
       }
-    
+    }
+    });
       // Update player's status
       player.line = { teamName, role, line: line || 'Goalie Line' };
       player.assigned = true;
@@ -339,5 +342,3 @@ function enableDragAndDrop() {
 
           // Save to localStorage and refresh display
           localStorage.setItem('teams', JSON.stringify(teams));
-        }
-      });
