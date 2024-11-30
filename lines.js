@@ -219,6 +219,7 @@ document.addEventListener('change', (e) => {
         player.line = null; // Remove the player from any assigned line
       }
 
+      // Update localStorage and re-render
       localStorage.setItem('teams', JSON.stringify(teams));
       displayAvailablePlayers();
       displayTeamLines();
@@ -234,8 +235,8 @@ document.addEventListener('change', (e) => {
         player.line = null; // Remove the player from any assigned line
       }
 
+      // Update localStorage and re-render
       localStorage.setItem('teams', JSON.stringify(teams));
-      
       displayAvailablePlayers();
       displayTeamLines();
     }
