@@ -131,7 +131,12 @@ function generateLineSlots(team, category, linesCount, positions) {
 // Add event listener for the "Remove" button
 document.addEventListener('click', (e) => {
   if (e.target && e.target.classList.contains('remove-btn')) {
+    // Ensure the closest .player element exists
     const playerElement = e.target.closest('.player');
+    
+    // Check if the player element is valid (it could be null if not found)
+    if (!playerElement) return; // If playerElement is null, exit early
+
     const playerId = parseInt(playerElement.dataset.playerId);
     const player = teams.flatMap(t => t.players).find(p => p.id === playerId);
 
@@ -143,29 +148,28 @@ document.addEventListener('click', (e) => {
         // Remove the player from the line (clear the assigned position)
         if (player.line) {
           const { line, role } = player.line;
-          
+
           if (line.includes('Forward')) {
             const lineIndex = parseInt(line.split(' ')[2]) - 1;
             if (team.lines.forwards[lineIndex]) {
-              team.lines.forwards[lineIndex][role] = null;
+              team.lines.forwards[lineIndex][role] = null;  // Remove player from forward line
             }
           } else if (line.includes('Defense')) {
             const lineIndex = parseInt(line.split(' ')[2]) - 1;
             if (team.lines.defense[lineIndex]) {
-              team.lines.defense[lineIndex][role] = null;
+              team.lines.defense[lineIndex][role] = null;  // Remove player from defense line
             }
           } else if (line.includes('Goalie')) {
             if (team.lines.goalies[role] !== undefined) {
-              team.lines.goalies[role] = null;
+              team.lines.goalies[role] = null;  // Remove player from goalie line
             }
           }
 
-          // Remove player from the team assignment
-          player.team = null;
+          // Clear the player's line assignment but keep their team
           player.line = null;
           player.assigned = false;
           
-          // Move the player back to available players
+          // Update the UI
           displayAvailablePlayers();
           displayTeamLines();
 
