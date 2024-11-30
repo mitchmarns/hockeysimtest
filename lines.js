@@ -340,4 +340,5 @@ function enableDragAndDrop() {
           localStorage.setItem('teams', JSON.stringify(teams));
         }
     });
-
+}
+    });
