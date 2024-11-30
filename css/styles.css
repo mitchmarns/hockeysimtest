@@ -307,15 +307,17 @@ input:checked + .slider:before {
 label.toggle {
   display: flex;
   align-items: center;
-  margin-bottom: 20px; /* space between toggles */
+  margin-bottom: 10px; /* space between toggles */
+  gap: 10px;
 }
 
 label.toggle .slider {
-  margin-right: 10px; /* space between slider and label */
+ /* slider specific */
 }
 
 label.toggle .text-label {
-  margin-top: 10px;
-  font-size: 14px;
+  font-size: 12px;
+  margin-top: 5px;
   color: #333;
+  padding-left: 10px;
 }
