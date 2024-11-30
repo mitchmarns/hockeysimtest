@@ -223,6 +223,9 @@ function enableDragAndDrop() {
       player.line = { teamName, role, line: line || 'Goalie Line' };
       player.assigned = true;
 
+      player.team = teamName;
+      playerBox.remove();
+
       // Update slot UI
       slot.innerHTML = `
         <div class="player-slot">
