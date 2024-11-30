@@ -62,11 +62,15 @@ h1 {
 .player.injured {
   border: 2px solid red;
   opacity: 0.6;
+  pointer-events: none;
+  background-color: #e0e0e0;
 }
 
 .player.scratch {
   border: 2px solid orange;
   opacity: 0.8;
+  pointer-events: none;
+  background-color: #e0e0e0;
 }
 
 .player img {
