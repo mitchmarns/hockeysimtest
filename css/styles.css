@@ -107,8 +107,8 @@ h1 {
 }
 
 .player-slot img {
-  max-width: 100%; 
-  max-height: 100%; 
+  max-width: 200px; 
+  max-height: 200px; 
   object-fit: cover; 
   border-radius: 50%; 
 }
