@@ -322,7 +322,7 @@ function enableDragAndDrop() {
     const team = teams.find((t) => t.name === teamName);
 
     if (!team) {
-      console.error(Team "${teamName}" not found.);
+      console.error(`Team "${teamName}" not found.`);
       return;
     }
 
