@@ -264,115 +264,109 @@ document.addEventListener('dragstart', e => {
 // drag and drop functionality
 function enableDragAndDrop() {
   const container = document.getElementById('lines-container');
+  if (!container) {
+    console.error('Container not found in the DOM');
+    return;
+  }
 
   // Handle dragover
   container.addEventListener('dragover', (e) => {
     e.preventDefault();
-
     const slot = e.target.closest('.player-slot');
     if (!slot) return;
 
     const slotTeam = slot.dataset.team;
     const draggedTeam = e.dataTransfer.getData('playerTeam');
-
     if (slotTeam === draggedTeam) {
       slot.classList.add('dragover');
     }
   });
 
-    // Handle dragleave
-    container.addEventListener('dragleave', (e) => {
-      
-      const slot = e.target.closest('.player-slot');
-      if (slot) slot.classList.remove('dragover');
-    });
-  
+  // Handle dragleave
+  container.addEventListener('dragleave', (e) => {
+    const slot = e.target.closest('.player-slot');
+    if (slot) slot.classList.remove('dragover');
+  });
+
   // Handle drop
   container.addEventListener('drop', (e) => {
     e.preventDefault();
-
     const slot = e.target.closest('.player-slot');
     if (!slot) return;
 
     slot.classList.remove('dragover');
 
     const playerId = parseInt(e.dataTransfer.getData('playerId'));
-    const player = teams.flatMap((t) => t.players).find((p) => p.id === playerId);
+    if (isNaN(playerId)) {
+      console.error('Invalid playerId');
+      return;
+    }
 
+    const player = teams.flatMap((t) => t.players).find((p) => p.id === playerId);
     if (!player) {
       console.error('Player not found');
-      return; // Exit if player is not found
+      return;
     }
+
     // Prevent drop if player is injured or scratched
     if (player.injured || player.healthyScratch) {
       alert('This player cannot be placed on lines because they are injured or scratched.');
       return;
     }
 
-      const teamName = slot.dataset.team;
-      const role = slot.dataset.role;
-      const line = slot.dataset.line;
+    const teamName = slot.dataset.team;
+    const role = slot.dataset.role;
+    const line = slot.dataset.line;
+    const team = teams.find((t) => t.name === teamName);
 
-      const team = teams.find((t) => t.name === teamName);
+    if (!team) {
+      console.error(`Team "${teamName}" not found.`);
+      return;
+    }
 
-      if (!team) {
-        console.error(`Team "${teamName}" not found.`);
-        return;
+    if (line) {
+      const lineParts = line.split(' ');
+      let lineNumber = parseInt(lineParts[2]) - 1;
+
+      if (line.includes('Forward')) {
+        team.lines.forwards[lineNumber][role] = player.id;
+      } else if (line.includes('Defense')) {
+        team.lines.defense[lineNumber][role] = player.id;
       }
+    } else if (role === 'Starter' || role === 'Backup') {
+      team.lines.goalies[role] = player.id;
+    }
 
-      if (line) {
-        const lineParts = line.split(' ');
-        let lineNumber = NaN;
+    // Update player's status
+    player.line = { teamName, role, line: line || 'Goalie Line' };
+    player.assigned = true;
+    player.team = teamName;
 
-        if (lineParts.length === 3 && !isNaN(parseInt(lineParts[2]))) {
-          lineNumber = parseInt(lineParts[2]) - 1; // Convert to 0-based index
-        }
+    // Remove player from available players list
+    displayAvailablePlayers();
 
-        if (isNaN(lineNumber)) {
-          console.error(`Invalid line number format for line: "${line}"`);
-          return;
-        }
+    // Update slot UI
+    const playerSlot = document.createElement('div');
+    playerSlot.classList.add('player-slot');
+    playerSlot.innerHTML = `
+      <img src="${player.image}" alt="${player.name}" />
+      <span>${player.name}</span>
+      <button class="remove-btn">Remove</button>
+    `;
+    slot.innerHTML = '';
+    slot.appendChild(playerSlot);
 
-        if (line.includes('Forward')) {
-          if (team.lines.forwards[lineNumber]) {
-            team.lines.forwards[lineNumber][role] = player.id;
-          } else {
-            console.error(`Line number ${lineNumber} does not exist in team ${teamName}`);
-          }
-        } else if (line.includes('Defense')) {
-          if (team.lines.defense[lineNumber]) {
-            team.lines.defense[lineNumber][role] = player.id;
-          } else {
-            console.error(`Line number ${lineNumber} does not exist in team ${teamName}`);
-          }
-        }
-      } else if (role === 'Starter' || role === 'Backup') {
-        if (team.lines.goalies[role] !== undefined) {
-          team.lines.goalies[role] = player.id;
-        } else {
-          console.error(`Invalid goalie role: "${role}"`);
-          return;
-        }
-      }
-      });
-      // Update player's status
-      player.line = { teamName, role, line: line || 'Goalie Line' };
-      player.assigned = true;
-      player.team = teamName;
+    // Handle remove button
+    playerSlot.querySelector('.remove-btn').addEventListener('click', () => {
+      slot.innerHTML = ''; // Clear the slot
+      player.line = null; // Update player status
+      player.assigned = false;
+      player.team = null;
+      displayAvailablePlayers(); // Refresh available players
+      localStorage.setItem('teams', JSON.stringify(teams)); // Save changes
+    });
 
-      // Remove player from available players list
-      displayAvailablePlayers();
-
-      // Update slot UI
-      slot.innerHTML = `
-        <div class="player-slot">
-          <img src="${player.image}" alt="${player.name}" />
-          <span>${player.name}</span>
-          <button class="remove-btn">Remove</button>
-        </div>
-      `;
-      
-
-          // Save to localStorage and refresh display
-          localStorage.setItem('teams', JSON.stringify(teams));
+    // Save changes
+    localStorage.setItem('teams', JSON.stringify(teams));
+  });
 }
