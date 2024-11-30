@@ -38,32 +38,41 @@ function displayAvailablePlayers() {
   const container = document.getElementById('available-players-list');
   container.innerHTML = '';
 
-   players
-    .filter(player => !player.team || !player.line || player.assigned === false)
-    .forEach(player => {
-      const playerBox = document.createElement('div');
-      playerBox.className = `player ${player.injured ? 'injured' : ''} ${player.healthyScratch ? 'scratch' : ''}`;
-      playerBox.setAttribute('draggable', !(player.injured || player.healthyScratch));
-      playerBox.dataset.id = player.id;
-
-      playerBox.innerHTML = `
-        <img src="${player.image}" alt="${player.name}" />
-        <span>${player.name} - ${player.position}</span>
-        <div class="player-actions">
-          <label class="toggle">
+    teams.forEach(team => {
+    team.players.forEach(player => {
+      if (!player.team || !player.line) { 
+        const playerBox = document.createElement('div');
+        playerBox.className = `player ${player.injured ? 'injured' : ''} ${player.healthyScratch ? 'scratch' : ''}`;
+        
+        // Disable dragging for injured or scratched players
+        if (player.injured || player.healthyScratch) {
+          playerBox.setAttribute('draggable', 'false');
+        } else {
+          playerBox.setAttribute('draggable', 'true');
+        }
+        
+        playerBox.dataset.id = player.id;
+        playerBox.dataset.team = team.name;
+        playerBox.innerHTML = `
+          <img src="${player.image}" alt="${player.name}" />
+          <span>${player.name} - ${player.team} ${player.position}</span>
+          <div class="player-actions">
+            <label class="toggle">
             <input type="checkbox" class="injured-toggle" data-id="${player.id}" ${player.injured ? 'checked' : ''}>
-            <span class="slider"></span>
-            <span>Injured</span>
-          </label>
-          <label class="toggle">
-            <input type="checkbox" class="scratch-toggle" data-id="${player.id}" ${player.healthyScratch ? 'checked' : ''}>
-            <span class="slider"></span>
-            <span>Scratch</span>
-          </label>
-        </div>
-      `;
-      container.appendChild(playerBox);
+              <span class="slider"></span>
+              <span class="text-label">Injured</span>
+            </label>
+            <label class="toggle">
+              <input type="checkbox" class="scratch-toggle" data-id="${player.id}" ${player.healthyScratch ? 'checked' : ''}>
+              <span class="slider"></span>
+              <span class="text-label">Scratch</span>
+            </label>
+          </div>
+        `;
+        container.appendChild(playerBox);
+      }
     });
+  });
 }
 
 // display team lines and populate slots with assigned players
