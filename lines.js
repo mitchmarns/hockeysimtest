@@ -121,7 +121,8 @@ function displayTeamLines() {
 function generateLineSlots(team, category, linesCount, positions) {
   let html = '';
   for (let i = 1; i <= linesCount; i++) {
-    html += <div class="line">
+    html += `
+      <div class="line">
       ${positions.map(pos => {
         const lineNumber = i - 1; // Convert to 0-based index
         const assignedPlayerId =
@@ -133,7 +134,7 @@ function generateLineSlots(team, category, linesCount, positions) {
           ? team.players.find(p => p.id === assignedPlayerId)
           : null;
 
-        return 
+        return `
           <div class="player-slot" data-team="${team.name}" data-line="${category} Line ${i}" data-role="${pos}">
             ${assignedPlayer ? 
             <div class="player-slot" data-player-id="${assignedPlayer.id}">
@@ -141,11 +142,12 @@ function generateLineSlots(team, category, linesCount, positions) {
               <span>${assignedPlayer.name}</span><br>
               <button class="remove-btn">Remove</button>
             </div>
-             : ''}
+            ` : ''}
           </div>
-        ;
+        `;
       }).join('')}
-    </div>;
+    </div>
+    `;
   }
   return html;
 }
