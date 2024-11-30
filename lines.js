@@ -344,6 +344,13 @@ function enableDragAndDrop() {
     player.assigned = true;
     player.team = teamName;
 
+  // Ensure the player is not both injured and scratched at the same time
+  if (player.injured) {
+    player.healthyScratch = false; // If injured, they cannot be scratched
+  } else if (player.healthyScratch) {
+    player.injured = false; // If scratched, they cannot be injured
+  }
+
     // Remove player from available players list
     displayAvailablePlayers();
 
