@@ -93,7 +93,7 @@ h1 {
 }
 
 .player-slot {
-  width: auto;
+  min-width: 150px;
   gap: 20px;
   height: auto;
   display: flex;
