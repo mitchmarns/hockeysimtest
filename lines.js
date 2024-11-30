@@ -231,7 +231,16 @@ document.addEventListener('change', (e) => {
 document.addEventListener('dragstart', e => {
   const playerBox = e.target.closest('.player');
   if (playerBox) {
-    e.dataTransfer.setData('playerId', playerBox.dataset.id);
+    const playerId = playerBox.dataset.id;
+    const player = teams.flatMap((t) => t.players).find((p) => p.id == playerId);
+
+    // Check if the player is injured or scratched
+    if (player && (player.injured || player.healthyScratch)) {
+      e.preventDefault(); // Prevent dragging the player
+      return; // Exit early so that the player isn't dragged
+    }
+
+    e.dataTransfer.setData('playerId', playerId);
     e.dataTransfer.setData('playerTeam', playerBox.dataset.team);
   }
 });
@@ -273,6 +282,13 @@ function enableDragAndDrop() {
 
     const playerId = parseInt(e.dataTransfer.getData('playerId'));
     const player = teams.flatMap((t) => t.players).find((p) => p.id === playerId);
+
+    if (player) {
+    // Prevent drop if player is injured or scratched
+    if (player.injured || player.healthyScratch) {
+      alert('This player cannot be placed on lines because they are injured or scratched.');
+      return;
+    }
 
     if (player) {
       const teamName = slot.dataset.team;
