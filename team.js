@@ -17,6 +17,14 @@ export const teams = [
         { LD: null, RD: null },
       ],
       goalies: { Starter: null, Backup: null },
+      powerplay: [
+        { LW: null, C: null, RW: null, LD: null, RD: null }, // Powerplay Unit 1
+        { LW: null, C: null, RW: null, LD: null, RD: null }, // Powerplay Unit 2
+      ],
+      penaltyKill: [
+        { F1: null, F2: null, LD: null, RD: null }, // Penalty Kill Unit 1
+        { F1: null, F2: null, LD: null, RD: null }, // Penalty Kill Unit 2
+      ],
     },
   },
   { name: "Devils", players: [], maxPlayers: 23,
@@ -33,6 +41,14 @@ export const teams = [
         { LD: null, RD: null },
       ],
       goalies: { Starter: null, Backup: null },
+      powerplay: [
+        { LW: null, C: null, RW: null, LD: null, RD: null }, // Powerplay Unit 1
+        { LW: null, C: null, RW: null, LD: null, RD: null }, // Powerplay Unit 2
+      ],
+      penaltyKill: [
+        { F1: null, F2: null, LD: null, RD: null }, // Penalty Kill Unit 1
+        { F1: null, F2: null, LD: null, RD: null }, // Penalty Kill Unit 2
+      ],
     },
   },
   { name: "Islanders", players: [], maxPlayers: 23,
@@ -50,6 +66,14 @@ export const teams = [
       ],
       goalies: { Starter: null, Backup: null },
     },
+   powerplay: [
+        { LW: null, C: null, RW: null, LD: null, RD: null }, // Powerplay Unit 1
+        { LW: null, C: null, RW: null, LD: null, RD: null }, // Powerplay Unit 2
+      ],
+      penaltyKill: [
+        { F1: null, F2: null, LD: null, RD: null }, // Penalty Kill Unit 1
+        { F1: null, F2: null, LD: null, RD: null }, // Penalty Kill Unit 2
+      ],
   },
   { name: "Sabres", players: [], maxPlayers: 23,
       lines: {
@@ -66,6 +90,14 @@ export const teams = [
       ],
       goalies: { Starter: null, Backup: null },
     },
+   powerplay: [
+        { LW: null, C: null, RW: null, LD: null, RD: null }, // Powerplay Unit 1
+        { LW: null, C: null, RW: null, LD: null, RD: null }, // Powerplay Unit 2
+      ],
+      penaltyKill: [
+        { F1: null, F2: null, LD: null, RD: null }, // Penalty Kill Unit 1
+        { F1: null, F2: null, LD: null, RD: null }, // Penalty Kill Unit 2
+      ],
   }
 ];
 
