@@ -215,9 +215,11 @@ document.addEventListener('change', (e) => {
     if (player) {
       player.injured = e.target.checked;
       player.healthyScratch = false; // Ensure it’s not both injured and a scratch
+
+      localStorage.setItem('teams', JSON.stringify(teams));
+      
       displayAvailablePlayers();
       displayTeamLines();
-      localStorage.setItem('teams', JSON.stringify(teams));
     }
   } else if (e.target.classList.contains('scratch-toggle')) {
     const playerId = parseInt(e.target.dataset.id);
@@ -226,9 +228,11 @@ document.addEventListener('change', (e) => {
     if (player) {
       player.healthyScratch = e.target.checked;
       player.injured = false; // Ensure it’s not both a scratch and injured
+
+      localStorage.setItem('teams', JSON.stringify(teams));
+      
       displayAvailablePlayers();
       displayTeamLines();
-      localStorage.setItem('teams', JSON.stringify(teams));
     }
   }
 });
