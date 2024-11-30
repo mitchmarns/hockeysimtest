@@ -307,7 +307,7 @@ input:checked + .slider:before {
 label.toggle {
   display: flex;
   align-items: center;
-  margin-bottom: 10px; /* space between toggles */
+  margin-bottom: 20px; /* space between toggles */
 }
 
 label.toggle .slider {
