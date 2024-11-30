@@ -79,6 +79,7 @@ function displayTeamLines() {
           const assignedPlayer = assignedPlayerId
             ? team.players.find(p => p.id === assignedPlayerId)
             : null;
+
           return `
             <div class="player-slot" data-team="${team.name}" data-role="${role}">
               ${assignedPlayer ? `
@@ -105,18 +106,16 @@ function generateLineSlots(team, category, linesCount, positions) {
           category === 'Forward' ? team.lines.forwards[lineNumber][pos] :
           category === 'Defense' ? team.lines.defense[lineNumber][pos] :
           null;
+
         const assignedPlayer = assignedPlayerId
           ? team.players.find(p => p.id === assignedPlayerId)
           : null;
+
         return `
           <div class="player-slot" data-team="${team.name}" data-line="${category} Line ${i}" data-role="${pos}">
             ${assignedPlayer ? `
-            <div class="player" data-player-id="${assignedPlayer.id}">
               <img src="${assignedPlayer.image}" alt="${assignedPlayer.name}" /><br>
               <span>${assignedPlayer.name}</span>
-              <span>${assignedPlayer.name}</span><br>
-              <button class="remove-btn">Remove</button>
-            </div>
             ` : ''}
           </div>
         `;
@@ -126,50 +125,6 @@ function generateLineSlots(team, category, linesCount, positions) {
   return html;
 }
 
-// Add event listener for the "Remove" button
-document.addEventListener('click', (e) => {
-  if (e.target && e.target.classList.contains('remove-btn')) {
-    const playerElement = e.target.closest('.player');
-    const playerId = parseInt(playerElement.dataset.playerId);
-    const player = teams.flatMap(t => t.players).find(p => p.id === playerId);
-    if (player) {
-      // Find the team the player belongs to
-      const team = teams.find(t => t.name === player.team);
-      if (team) {
-        // Remove the player from the line (clear the assigned position)
-        if (player.line) {
-          const { line, role } = player.line;
-          
-          if (line.includes('Forward')) {
-            const lineIndex = parseInt(line.split(' ')[2]) - 1;
-            if (team.lines.forwards[lineIndex]) {
-              team.lines.forwards[lineIndex][role] = null;
-            }
-          } else if (line.includes('Defense')) {
-            const lineIndex = parseInt(line.split(' ')[2]) - 1;
-            if (team.lines.defense[lineIndex]) {
-              team.lines.defense[lineIndex][role] = null;
-            }
-          } else if (line.includes('Goalie')) {
-            if (team.lines.goalies[role] !== undefined) {
-              team.lines.goalies[role] = null;
-            }
-          }
-          // Remove player from the team assignment
-          player.team = null;
-          player.line = null;
-          player.assigned = false;
-          
-          // Move the player back to available players
-          displayAvailablePlayers();
-          displayTeamLines();
-          // Update localStorage
-          localStorage.setItem('teams', JSON.stringify(teams));
-        }
-      }
-    }
-  }
-});
 // drag start
 document.addEventListener('dragstart', e => {
   const playerBox = e.target.closest('.player');
@@ -200,7 +155,7 @@ function enableDragAndDrop() {
 
     // Handle dragleave
     container.addEventListener('dragleave', (e) => {
-
+      
       const slot = e.target.closest('.player-slot');
       if (slot) slot.classList.remove('dragover');
     });
@@ -275,7 +230,7 @@ function enableDragAndDrop() {
           <span>${player.name}</span>
         </div>
       `;
-
+      
 
           // Save to localStorage and refresh display
           localStorage.setItem('teams', JSON.stringify(teams));
