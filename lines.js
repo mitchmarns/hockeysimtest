@@ -220,7 +220,7 @@ document.addEventListener('click', (e) => {
       }
     }
   }
-});
+
 
 // drag start
 document.addEventListener('dragstart', e => {
