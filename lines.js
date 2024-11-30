@@ -365,8 +365,19 @@ function enableDragAndDrop() {
       displayAvailablePlayers(); // Refresh available players
       localStorage.setItem('teams', JSON.stringify(teams)); // Save changes
     });
-
+  }
     // Save changes
     localStorage.setItem('teams', JSON.stringify(teams));
-  });
-}
+    
+    // Update slot UI
+      slot.innerHTML = `
+        <div class="player-slot">
+          <img src="${player.image}" alt="${player.name}" />
+          <span>${player.name}</span>
+          <button class="remove-btn">Remove</button>
+        </div>
+      `;
+      
+
+          // Save to localStorage and refresh display
+          localStorage.setItem('teams', JSON.stringify(teams));
