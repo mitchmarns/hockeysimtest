@@ -180,6 +180,20 @@ document.addEventListener('click', (e) => {
             }
           }
         }
+
+        // Remove player from the team assignment
+          player.line = null;
+          player.assigned = false;
+          
+          // Move the player back to available players
+          displayAvailablePlayers();
+          displayTeamLines();
+
+          // Update localStorage
+          localStorage.setItem('teams', JSON.stringify(teams));
+        }
+      
+      }
         
 // toggle button
 document.addEventListener('change', (e) => {
@@ -207,20 +221,6 @@ document.addEventListener('change', (e) => {
     }
   }
 });
-
-          // Remove player from the team assignment
-          player.line = null;
-          player.assigned = false;
-          
-          // Move the player back to available players
-          displayAvailablePlayers();
-          displayTeamLines();
-
-          // Update localStorage
-          localStorage.setItem('teams', JSON.stringify(teams));
-        }
-      
-      }
 
 
 // drag start
