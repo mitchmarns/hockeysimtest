@@ -350,11 +350,11 @@ function enableDragAndDrop() {
     // Update slot UI
     const playerSlot = document.createElement('div');
     playerSlot.classList.add('player-slot');
-    playerSlot.innerHTML = 
+    playerSlot.innerHTML = `
       <img src="${player.image}" alt="${player.name}" />
       <span>${player.name}</span>
       <button class="remove-btn">Remove</button>
-    ;
+    `;
     slot.innerHTML = '';
     slot.appendChild(playerSlot);
 
