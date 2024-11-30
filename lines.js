@@ -205,6 +205,7 @@ document.addEventListener('change', (e) => {
       displayAvailablePlayers();
       displayTeamLines();
     }
+  }
   });
 
 
