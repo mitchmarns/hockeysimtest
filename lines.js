@@ -179,11 +179,12 @@ document.addEventListener('change', e => {
 function enableDragAndDrop() {
   const container = document.getElementById('lines-container');
 
-  container.addEventListener('dragstart', e => {
+  container.addEventListener('dragstart', (e) => {
     const playerBox = e.target.closest('.player');
-    if (playerBox) {
-      const playerId = playerBox.dataset.id;
-      const player = teams.flatMap((t) => t.players).find((p) => p.id == playerId);
+    if (playerBox) return;
+
+    const playerId = playerBox.dataset.id;
+    const player = teams.flatMap((t) => t.players).find((p) => p.id == playerId);
 
       // Check if the player is injured or scratched
     if (player && (player.injured || player.healthyScratch)) {
@@ -193,38 +194,42 @@ function enableDragAndDrop() {
 
     e.dataTransfer.setData('playerId', playerId);
     e.dataTransfer.setData('playerTeam', playerBox.dataset.team);
+  });
 
-  container.addEventListener('dragover', e => {
+  container.addEventListener('dragover', (e) => {
     e.preventDefault();
     const slot = e.target.closest('.player-slot');
     if (!slot) return;
 
     const slotTeam = slot.dataset.team;
     const draggedTeam = e.dataTransfer.getData('playerTeam');
+    
     if (slotTeam === draggedTeam) {
       slot.classList.add('dragover');
     }
   });
 
-  container.addEventListener('dragleave', e => {
+  container.addEventListener('dragleave', (e) => {
     const slot = e.target.closest('.player-slot');
-    if (slot) slot.classList.remove('dragover');
+    if (slot) {
+      slot.classList.remove('dragover');
+    }
   });
 
-  container.addEventListener('drop', e => {
+  container.addEventListener('drop', (e) => {
     e.preventDefault();
     const slot = e.target.closest('.player-slot');
     if (!slot) return;
 
     slot.classList.remove('dragover');
 
-    const playerId = parseInt(e.dataTransfer.getData('playerId'));
+    const playerId = parseInt(e.dataTransfer.getData('playerId'), 10);
     if (isNaN(playerId)) {
       console.error('Invalid playerId');
       return;
     }
     
-    const player = teams.flatMap((t) => t.players).find((p) => p.id === playerId);
+    const player = players.find((p) => p.id === playerId);
     if (!player) {
       console.error('Player not found');
       return;
