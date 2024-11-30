@@ -40,12 +40,14 @@ function displayAvailablePlayers() {
           <span>${player.name} - ${player.team} ${player.position}</span>
           <div class="player-actions">
             <label class="toggle">
-              <input type="checkbox" class="injured-toggle" data-id="${player.id}" ${player.injured ? 'checked' : ''}>
-              <span class="slider"></span> <span class="text-label">Injured</span>
+            <input type="checkbox" class="injured-toggle" data-id="${player.id}" ${player.injured ? 'checked' : ''}>
+              <span class="slider"></span>
+              <span class="text-label">Injured</span>
             </label>
             <label class="toggle">
               <input type="checkbox" class="scratch-toggle" data-id="${player.id}" ${player.healthyScratch ? 'checked' : ''}>
-              <span class="slider"></span> <span class="text-label">Scratch</span>
+              <span class="slider"></span>
+              <span class="text-label">Scratch</span>
             </label>
           </div>
         `;
@@ -334,8 +336,6 @@ function enableDragAndDrop() {
           <img src="${player.image}" alt="${player.name}" />
           <span>${player.name}</span>
           <button class="remove-btn">Remove</button>
-          <button class="injured-toggle">${assignedPlayer.injured ? 'Mark Healthy' : 'Mark Injured'}</button>
-        <button class="scratch-toggle">${assignedPlayer.healthyScratch ? 'Remove Scratch' : 'Mark Scratch'}</button>
         </div>
       `;
       
