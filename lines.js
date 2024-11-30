@@ -137,7 +137,7 @@ function generateLineSlots(team, category, linesCount, positions) {
         return `
           <div class="player-slot" data-team="${team.name}" data-line="${category} Line ${i}" data-role="${pos}">
             ${assignedPlayer ? 
-            <div class="player-slot" data-player-id="${assignedPlayer.id}">
+            `<div class="player-slot" data-player-id="${assignedPlayer.id}">
               <img src="${assignedPlayer.image}" alt="${assignedPlayer.name}" /><br>
               <span>${assignedPlayer.name}</span><br>
               <button class="remove-btn">Remove</button>
