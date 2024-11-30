@@ -345,9 +345,7 @@ function enableDragAndDrop() {
           return;
         }
       }
-    }
-  }
-    });
+      });
       // Update player's status
       player.line = { teamName, role, line: line || 'Goalie Line' };
       player.assigned = true;
