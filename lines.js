@@ -214,20 +214,25 @@ document.addEventListener('change', (e) => {
 
     if (player) {
       player.injured = e.target.checked;
-      player.healthyScratch = false; // Ensure it’s not both injured and a scratch
+      if (player.injured) {
+        player.healthyScratch = false; // Ensure it's not both injured and scratched
+        player.line = null; // Remove the player from any assigned line
+      }
 
       localStorage.setItem('teams', JSON.stringify(teams));
-      
       displayAvailablePlayers();
       displayTeamLines();
     }
   } else if (e.target.classList.contains('scratch-toggle')) {
     const playerId = parseInt(e.target.dataset.id);
-    const player = teams.flatMap(t => t.players).find(p => p.id === playerId);
+    const player = teams.flatMap((t) => t.players).find((p) => p.id === playerId);
 
     if (player) {
       player.healthyScratch = e.target.checked;
-      player.injured = false; // Ensure it’s not both a scratch and injured
+      if (player.healthyScratch) {
+        player.injured = false; // Ensure it's not both scratched and injured
+        player.line = null; // Remove the player from any assigned line
+      }
 
       localStorage.setItem('teams', JSON.stringify(teams));
       
