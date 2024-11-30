@@ -193,7 +193,6 @@ function enableDragAndDrop() {
 
     e.dataTransfer.setData('playerId', playerId);
     e.dataTransfer.setData('playerTeam', playerBox.dataset.team);
-  });
 
   container.addEventListener('dragover', e => {
     e.preventDefault();
@@ -234,5 +233,6 @@ function enableDragAndDrop() {
     displayAvailablePlayers();
     displayTeamLines();
   });
+}
   });
 }
