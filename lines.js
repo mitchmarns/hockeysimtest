@@ -1,5 +1,14 @@
 import { loadPlayers, loadTeamsFromLocalStorage, teams } from './team.js';
 
+async function fetchPlayers() {
+  try {
+    const response = await fetch('players.json');
+    players = await response.json();
+  } catch (error) {
+    console.error('Error loading players:', error);
+  }
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
   await loadPlayers();
   loadTeamsFromLocalStorage();
@@ -168,20 +177,19 @@ document.addEventListener('click', (e) => {
     if (!playerElement) return;
 
     const playerId = parseInt(playerElement.dataset.playerId, 10);
-    const player = teams.flatMap(t => t.players).find(p => p.id === playerId);
+    const player = teams.flatMap(t => t.players).find((p) => p.id === playerId);
 
      if (player) {
          console.error(`Player with ID ${playerId} not found.`);
       return; // Exit if the player is not found
     }
 
-    // paste here
-
         // Remove player from the team assignment
           player.line = null;
           player.assigned = false;
           
           // Move the player back to available players
+          playerElement.parentElement.innerHTML = '';
           displayAvailablePlayers();
           displayTeamLines();
 
@@ -237,15 +245,16 @@ document.addEventListener('change', (e) => {
 // drag start
 document.addEventListener('dragstart', e => {
   const playerBox = e.target.closest('.player');
-  if (playerBox) {
-    const playerId = playerBox.dataset.id;
-    const player = teams.flatMap((t) => t.players).find((p) => p.id == playerId);
+  if (!playerBox) return;
+  
+  const playerId = parseInt(playerBox.dataset.id, 10);
+  const player = teams.flatMap((t) => t.players).find((p) => p.id === playerId);
 
-    // Check if the player is injured or scratched
-    if (player && (player.injured || player.healthyScratch)) {
-      e.preventDefault(); // Prevent dragging the player
-      return; // Exit early so that the player isn't dragged
-    }
+  if (!player || player.injured || player.healthyScratch) {
+    e.preventDefault(); // Prevent dragging invalid players
+    alert('This player cannot be moved.');
+    return;
+  }
 
     e.dataTransfer.setData('playerId', playerId);
     e.dataTransfer.setData('playerTeam', playerBox.dataset.team);
@@ -306,9 +315,12 @@ function enableDragAndDrop() {
     }
 
     const teamName = slot.dataset.team;
-    const role = slot.dataset.role;
-    const line = slot.dataset.line;
     const team = teams.find((t) => t.name === teamName);
+    const role = slot.dataset.role;
+    team.lines.goalies[role] = playerId;
+    player.line = { teamName, role };
+    player.assigned = true;
+    player.team = teamName;
 
     if (!team) {
       console.error(`Team "${teamName}" not found.`);
