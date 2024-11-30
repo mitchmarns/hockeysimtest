@@ -338,18 +338,18 @@ function enableDragAndDrop() {
     } else if (role === 'Starter' || role === 'Backup') {
       team.lines.goalies[role] = player.id;
     }
-});
+
     // Update player's status
     player.line = { teamName, role, line: line || 'Goalie Line' };
     player.assigned = true;
     player.team = teamName;
 
-  // Ensure the player is not both injured and scratched at the same time
-  if (player.injured) {
-    player.healthyScratch = false; // If injured, they cannot be scratched
-  } else if (player.healthyScratch) {
-    player.injured = false; // If scratched, they cannot be injured
-  }
+    // Ensure the player is not both injured and scratched at the same time
+    if (player.injured) {
+      player.healthyScratch = false; // If injured, they cannot be scratched
+    } else if (player.healthyScratch) {
+      player.injured = false; // If scratched, they cannot be injured
+    }
 
     // Remove player from available players list
     displayAvailablePlayers();
@@ -374,7 +374,8 @@ function enableDragAndDrop() {
       displayAvailablePlayers(); // Refresh available players
       localStorage.setItem('teams', JSON.stringify(teams)); // Save changes
     });
-  
-          // Save to localStorage and refresh display
-          localStorage.setItem('teams', JSON.stringify(teams));
-  }
+
+    // Save to localStorage and refresh display
+    localStorage.setItem('teams', JSON.stringify(teams));
+  });
+}
