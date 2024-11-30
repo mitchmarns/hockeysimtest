@@ -39,7 +39,7 @@ function displayAvailablePlayers() {
   container.innerHTML = '';
 
    players
-    .filter(player => !player.team || !player.line)
+    .filter(player => !player.team || !player.line || player.assigned === false)
     .forEach(player => {
       const playerBox = document.createElement('div');
       playerBox.className = `player ${player.injured ? 'injured' : ''} ${player.healthyScratch ? 'scratch' : ''}`;
