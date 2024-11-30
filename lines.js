@@ -170,7 +170,13 @@ function enableDragAndDrop() {
     slot.classList.remove('dragover');
 
     const playerId = parseInt(e.dataTransfer.getData('playerId'));
+    const playerTeam = e.dataTransfer.getData('playerTeam');
     const player = teams.flatMap((t) => t.players).find((p) => p.id === playerId);
+
+    if (!player) {
+    console.error('Player not found');
+    return;
+  }
 
     if (player) {
       const teamName = slot.dataset.team;
@@ -222,10 +228,14 @@ function enableDragAndDrop() {
       // Update player's status
       player.line = { teamName, role, line: line || 'Goalie Line' };
       player.assigned = true;
-
       player.team = teamName;
-      playerBox.remove();
 
+      // Remove player from the available players list
+  const playerBox = document.querySelector(`[data-id='${player.id}']`);
+  if (playerBox) {
+    playerBox.remove();
+  }
+      
       // Update slot UI
       slot.innerHTML = `
         <div class="player-slot">
@@ -237,6 +247,7 @@ function enableDragAndDrop() {
 
           // Save to localStorage and refresh display
           localStorage.setItem('teams', JSON.stringify(teams));
-        }
-    });
-}
+       // Refresh the available players and team lines
+  displayAvailablePlayers();
+  displayTeamLines();
+});
