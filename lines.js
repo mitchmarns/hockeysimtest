@@ -67,7 +67,7 @@ function displayAvailablePlayers() {
 // display team lines and populate slots with assigned players
 function displayTeamLines() {
   teams.forEach(team => {
-    const teamLines = document.getElementById(${team.name}-lines);
+    const teamLines = document.getElementById(`${team.name}-lines`);
 
     // Clear existing content
     teamLines.innerHTML = '';
