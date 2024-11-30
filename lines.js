@@ -357,6 +357,7 @@ function enableDragAndDrop() {
     // Update slot UI
     const playerSlot = document.createElement('div');
     playerSlot.classList.add('player-slot');
+    playerSlot.setAttribute('data-player-id', player.id);
     playerSlot.innerHTML = `
       <img src="${player.image}" alt="${player.name}" />
       <span>${player.name}</span>
@@ -367,10 +368,25 @@ function enableDragAndDrop() {
 
     // Handle remove button
     playerSlot.querySelector('.remove-btn').addEventListener('click', () => {
-      slot.innerHTML = ''; // Clear the slot
-      player.line = null; // Update player status
-      player.assigned = false;
-      player.team = null;
+      const playerId = parseInt(playerSlot.getAttribute('data-player-id'));
+      if (isNaN(playerId)) {
+        console.error('Invalid playerId in slot');
+        return;
+      }
+
+      // Find the player in teams
+  const player = teams.flatMap((t) => t.players).find((p) => p.id === playerId);
+  if (!player) {
+    console.error('Player not found in teams');
+    return;
+  }
+
+      // clear slot
+      slot.innerHTML = '';
+
+      // update player status
+      player.line = null;
+      
       displayAvailablePlayers(); // Refresh available players
       localStorage.setItem('teams', JSON.stringify(teams)); // Save changes
     });
