@@ -197,7 +197,6 @@ document.addEventListener('click', (e) => {
           // Update localStorage
           localStorage.setItem('teams', JSON.stringify(teams));
     }
-  }
 });
         
 // toggle button
