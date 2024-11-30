@@ -341,4 +341,4 @@ function enableDragAndDrop() {
         }
     });
 }
-    });
+    }
