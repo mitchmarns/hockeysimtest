@@ -41,11 +41,11 @@ function displayAvailablePlayers() {
           <div class="player-actions">
             <label class="toggle">
               <input type="checkbox" class="injured-toggle" data-id="${player.id}" ${player.injured ? 'checked' : ''}>
-              <span class="slider"></span> Injured
+              <span class="slider"></span> <span class="text-label">Injured</span>
             </label>
             <label class="toggle">
               <input type="checkbox" class="scratch-toggle" data-id="${player.id}" ${player.healthyScratch ? 'checked' : ''}>
-              <span class="slider"></span> Scratch
+              <span class="slider"></span> <span class="text-label">Scratch</span>
             </label>
           </div>
         `;
