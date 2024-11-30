@@ -158,7 +158,7 @@ document.addEventListener('click', (e) => {
     if (player) {
       // Find the team the player belongs to
       const team = teams.find(t => t.name === player.team);
-
+    
       if (team) {
         // Remove the player from the line (clear the assigned position)
         if (player.line) {
@@ -177,8 +177,9 @@ document.addEventListener('click', (e) => {
           } else if (line.includes('Goalie')) {
             if (team.lines.goalies[role] !== undefined) {
               team.lines.goalies[role] = null;
-            }
+}
           }
+        
 // toggle button
 document.addEventListener('change', (e) => {
   if (e.target.classList.contains('injured-toggle')) {
@@ -217,9 +218,8 @@ document.addEventListener('change', (e) => {
           // Update localStorage
           localStorage.setItem('teams', JSON.stringify(teams));
         }
+      
       }
-    }
-  }
 
 
 // drag start
@@ -315,7 +315,7 @@ function enableDragAndDrop() {
           return;
         }
       }
-
+    
       // Update player's status
       player.line = { teamName, role, line: line || 'Goalie Line' };
       player.assigned = true;
@@ -338,3 +338,5 @@ function enableDragAndDrop() {
 
           // Save to localStorage and refresh display
           localStorage.setItem('teams', JSON.stringify(teams));
+        }
+      });
