@@ -177,8 +177,9 @@ document.addEventListener('click', (e) => {
           } else if (line.includes('Goalie')) {
             if (team.lines.goalies[role] !== undefined) {
               team.lines.goalies[role] = null;
-}
+            }
           }
+        }
         
 // toggle button
 document.addEventListener('change', (e) => {
