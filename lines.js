@@ -204,7 +204,7 @@ document.addEventListener('change', (e) => {
       localStorage.setItem('teams', JSON.stringify(teams));
     }
   }
-
+});
 
           // Remove player from the team assignment
           player.line = null;
@@ -338,8 +338,3 @@ function enableDragAndDrop() {
 
           // Save to localStorage and refresh display
           localStorage.setItem('teams', JSON.stringify(teams));
-        }
-    });
-}
-    }
-}
