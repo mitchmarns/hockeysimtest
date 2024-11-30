@@ -251,7 +251,6 @@ document.addEventListener('dragstart', e => {
 
     e.dataTransfer.setData('playerId', playerId);
     e.dataTransfer.setData('playerTeam', playerBox.dataset.team);
-  }
 });
 
 // drag and drop functionality
