@@ -152,48 +152,43 @@ function generateLineSlots(team, category, linesCount, positions) {
 
 // remove button
 document.addEventListener('click', (e) => {
-  if (e.target && e.target.classList.contains('injured-toggle')) {
-    const playerElement = e.target.closest('.player');
-    const playerId = parseInt(playerElement.dataset.id);
-    const player = teams.flatMap(t => t.players).find(p => p.id === playerId);
-
   if (e.target && e.target.classList.contains('remove-btn')) {
     const playerElement = e.target.closest('.player-slot');
     if (!playerElement) return;
-    
+
     const playerId = parseInt(playerElement.dataset.playerId);
     const player = teams.flatMap(t => t.players).find(p => p.id === playerId);
 
-    if (player) {
-      // Find the team the player belongs to
-      const team = teams.find(t => t.name === player.team);
+     if (player) {
+         console.error(`Player with ID ${playerId} not found.`);
+      return; // Exit if the player is not found
+    }
+
+    // Remove player from the line
+    const { teamName, line, role } = player.line || {};
+    const team = teams.find((t) => t.name === teamName);
     
-      if (team) {
-        // Remove the player from the line (clear the assigned position)
-        if (player.line) {
-          const { line, role } = player.line;
-          
-          if (line.includes('Forward')) {
-            const lineIndex = parseInt(line.split(' ')[2]) - 1;
-            if (team.lines.forwards[lineIndex]) {
-              team.lines.forwards[lineIndex][role] = null;
-            }
-          } else if (line.includes('Defense')) {
-            const lineIndex = parseInt(line.split(' ')[2]) - 1;
-            if (team.lines.defense[lineIndex]) {
-              team.lines.defense[lineIndex][role] = null;
-            }
-          } else if (line.includes('Goalie')) {
-            if (team.lines.goalies[role] !== undefined) {
-              team.lines.goalies[role] = null;
-            }
-          }
+      // Remove player from the line
+    const { teamName, line, role } = player.line || {};
+    const team = teams.find((t) => t.name === teamName);
+
+    if (team && line) {
+      if (line.includes('Forward')) {
+        const lineIndex = parseInt(line.split(' ')[2]) - 1;
+        if (team.lines.forwards[lineIndex]) {
+          team.lines.forwards[lineIndex][role] = null;
+        }
+      } else if (line.includes('Defense')) {
+        const lineIndex = parseInt(line.split(' ')[2]) - 1;
+        if (team.lines.defense[lineIndex]) {
+          team.lines.defense[lineIndex][role] = null;
+        }
+      } else if (line === 'Goalie Line') {
+        if (team.lines.goalies[role] !== undefined) {
+          team.lines.goalies[role] = null;
         }
       }
     }
-  }
-}
-    });
 
         // Remove player from the team assignment
           player.line = null;
@@ -205,6 +200,15 @@ document.addEventListener('click', (e) => {
 
           // Update localStorage
           localStorage.setItem('teams', JSON.stringify(teams));
+    
+    if (e.target && e.target.classList.contains('injured-toggle')) {
+      const playerElement = e.target.closest('.player');
+      const playerId = parseInt(playerElement.dataset.id);
+      const player = teams.flatMap(t => t.players).find(p => p.id === playerId);
+
+    }
+  }
+});
         
 // toggle button
 document.addEventListener('change', (e) => {
