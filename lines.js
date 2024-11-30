@@ -169,22 +169,14 @@ document.addEventListener('click', (e) => {
     const team = teams.find((t) => t.name === teamName);
 
     if (team && line) {
-      if (line.includes('Forward')) {
-        const lineIndex = parseInt(line.split(' ')[2]) - 1;
-        if (team.lines.forwards[lineIndex]) {
-          team.lines.forwards[lineIndex][role] = null;
-        }
-      } else if (line.includes('Defense')) {
-        const lineIndex = parseInt(line.split(' ')[2]) - 1;
-        if (team.lines.defense[lineIndex]) {
-          team.lines.defense[lineIndex][role] = null;
-        }
-      } else if (line === 'Goalie Line') {
-        if (team.lines.goalies[role] !== undefined) {
-          team.lines.goalies[role] = null;
-        }
-      }
+      const lineIndex = parseInt(line.split(' ')[2]) - 1;
+      if (line.includes('Forward')) team.lines.forwards[lineIndex][role] = null;
+      else if (line.includes('Defense')) team.lines.defense[lineIndex][role] = null;
+      else if (line === 'Goalie Line') team.lines.goalies[role] = null;
     }
+
+    player.line = null;
+    player.assigned = false;
           
           // Move the player back to available players
           displayAvailablePlayers();
@@ -202,7 +194,7 @@ document.addEventListener('change', (e) => {
     const player = teams.flatMap(t => t.players).find(p => p.id === playerId);
 
     if (player) {
-      player.injured = e.target.checked;
+      player[toggleType] = e.target.checked;
       if (player.injured) {
         player.healthyScratch = false; // Ensure it's not both injured and scratched
         player.line = null; // Remove the player from any assigned line
@@ -213,24 +205,7 @@ document.addEventListener('change', (e) => {
       displayAvailablePlayers();
       displayTeamLines();
     }
-  } else if (e.target.classList.contains('scratch-toggle')) {
-    const playerId = parseInt(e.target.dataset.id);
-    const player = teams.flatMap((t) => t.players).find((p) => p.id === playerId);
-
-    if (player) {
-      player.healthyScratch = e.target.checked;
-      if (player.healthyScratch) {
-        player.injured = false; // Ensure it's not both scratched and injured
-        player.line = null; // Remove the player from any assigned line
-      }
-
-      // Update localStorage and re-render
-      localStorage.setItem('teams', JSON.stringify(teams));
-      displayAvailablePlayers();
-      displayTeamLines();
-    }
-  }
-});
+  });
 
 
 // drag start
@@ -264,12 +239,6 @@ function enableDragAndDrop() {
     e.preventDefault();
     const slot = e.target.closest('.player-slot');
     if (!slot) return;
-
-    const slotTeam = slot.dataset.team;
-    const draggedTeam = e.dataTransfer.getData('playerTeam');
-    if (slotTeam === draggedTeam) {
-      slot.classList.add('dragover');
-    }
   });
 
   // Handle dragleave
