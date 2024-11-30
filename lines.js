@@ -9,6 +9,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   enableDragAndDrop();
 });
 
+fetch('players.json')
+  .then((response) => response.json())
+  .then((data) => {
+    players = data; // Make sure `players` is globally accessible
+  })
+  .catch((error) => console.error('Error loading players:', error));
+
 // lines structure loaded
 function initializeTeamLines() {
   teams.forEach(team => {
