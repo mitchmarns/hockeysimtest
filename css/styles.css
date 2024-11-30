@@ -304,14 +304,4 @@ input:checked + .slider:before {
   transform: translateX(26px);
 }
 
-label.toggle {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 10px;
-}
 
-label.toggle .slider {
-  margin-bottom: 10px;
-}
-  
