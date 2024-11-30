@@ -32,7 +32,14 @@ function displayAvailablePlayers() {
       if (!player.team || !player.line) { 
         const playerBox = document.createElement('div');
         playerBox.className = `player ${player.injured ? 'injured' : ''} ${player.healthyScratch ? 'scratch' : ''}`;
-        playerBox.setAttribute('draggable', 'true');
+        
+        // Disable dragging for injured or scratched players
+        if (player.injured || player.healthyScratch) {
+          playerBox.setAttribute('draggable', 'false');
+        } else {
+          playerBox.setAttribute('draggable', 'true');
+        }
+        
         playerBox.dataset.id = player.id;
         playerBox.dataset.team = team.name;
         playerBox.innerHTML = `
