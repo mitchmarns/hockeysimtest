@@ -192,9 +192,9 @@ document.addEventListener('click', (e) => {
           // Update localStorage
           localStorage.setItem('teams', JSON.stringify(teams));
         }
-      
       }
-        
+    }
+  });    
 // toggle button
 document.addEventListener('change', (e) => {
   if (e.target.classList.contains('injured-toggle')) {
