@@ -74,23 +74,23 @@ function displayTeamLines() {
 
     // Add Forward Lines
     const forwardLinesContainer = document.createElement('div');
-    forwardLinesContainer.innerHTML = 
+    forwardLinesContainer.innerHTML = `
       <h4>Forward Lines</h4>
       ${generateLineSlots(team, 'Forward', 4, ['LW', 'C', 'RW'])}
-    ;
+    `;
     teamLines.appendChild(forwardLinesContainer);
 
     // Add Defense Lines
     const defenseLinesContainer = document.createElement('div');
-    defenseLinesContainer.innerHTML = 
+    defenseLinesContainer.innerHTML = `
       <h4>Defense Lines</h4>
       ${generateLineSlots(team, 'Defense', 3, ['LD', 'RD'])}
-    ;
+    `;
     teamLines.appendChild(defenseLinesContainer);
 
 // Add Goalie Line
     const goalieLineContainer = document.createElement('div');
-    goalieLineContainer.innerHTML = 
+    goalieLineContainer.innerHTML = `
       <h4>Goalies</h4>
       <div class="lines">
         ${['Starter', 'Backup'].map(role => {
@@ -99,20 +99,20 @@ function displayTeamLines() {
             ? team.players.find(p => p.id === assignedPlayerId)
             : null;
 
-          return 
-        <div class="player-slot" data-team="${team.name}" data-role="${role}">
-          ${assignedPlayer ? 
-            <div class="player-slot" data-player-id="${assignedPlayer.id}">
-              <img src="${assignedPlayer.image}" alt="${assignedPlayer.name}" /><br>
-              <span>${assignedPlayer.name}</span><br>
-              <button class="remove-btn">Remove</button>
+          return `
+            <div class="player-slot" data-team="${team.name}" data-role="${role}">
+              ${assignedPlayer ? `
+                <div class="player-slot" data-player-id="${assignedPlayer.id}">
+                  <img src="${assignedPlayer.image}" alt="${assignedPlayer.name}" /><br>
+                  <span>${assignedPlayer.name}</span><br>
+                  <button class="remove-btn">Remove</button>
+                </div>
+              ` : ''}
             </div>
-           : ''}
-        </div>
-      ;
+          `;
         }).join('')}
       </div>
-    ;
+    `;
     teamLines.appendChild(goalieLineContainer);
   });
 }
