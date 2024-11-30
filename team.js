@@ -213,7 +213,4 @@ export function loadTeamsFromLocalStorage() {
     console.log("Teams loaded from localStorage:", teams);
   }
 
-// Export all players for use
-export function getPlayers() {
-  return playersData.players;
-}
+
