@@ -138,6 +138,10 @@ h1 {
   white-space: nowrap;
 }
 
+.player-slot.dragover {
+  border: 2px solid green;
+}
+
 /* Teams Section */
 #teams {
   display: flex;
