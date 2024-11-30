@@ -31,7 +31,7 @@ function displayAvailablePlayers() {
     team.players.forEach(player => {
       if (!player.team || !player.line) { 
         const playerBox = document.createElement('div');
-        playerBox.className = player ${player.injured ? 'injured' : ''} ${player.healthyScratch ? 'scratch' : ''};
+        playerBox.className = `player ${player.injured ? 'injured' : ''} ${player.healthyScratch ? 'scratch' : ''}`;
         
         // Disable dragging for injured or scratched players
         if (player.injured || player.healthyScratch) {
