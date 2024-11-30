@@ -162,7 +162,7 @@ document.addEventListener('click', (e) => {
     const player = teams.flatMap(t => t.players).find(p => p.id === playerId);
 
      if (player) {
-         console.error(Player with ID ${playerId} not found.);
+         console.error(`Player with ID ${playerId} not found.`);
       return; // Exit if the player is not found
     }
 
