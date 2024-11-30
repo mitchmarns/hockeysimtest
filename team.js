@@ -186,7 +186,6 @@ export function loadTeamsFromLocalStorage() {
         if (savedTeam.specialTeams) {
           team.specialTeams = savedTeam.specialTeams;
         }
-      }})}}
         
         // Ensure the UI reflects the loaded states
         team.players.forEach((player) => {
@@ -203,7 +202,13 @@ export function loadTeamsFromLocalStorage() {
             if (player.healthyScratch) {
               playerElement.classList.add('healthy-scratch');
             } else {
-              playerElement.classList.remove('healthy-scratch');}}})
+              playerElement.classList.remove('healthy-scratch');
+            }
+          }
+        });
+      }
+    });
+  }
     
     console.log("Teams loaded from localStorage:", teams);
 
