@@ -304,4 +304,18 @@ input:checked + .slider:before {
   transform: translateX(26px);
 }
 
+label.toggle {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px; /* space between toggles */
+}
 
+label.toggle .slider {
+  margin-right: 10px; /* space between slider and label */
+}
+
+label.toggle .text-label {
+  margin-top: 5px;
+  font-size: 14px;
+  color: #333;
+}
