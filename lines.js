@@ -42,7 +42,7 @@ function displayAvailablePlayers() {
         
         playerBox.dataset.id = player.id;
         playerBox.dataset.team = team.name;
-        playerBox.innerHTML = 
+        playerBox.innerHTML = `
           <img src="${player.image}" alt="${player.name}" />
           <span>${player.name} - ${player.team} ${player.position}</span>
           <div class="player-actions">
@@ -57,7 +57,7 @@ function displayAvailablePlayers() {
               <span class="text-label">Scratch</span>
             </label>
           </div>
-        ;
+        `;
         container.appendChild(playerBox);
       }
     });
