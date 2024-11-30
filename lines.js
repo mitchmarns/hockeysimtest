@@ -179,8 +179,8 @@ document.addEventListener('click', (e) => {
               team.lines.goalies[role] = null;
             }
           }
-    // toggle button
-          document.addEventListener('change', (e) => {
+// toggle button
+document.addEventListener('change', (e) => {
   if (e.target.classList.contains('injured-toggle')) {
     const playerId = parseInt(e.target.dataset.id);
     const player = teams.flatMap(t => t.players).find(p => p.id === playerId);
@@ -204,7 +204,7 @@ document.addEventListener('click', (e) => {
       localStorage.setItem('teams', JSON.stringify(teams));
     }
   }
-});
+
 
           // Remove player from the team assignment
           player.line = null;
