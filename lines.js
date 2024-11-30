@@ -181,9 +181,18 @@ function enableDragAndDrop() {
 
   container.addEventListener('dragstart', e => {
     const playerBox = e.target.closest('.player');
-    if (!playerBox) return;
+    if (playerBox) {
+      const playerId = playerBox.dataset.id;
+      const player = teams.flatMap((t) => t.players).find((p) => p.id == playerId);
 
-    e.dataTransfer.setData('playerId', playerBox.dataset.id);
+      // Check if the player is injured or scratched
+    if (player && (player.injured || player.healthyScratch)) {
+      e.preventDefault(); // Prevent dragging the player
+      return; // Exit early so that the player isn't dragged
+    }
+
+    e.dataTransfer.setData('playerId', playerId);
+    e.dataTransfer.setData('playerTeam', playerBox.dataset.team);
   });
 
   container.addEventListener('dragover', e => {
