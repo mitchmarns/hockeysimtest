@@ -38,93 +38,67 @@ function displayAvailablePlayers() {
   const container = document.getElementById('available-players-list');
   container.innerHTML = '';
 
-    teams.forEach(team => {
-    team.players.forEach(player => {
-      if (!player.team || !player.line) { 
-        const playerBox = document.createElement('div');
-        playerBox.className = `player ${player.injured ? 'injured' : ''} ${player.healthyScratch ? 'scratch' : ''}`;
-        
-        // Disable dragging for injured or scratched players
-        if (player.injured || player.healthyScratch) {
-          playerBox.setAttribute('draggable', 'false');
-        } else {
-          playerBox.setAttribute('draggable', 'true');
-        }
-        
-        playerBox.dataset.id = player.id;
-        playerBox.dataset.team = team.name;
-        playerBox.innerHTML = `
-          <img src="${player.image}" alt="${player.name}" />
-          <span>${player.name} - ${player.team} ${player.position}</span>
-          <div class="player-actions">
-            <label class="toggle">
+   players
+    .filter(player => !player.team || !player.line)
+    .forEach(player => {
+      const playerBox = document.createElement('div');
+      playerBox.className = `player ${player.injured ? 'injured' : ''} ${player.healthyScratch ? 'scratch' : ''}`;
+      playerBox.setAttribute('draggable', !(player.injured || player.healthyScratch));
+      playerBox.dataset.id = player.id;
+
+      playerBox.innerHTML = `
+        <img src="${player.image}" alt="${player.name}" />
+        <span>${player.name} - ${player.position}</span>
+        <div class="player-actions">
+          <label class="toggle">
             <input type="checkbox" class="injured-toggle" data-id="${player.id}" ${player.injured ? 'checked' : ''}>
-              <span class="slider"></span>
-              <span class="text-label">Injured</span>
-            </label>
-            <label class="toggle">
-              <input type="checkbox" class="scratch-toggle" data-id="${player.id}" ${player.healthyScratch ? 'checked' : ''}>
-              <span class="slider"></span>
-              <span class="text-label">Scratch</span>
-            </label>
-          </div>
-        `;
-        container.appendChild(playerBox);
-      }
+            <span class="slider"></span>
+            <span>Injured</span>
+          </label>
+          <label class="toggle">
+            <input type="checkbox" class="scratch-toggle" data-id="${player.id}" ${player.healthyScratch ? 'checked' : ''}>
+            <span class="slider"></span>
+            <span>Scratch</span>
+          </label>
+        </div>
+      `;
+      container.appendChild(playerBox);
     });
-  });
 }
 
 // display team lines and populate slots with assigned players
 function displayTeamLines() {
   teams.forEach(team => {
     const teamLines = document.getElementById(`${team.name}-lines`);
+    if (!teamLines) return;
 
-    // Clear existing content
-    teamLines.innerHTML = '';
-
-    // Add Forward Lines
-    const forwardLinesContainer = document.createElement('div');
-    forwardLinesContainer.innerHTML = `
-      <h4>Forward Lines</h4>
-      ${generateLineSlots(team, 'Forward', 4, ['LW', 'C', 'RW'])}
-    `;
-    teamLines.appendChild(forwardLinesContainer);
-
-    // Add Defense Lines
-    const defenseLinesContainer = document.createElement('div');
-    defenseLinesContainer.innerHTML = `
-      <h4>Defense Lines</h4>
-      ${generateLineSlots(team, 'Defense', 3, ['LD', 'RD'])}
-    `;
-    teamLines.appendChild(defenseLinesContainer);
-
-// Add Goalie Line
-    const goalieLineContainer = document.createElement('div');
-    goalieLineContainer.innerHTML = `
-      <h4>Goalies</h4>
-      <div class="lines">
-        ${['Starter', 'Backup'].map(role => {
-          const assignedPlayerId = team.lines.goalies[role];
-          const assignedPlayer = assignedPlayerId
-            ? team.players.find(p => p.id === assignedPlayerId)
-            : null;
-
-          return `
-            <div class="player-slot" data-team="${team.name}" data-role="${role}">
-              ${assignedPlayer ? `
-                <div class="player-slot" data-player-id="${assignedPlayer.id}">
-                  <img src="${assignedPlayer.image}" alt="${assignedPlayer.name}" /><br>
-                  <span>${assignedPlayer.name}</span><br>
-                  <button class="remove-btn">Remove</button>
-                </div>
-              ` : ''}
-            </div>
-          `;
-        }).join('')}
+    teamLines.innerHTML = `
+      <div>
+        <h4>Forward Lines</h4>
+        ${generateLineSlots(team, 'Forward', 4, ['LW', 'C', 'RW'])}
       </div>
-    `;
-    teamLines.appendChild(goalieLineContainer);
+      <div>
+        <h4>Defense Lines</h4>
+        ${generateLineSlots(team, 'Defense', 3, ['LD', 'RD'])}
+      </div>
+      <div>
+        <h4>Goalies</h4>
+        <div class="lines">
+          ${['Starter', 'Backup'].map(role => {
+            const playerId = team.lines.goalies[role];
+            const player = players.find(p => p.id === playerId);
+            return `
+              <div class="player-slot" data-team="${team.name}" data-role="${role}">
+                ${player ? `
+                  <div class="player-slot" data-player-id="${player.id}">
+                    <img src="${player.image}" alt="${player.name}" />
+                    <span>${player.name}</span>
+                    <button class="remove-btn">Remove</button>
+                  </div>` : ''}
+              </div>`;
+          }).join('')}
+        </div>
+      </div>`;
   });
 }
 
@@ -132,33 +106,23 @@ function displayTeamLines() {
 function generateLineSlots(team, category, linesCount, positions) {
   let html = '';
   for (let i = 1; i <= linesCount; i++) {
+  const line = category === 'Forward' ? team.lines.forwards[i - 1] : team.lines.defense[i - 1];
     html += `
       <div class="line">
-      ${positions.map(pos => {
-        const lineNumber = i - 1; // Convert to 0-based index
-        const assignedPlayerId =
-          category === 'Forward' ? team.lines.forwards[lineNumber][pos] :
-          category === 'Defense' ? team.lines.defense[lineNumber][pos] :
-          null;
-
-        const assignedPlayer = assignedPlayerId
-          ? team.players.find(p => p.id === assignedPlayerId)
-          : null;
-
-        return `
-          <div class="player-slot" data-team="${team.name}" data-line="${category} Line ${i}" data-role="${pos}">
-            ${assignedPlayer ? 
-            `<div class="player-slot" data-player-id="${assignedPlayer.id}">
-              <img src="${assignedPlayer.image}" alt="${assignedPlayer.name}" /><br>
-              <span>${assignedPlayer.name}</span><br>
-              <button class="remove-btn">Remove</button>
-            </div>
-            ` : ''}
-          </div>
-        `;
-      }).join('')}
-    </div>
-    `;
+        ${positions.map(pos => {
+          const playerId = line[pos];
+          const player = players.find(p => p.id === playerId);
+          return `
+            <div class="player-slot" data-team="${team.name}" data-line="${category} Line ${i}" data-role="${pos}">
+              ${player ? `
+                <div class="player-slot" data-player-id="${player.id}">
+                  <img src="${player.image}" alt="${player.name}" />
+                  <span>${player.name}</span>
+                  <button class="remove-btn">Remove</button>
+                </div>` : ''}
+            </div>`;
+        }).join('')}
+      </div>`;
   }
   return html;
 }
@@ -176,201 +140,80 @@ document.addEventListener('click', (e) => {
           player.line = null;
           player.assigned = false;
           
-          // Move the player back to available players
-          playerElement.parentElement.innerHTML = '';
+
           localStorage.setItem('teams', JSON.stringify(teams));
           displayAvailablePlayers();
           displayTeamLines();
   }
 });
         
-// toggle button
-document.addEventListener('change', (e) => {
-  if (e.target.classList.contains('injured-toggle')) {
-    const playerId = parseInt(e.target.dataset.id);
-    const player = teams.flatMap(t => t.players).find(p => p.id === playerId);
+// Toggle injured and scratch statuses
+document.addEventListener('change', e => {
+  const toggleType = e.target.classList.contains('injured-toggle') ? 'injured' : 'healthyScratch';
+  const playerId = parseInt(e.target.dataset.id, 10);
+  const player = players.find(p => p.id === playerId);
 
-    if (player) {
-      player.injured = e.target.checked;
-      if (player.injured) {
-        player.healthyScratch = false; // Ensure it's not both injured and scratched
-        player.line = null; // Remove the player from any assigned line
-      }
+  if (!player) return;
 
-      localStorage.setItem('teams', JSON.stringify(teams));
-      displayAvailablePlayers();
-      displayTeamLines();
-    }
-  } else if (e.target.classList.contains('scratch-toggle')) {
-    const playerId = parseInt(e.target.dataset.id);
-    const player = teams.flatMap((t) => t.players).find((p) => p.id === playerId);
+  player[toggleType] = e.target.checked;
+  if (toggleType === 'injured' && player.injured) player.healthyScratch = false;
+  if (toggleType === 'healthyScratch' && player.healthyScratch) player.injured = false;
 
-    if (player) {
-      player.healthyScratch = e.target.checked;
-      if (player.healthyScratch) {
-        player.injured = false; // Ensure it's not both scratched and injured
-        player.line = null; // Remove the player from any assigned line
-      }
-
-      localStorage.setItem('teams', JSON.stringify(teams));
-      
-      displayAvailablePlayers();
-      displayTeamLines();
-    }
-  }
+  player.line = null; // Clear assignment if toggled
+  localStorage.setItem('teams', JSON.stringify(teams));
+  displayAvailablePlayers();
+  displayTeamLines();
 });
 
 
-// drag start
-document.addEventListener('dragstart', e => {
-  const playerBox = e.target.closest('.player');
-  if (!playerBox) return;
-  
-  const playerId = parseInt(playerBox.dataset.id, 10);
-  const player = teams.flatMap((t) => t.players).find((p) => p.id === playerId);
-
-  if (!player || player.injured || player.healthyScratch) {
-    e.preventDefault(); // Prevent dragging invalid players
-    alert('This player cannot be moved.');
-    return;
-  }
-
-    e.dataTransfer.setData('playerId', playerId);
-    e.dataTransfer.setData('playerTeam', playerBox.dataset.team);
-});
-
-// drag and drop functionality
+// Drag and drop functionality
 function enableDragAndDrop() {
   const container = document.getElementById('lines-container');
-  if (!container) {
-    console.error('Container not found in the DOM');
-    return;
-  }
 
-  // Handle dragover
-  container.addEventListener('dragover', (e) => {
-    e.preventDefault();
-    const slot = e.target.closest('.player-slot');
-    if (!slot) return;
+  container.addEventListener('dragstart', e => {
+    const playerBox = e.target.closest('.player');
+    if (!playerBox) return;
 
-    const slotTeam = slot.dataset.team;
-    const draggedTeam = e.dataTransfer.getData('playerTeam');
-    if (slotTeam === draggedTeam) {
-      slot.classList.add('dragover');
-    }
+    e.dataTransfer.setData('playerId', playerBox.dataset.id);
   });
 
-  // Handle dragleave
-  container.addEventListener('dragleave', (e) => {
+  container.addEventListener('dragover', e => {
+    e.preventDefault();
+    const slot = e.target.closest('.player-slot');
+    if (slot) slot.classList.add('dragover');
+  });
+
+  container.addEventListener('dragleave', e => {
     const slot = e.target.closest('.player-slot');
     if (slot) slot.classList.remove('dragover');
   });
 
-  // Handle drop
-  container.addEventListener('drop', (e) => {
+  container.addEventListener('drop', e => {
     e.preventDefault();
     const slot = e.target.closest('.player-slot');
     if (!slot) return;
 
-    slot.classList.remove('dragover');
-
-    const playerId = parseInt(e.dataTransfer.getData('playerId'));
-    if (isNaN(playerId)) {
-      console.error('Invalid playerId');
-      return;
-    }
-
-    const player = teams.flatMap((t) => t.players).find((p) => p.id === playerId);
-    if (!player) {
-      console.error('Player not found');
-      return;
-    }
-
-    // Prevent drop if player is injured or scratched
-    if (player.injured || player.healthyScratch) {
-      alert('This player cannot be placed on lines because they are injured or scratched.');
-      return;
-    }
-
+    const playerId = parseInt(e.dataTransfer.getData('playerId'), 10);
+    const player = players.find(p => p.id === playerId);
     const teamName = slot.dataset.team;
-    const team = teams.find((t) => t.name === teamName);
     const role = slot.dataset.role;
-    team.lines.goalies[role] = playerId;
+
+    const team = teams.find(t => t.name === teamName);
+    if (!player || !team) return;
+
+    if (role === 'Starter' || role === 'Backup') {
+      team.lines.goalies[role] = playerId;
+    } else {
+      const [category, line] = slot.dataset.line.split(' Line ');
+      const lineIndex = parseInt(line, 10) - 1;
+      team.lines[category.toLowerCase()][lineIndex][role] = playerId;
+    }
+
     player.line = { teamName, role };
-    player.assigned = true;
     player.team = teamName;
 
-    if (!team) {
-      console.error(`Team "${teamName}" not found.`);
-      return;
-    }
-
-    if (line) {
-      const lineParts = line.split(' ');
-      let lineNumber = parseInt(lineParts[2]) - 1;
-
-      if (line.includes('Forward')) {
-        team.lines.forwards[lineNumber][role] = player.id;
-      } else if (line.includes('Defense')) {
-        team.lines.defense[lineNumber][role] = player.id;
-      }
-    } else if (role === 'Starter' || role === 'Backup') {
-      team.lines.goalies[role] = player.id;
-    }
-
-    // Update player's status
-    player.line = { teamName, role, line: line || 'Goalie Line' };
-    player.assigned = true;
-    player.team = teamName;
-
-    // Ensure the player is not both injured and scratched at the same time
-    if (player.injured) {
-      player.healthyScratch = false; // If injured, they cannot be scratched
-    } else if (player.healthyScratch) {
-      player.injured = false; // If scratched, they cannot be injured
-    }
-
-    // Remove player from available players list
-    displayAvailablePlayers();
-
-    // Update slot UI
-    const playerSlot = document.createElement('div');
-    playerSlot.classList.add('player-slot');
-    playerSlot.setAttribute('data-player-id', player.id);
-    playerSlot.innerHTML = `
-      <img src="${player.image}" alt="${player.name}" />
-      <span>${player.name}</span>
-      <button class="remove-btn">Remove</button>
-    `;
-    slot.innerHTML = '';
-    slot.appendChild(playerSlot);
-
-    // Handle remove button
-    playerSlot.querySelector('.remove-btn').addEventListener('click', () => {
-      const playerId = parseInt(playerSlot.getAttribute('data-player-id'));
-      if (isNaN(playerId)) {
-        console.error('Invalid playerId in slot');
-        return;
-      }
-
-      // Find the player in teams
-  const player = teams.flatMap((t) => t.players).find((p) => p.id === playerId);
-  if (!player) {
-    console.error('Player not found in teams');
-    return;
-  }
-
-      // clear slot
-      slot.innerHTML = '';
-
-      // update player status
-      player.line = null;
-      
-      displayAvailablePlayers(); // Refresh available players
-      localStorage.setItem('teams', JSON.stringify(teams)); // Save changes
-    });
-
-    // Save to localStorage and refresh display
     localStorage.setItem('teams', JSON.stringify(teams));
+    displayAvailablePlayers();
+    displayTeamLines();
   });
 }
