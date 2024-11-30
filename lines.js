@@ -128,10 +128,12 @@ function generateLineSlots(team, category, linesCount, positions) {
   return html;
 }
 
-// Add event listener for the "Remove" button
+// remove button
 document.addEventListener('click', (e) => {
   if (e.target && e.target.classList.contains('remove-btn')) {
-    const playerElement = e.target.closest('.player');
+    const playerElement = e.target.closest('.player-slot');
+    if (!playerElement) return;
+    
     const playerId = parseInt(playerElement.dataset.playerId);
     const player = teams.flatMap(t => t.players).find(p => p.id === playerId);
 
@@ -161,7 +163,6 @@ document.addEventListener('click', (e) => {
           }
 
           // Remove player from the team assignment
-          player.team = null;
           player.line = null;
           player.assigned = false;
           
@@ -274,6 +275,10 @@ function enableDragAndDrop() {
       // Update player's status
       player.line = { teamName, role, line: line || 'Goalie Line' };
       player.assigned = true;
+      player.team = teamName;
+
+      // Remove player from available players list
+      displayAvailablePlayers();
 
       // Update slot UI
       slot.innerHTML = `
@@ -288,4 +293,4 @@ function enableDragAndDrop() {
           localStorage.setItem('teams', JSON.stringify(teams));
         }
     });
-}
+
