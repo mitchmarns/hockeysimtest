@@ -309,15 +309,26 @@ label.toggle {
   align-items: center;
   margin-bottom: 10px; /* space between toggles */
   gap: 10px;
+  position: relative;
 }
 
 label.toggle .slider {
- /* slider specific */
+ position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 34px;
 }
 
 label.toggle .text-label {
-  font-size: 12px;
+  font-size: 14px;
   margin-top: 5px;
   color: #333;
   padding-left: 10px;
+  z-index: 1;
+  position: relative;
 }
