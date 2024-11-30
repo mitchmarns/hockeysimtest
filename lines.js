@@ -185,10 +185,6 @@ document.addEventListener('click', (e) => {
         }
       }
     }
-
-        // Remove player from the team assignment
-          player.line = null;
-          player.assigned = false;
           
           // Move the player back to available players
           displayAvailablePlayers();
