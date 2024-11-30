@@ -1,129 +1,134 @@
-// Utility function to create a player element
-function createPlayerElement(player) {
-  const playerDiv = document.createElement('div');
-  playerDiv.classList.add('player');
-  playerDiv.dataset.id = player.id;
-  playerDiv.textContent = `${player.name} (${player.position})`;
-  return playerDiv;
-}
+import { loadTeamsFromLocalStorage, teams } from './team.js';
 
-// Assign Power Play (PP) and Penalty Kill (PK) units for a specific team
-function assignSpecialTeams(players, selectedTeamName) {
-
-  // Filter players for the selected team and exclude injured players
-  const teamPlayers = players.filter(player => player.team === selectedTeamName && !player.injured);
-
-  // Group players by position
-  const leftWings = teamPlayers.filter(player => player.position === 'LW').sort((a, b) => b.skills.shooting - a.skills.shooting);
-  const centers = teamPlayers.filter(player => player.position === 'C').sort((a, b) => b.skills.passing - a.skills.passing);
-  const rightWings = teamPlayers.filter(player => player.position === 'RW').sort((a, b) => b.skills.shooting - a.skills.shooting);
-  const defensemen = teamPlayers.filter(player => player.position === 'LD' || player.position === 'RD').sort((a, b) => b.skills.defense - a.skills.defense);
-  // Power Play (PP) assignments
-  const pp1 = [];
-  const pp2 = [];
-
-  // Assign PP1: Best LW, C, RW, and 2 best D
-  if (leftWings.length > 0) pp1.push(leftWings[0]);
-  if (centers.length > 0) pp1.push(centers[0]);
-  if (rightWings.length > 0) pp1.push(rightWings[0]);
-  pp1.push(...defensemen.slice(0, 2)); // Best 2 defensemen
-
-  // Assign PP2: Next best LW, C, RW, and next 2 best D
-  if (leftWings.length > 1) pp2.push(leftWings[1]);
-  if (centers.length > 1) pp2.push(centers[1]);
-  if (rightWings.length > 1) pp2.push(rightWings[1]);
-  pp2.push(...defensemen.slice(2, 4)); // Next 2 defensemen
-
-  // Penalty Kill (PK) assignments
-  const pk1 = [];
-  const pk2 = [];
-
-  // Assign PK1: Best defensive forwards and best 2 defensive defensemen
-  const defensiveForwards = teamPlayers
-    .filter(player => player.position !== 'D')
-    .sort((a, b) => b.skills.defense - a.skills.defense);
-  pk1.push(...defensiveForwards.slice(0, 2)); // Best 2 defensive forwards
-  pk1.push(...defensemen.slice(0, 2)); // Best 2 defensemen
-
-  // Assign PK2: Next best defensive forwards and next 2 defensive defensemen
-  pk2.push(...defensiveForwards.slice(2, 4)); // Next 2 defensive forwards
-  pk2.push(...defensemen.slice(2, 4)); // Next 2 defensemen
-
-  return { PP1: pp1, PP2: pp2, PK1: pk1, PK2: pk2 };
-}
-
-// Helper to populate a container with players
-function populateContainer(container, players) {
-  container.innerHTML = ''; // Clear the container
-  console.log("Rendering players:", players);
-  players.forEach(player => {
-    const playerDiv = createPlayerElement(player);
-    container.appendChild(playerDiv);
-  });
-}
-  
-// Render the special teams on the page
-function renderSpecialTeams(specialTeams) {
-  const pp1Container = document.getElementById('powerplay1');
-  const pp2Container = document.getElementById('powerplay2');
-  const pk1Container = document.getElementById('penaltykill1');
-  const pk2Container = document.getElementById('penaltykill2');
-
-  populateContainer(pp1Container, specialTeams.PP1);
-  populateContainer(pp2Container, specialTeams.PP2);
-  populateContainer(pk1Container, specialTeams.PK1);
-  populateContainer(pk2Container, specialTeams.PK2);
-}
-
-// Save special team assignments back to LocalStorage for a specific team
-function saveSpecialTeamAssignments(selectedTeamName) {
-  const pp1 = Array.from(document.getElementById('powerplay1').children).map(el => el.dataset.id);
-  const pp2 = Array.from(document.getElementById('powerplay2').children).map(el => el.dataset.id);
-  const pk1 = Array.from(document.getElementById('penaltykill1').children).map(el => el.dataset.id);
-  const pk2 = Array.from(document.getElementById('penaltykill2').children).map(el => el.dataset.id);
-
-  const allSpecialTeams = JSON.parse(localStorage.getItem('specialTeams')) || {};
-  allSpecialTeams[selectedTeamName] = { PP1: pp1, PP2: pp2, PK1: pk1, PK2: pk2 };
-  localStorage.setItem('specialTeams', JSON.stringify(allSpecialTeams));
-}
-
-// Initialize the special teams page
 document.addEventListener('DOMContentLoaded', () => {
-  const players = JSON.parse(localStorage.getItem('teamPlayers')) || [];
-  console.log("Loaded players:", players);
-  const allSpecialTeams = JSON.parse(localStorage.getItem('specialTeams')) || {};
-  const teamSelector = document.getElementById('team-selector');
-  const playersContainer = document.getElementById('players-container');
-
-  // Load initial team
-  let selectedTeamName = teamSelector.value;
-
-  // Handle team selection change
-  teamSelector.addEventListener('change', () => {
-    selectedTeamName = teamSelector.value;
-    loadTeamSpecialTeams(players, selectedTeamName, allSpecialTeams);
-  });
-
-  // Load special teams for the initial team
-  loadTeamSpecialTeams(players, selectedTeamName, allSpecialTeams);
+  loadTeamsFromLocalStorage();
+  initializeSpecialTeams();
+  displaySpecialTeams();
 });
 
-// Load special teams for a specific team
-function loadTeamSpecialTeams(players, selectedTeamName, allSpecialTeams) {
-  const lineAssignments = allSpecialTeams[selectedTeamName] || {};
-  const specialTeams = assignSpecialTeams(players, selectedTeamName);
+// Initialize Special Teams Structure
+function initializeSpecialTeams() {
+  teams.forEach(team => {
+    if (!team.specialTeams) {
+      team.specialTeams = {
+        powerplay: [
+          { LW: null, C: null, RW: null, LD: null, RD: null }, // Unit 1
+          { LW: null, C: null, RW: null, LD: null, RD: null }  // Unit 2
+        ],
+        penaltyKill: [
+          { LD: null, RD: null, F1: null, F2: null },          // Unit 1
+          { LD: null, RD: null, F1: null }                    // Unit 2 (3-man PK)
+        ]
+      };
+    }
+  });
+}
 
-  // Update the available players container
-  const availablePlayers = players.filter(player => player.team === selectedTeamName && !player.injured);
+// Display Special Teams UI
+function displaySpecialTeams() {
+  const container = document.getElementById('special-teams-container');
+  container.innerHTML = '';
 
-  // Populate the players container with the available players
-  populateContainer(playersContainer, availablePlayers);
+  teams.forEach(team => {
+    const teamContainer = document.createElement('div');
+    teamContainer.className = 'team-special-teams';
+    teamContainer.innerHTML = `<h2>${team.name}</h2>`;
+    
+    // Powerplay Units
+    const powerplayContainer = createUnitContainer(team, 'powerplay', ['LW', 'C', 'RW', 'LD', 'RD']);
+    teamContainer.appendChild(powerplayContainer);
 
-  // Merge automatic assignments with saved data
-  specialTeams.PP1 = lineAssignments.PP1 || specialTeams.PP1;
-  specialTeams.PP2 = lineAssignments.PP2 || specialTeams.PP2;
-  specialTeams.PK1 = lineAssignments.PK1 || specialTeams.PK1;
-  specialTeams.PK2 = lineAssignments.PK2 || specialTeams.PK2;
+    // Penalty Kill Units
+    const penaltyKillContainer = createUnitContainer(team, 'penaltyKill', ['LD', 'RD', 'F1', 'F2']);
+    teamContainer.appendChild(penaltyKillContainer);
 
-  renderSpecialTeams(specialTeams);
+    container.appendChild(teamContainer);
+  });
+
+  enableDragAndDrop();
+}
+
+// Create Unit Container
+function createUnitContainer(team, unitType, roles) {
+  const container = document.createElement('div');
+  container.className = `${unitType}-container`;
+
+  const unitTitle = unitType === 'powerplay' ? 'Powerplay Units' : 'Penalty Kill Units';
+  container.innerHTML = `<h3>${unitTitle}</h3>`;
+
+  team.specialTeams[unitType].forEach((unit, index) => {
+    const unitDiv = document.createElement('div');
+    unitDiv.className = 'unit';
+    unitDiv.innerHTML = `<h4>${unitType === 'powerplay' ? 'PP' : 'PK'} Unit ${index + 1}</h4>`;
+    
+    roles.forEach(role => {
+      const playerSlot = document.createElement('div');
+      playerSlot.className = 'player-slot';
+      playerSlot.dataset.team = team.name;
+      playerSlot.dataset.unitType = unitType;
+      playerSlot.dataset.unitIndex = index;
+      playerSlot.dataset.role = role;
+
+      const playerId = unit[role];
+      const player = playerId ? team.players.find(p => p.id === playerId) : null;
+
+      playerSlot.innerHTML = player ? `
+        <div class="player" data-id="${player.id}">
+          <img src="${player.image}" alt="${player.name}" />
+          <span>${player.name}</span>
+          <button class="remove-btn">Remove</button>
+        </div>
+      ` : '<span>Empty</span>';
+
+      unitDiv.appendChild(playerSlot);
+    });
+
+    container.appendChild(unitDiv);
+  });
+
+  return container;
+}
+
+// Enable Drag-and-Drop for Special Teams
+function enableDragAndDrop() {
+  const container = document.getElementById('special-teams-container');
+
+  // Drag Start
+  container.addEventListener('dragstart', e => {
+    const playerBox = e.target.closest('.player');
+    if (playerBox) {
+      e.dataTransfer.setData('playerId', playerBox.dataset.id);
+      e.dataTransfer.setData('teamName', playerBox.closest('.team-special-teams').querySelector('h2').textContent);
+    }
+  });
+
+  // Drag Over
+  container.addEventListener('dragover', e => {
+    e.preventDefault();
+  });
+
+  // Drop
+  container.addEventListener('drop', e => {
+    const slot = e.target.closest('.player-slot');
+    if (!slot) return;
+
+    const playerId = parseInt(e.dataTransfer.getData('playerId'));
+    const teamName = e.dataTransfer.getData('teamName');
+    const role = slot.dataset.role;
+    const unitType = slot.dataset.unitType;
+    const unitIndex = parseInt(slot.dataset.unitIndex);
+
+    const team = teams.find(t => t.name === teamName);
+    const player = team.players.find(p => p.id === playerId);
+
+    if (!player || !team) return;
+
+    // Assign player to special team slot
+    const unit = team.specialTeams[unitType][unitIndex];
+    unit[role] = player.id;
+
+    // Persist changes
+    localStorage.setItem('teams', JSON.stringify(teams));
+    displaySpecialTeams();
+  });
 }
