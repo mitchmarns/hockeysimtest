@@ -167,7 +167,7 @@ document.addEventListener('click', (e) => {
     const playerElement = e.target.closest('.player-slot');
     if (!playerElement) return;
 
-    const playerId = parseInt(playerElement.dataset.playerId);
+    const playerId = parseInt(playerElement.dataset.playerId, 10);
     const player = teams.flatMap(t => t.players).find(p => p.id === playerId);
 
      if (player) {
