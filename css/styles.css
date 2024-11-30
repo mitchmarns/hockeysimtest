@@ -328,7 +328,7 @@ label.toggle .text-label {
   font-size: 14px;
   margin-top: 5px;
   color: #333;
-  padding-left: 10px;
+  padding-top: 20px;
   z-index: 1;
   position: relative;
 }
