@@ -131,21 +131,31 @@ export function loadTeamsFromLocalStorage() {
     parsedTeams.forEach(savedTeam => {
       const team = teams.find(t => t.name === savedTeam.name);
       if (team) {
+        team.players = savedTeam.players.map(savedPlayer => {
+          const player = playersData.players.find(p => p.id === savedPlayer.id);
 
-        team.players = savedTeam.players.map((savedPlayer) => {
-          const player = playersData.players.find((p) => p.id === savedPlayer.id);
           if (player) {
             player.line = savedPlayer.line || null;
             player.assigned = savedPlayer.assigned !== undefined ? savedPlayer.assigned : false;
             player.team = savedPlayer.team || null;
             player.injured = savedPlayer.injured || false; 
-            player.healthyScratch = savedPlayer.healthyScratch || false;
+            player.healthyScratch = savedPlayer.healthyScratch || false; // extra properties after this
+          } else {
+            console.warn(`Player with ID ${savedPlayer.id} not found in playersData.`);
           }
-          return player;
-        });
+          
+        return player || null; // Return null if player is not found
+        }).filter(p => p !== null); // Filter out any null players
 
         // Update team lines
         team.lines = savedTeam.lines || team.lines;
+
+        // Update special teams (if applicable)
+        if (savedTeam.specialTeams) {
+          team.specialTeams = savedTeam.specialTeams;
+        }
+      }
+    });
         
         // Ensure the UI reflects the loaded states
         team.players.forEach((player) => {
