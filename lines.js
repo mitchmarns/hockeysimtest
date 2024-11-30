@@ -344,6 +344,7 @@ function enableDragAndDrop() {
         }
       }
     }
+  }
     });
       // Update player's status
       player.line = { teamName, role, line: line || 'Goalie Line' };
@@ -365,3 +366,4 @@ function enableDragAndDrop() {
 
           // Save to localStorage and refresh display
           localStorage.setItem('teams', JSON.stringify(teams));
+    
