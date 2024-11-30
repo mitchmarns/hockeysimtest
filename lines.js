@@ -166,7 +166,7 @@ document.addEventListener('click', (e) => {
       localStorage.setItem('teams', JSON.stringify(teams));
     }
   }
-});
+
 
   if (e.target && e.target.classList.contains('remove-btn')) {
     const playerElement = e.target.closest('.player-slot');
