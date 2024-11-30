@@ -138,15 +138,37 @@ export function loadTeamsFromLocalStorage() {
             player.line = savedPlayer.line || null;
             player.assigned = savedPlayer.assigned !== undefined ? savedPlayer.assigned : false;
             player.team = savedPlayer.team || null;
+            player.injured = savedPlayer.injured || false; 
+            player.healthyScratch = savedPlayer.healthyScratch || false;
           }
           return player;
         });
 
         // Update team lines
         team.lines = savedTeam.lines || team.lines;
+        
+        // Ensure the UI reflects the loaded states
+        team.players.forEach((player) => {
+          const playerElement = document.querySelector(`[data-player-id="${player.id}"]`);
+
+          if (playerElement) {
+            // Apply visual indicators for injured or scratched players
+            if (player.injured) {
+              playerElement.classList.add('injured');
+            } else {
+              playerElement.classList.remove('injured');
+            }
+
+            if (player.healthyScratch) {
+              playerElement.classList.add('healthy-scratch');
+            } else {
+              playerElement.classList.remove('healthy-scratch');
+            }
+          }
+        });
       }
     });
-
+    
     console.log("Teams loaded from localStorage:", teams);
   }
 }
