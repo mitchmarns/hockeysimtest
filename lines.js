@@ -29,9 +29,22 @@ document.addEventListener("DOMContentLoaded", async () => {
       playerDiv.className = "player";
       playerDiv.draggable = true;
       playerDiv.dataset.id = player.id;
-      playerDiv.textContent = player.name;
-      playersContainer.appendChild(playerDiv);
 
+      // image
+      const playerImg = document.createElement("img");
+      playerImg.src = player.image;
+      playerImg.alt = player.name;
+      playerImg.className = "player-image";
+
+      // name
+      const playerName = document.createElement("span");
+      playerName.textContent = player.name;
+
+      playerDiv.appendChild(playerImg);
+      playerDiv.appendChild(playerName);
+
+      playersContainer.appendChild(playerDiv);
+      
       // Add drag event to player
       playerDiv.addEventListener("dragstart", (e) => {
         e.dataTransfer.setData("playerId", player.id);
@@ -45,7 +58,18 @@ document.addEventListener("DOMContentLoaded", async () => {
       const slot = document.querySelector(`[data-position="${slotId}"]`);
       const player = players.find((p) => p.id === parseInt(playerId));
       if (slot && player) {
-        slot.textContent = player.name; // Update UI
+        const playerImg = document.createElement("img");
+        playerImg.src = player.image;
+        playerImg.alt = player.name;
+        playerImg.className = "player-image";
+
+        const playerName = document.createElement("span");
+        playerName.textContent = player.name;
+
+        slot.textContent = ''; // Clear the slot
+        slot.appendChild(playerImg);
+        slot.appendChild(playerName);
+
         slot.dataset.assignedPlayer = playerId;
       }
     }
@@ -64,7 +88,18 @@ document.addEventListener("DOMContentLoaded", async () => {
         const player = document.querySelector(`[data-id="${playerId}"]`);
 
         // Update UI
-        slot.textContent = player.textContent;
+        const playerImg = document.createElement("img");
+        playerImg.src = player.querySelector("img").src;
+        playerImg.alt = player.textContent.trim();
+        playerImg.className = "player-image";
+
+        const playerName = document.createElement("span");
+        playerName.textContent = player.textContent.trim();
+
+        slot.textContent = ''; // Clear the slot
+        slot.appendChild(playerImg);
+        slot.appendChild(playerName);
+
         slot.dataset.assignedPlayer = playerId;
 
         // Update assignments
