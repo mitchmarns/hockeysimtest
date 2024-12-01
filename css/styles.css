@@ -44,7 +44,7 @@ h1 {
 
 #players, #lines {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 10px;
   margin-bottom: 20px;
 }
@@ -286,7 +286,7 @@ button.assign-btn:disabled {
 
 .lines {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 20px;
   background-color: #f9f9f9;
   padding: 10px;
@@ -296,6 +296,7 @@ button.assign-btn:disabled {
 
 .line {
   display: flex;
+  flex-direction: row;
   justify-content: space-between; /* Spreads slots evenly */
   gap: 10px; /* Adds space between individual slots */
   padding: 10px;
@@ -318,7 +319,7 @@ button.assign-btn:disabled {
   background: #fff;
   border-radius: 5px;
   text-align: center;
-  height: 40px;
+  min-height: 100px;
   line-height: 20px;
 }
 
