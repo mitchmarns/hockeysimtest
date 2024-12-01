@@ -18,11 +18,18 @@ export async function loadPlayers() {
 
       localStorage.setItem('playersData', JSON.stringify(playersData));
       console.log('Players loaded from players.json:', playersData);
-}
+    }
+
+    // Ensure players have a lineAssigned property for the unassigned check
+    playersData.players.forEach(player => {
+      if (!player.hasOwnProperty('lineAssigned')) {
+        player.lineAssigned = null; // Default to null if not set
+      }
+    });
+
     if (!Array.isArray(playersData.players)) {
       throw new Error('playersData.players is not an array');
     }
-
   } catch (error) {
     console.error('Error loading player data:', error);
   }
@@ -36,15 +43,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 export function getUnassignedPlayers() {
-  return teams.flatMap(team => {
-    // Filter players where lineAssigned is either null or an empty object
-    return team.players.filter(player => player.lineAssigned === null);
-  });
+  // Ensure players that do not have a valid lineAssigned are returned as unassigned
+  return playersData.players.filter(player => !player.lineAssigned);
 }
 
 function displayUnassignedPlayers() {
   const unassignedPlayersContainer = document.getElementById('unassigned-players');
-
   const unassignedPlayers = getUnassignedPlayers();
 
   if (unassignedPlayers.length === 0) {
@@ -84,6 +88,7 @@ function displayTeamLines() {
       <h4>Goalies</h4>
       ${generateGoalieSlots(team)}
     `;
+    
     // Set up drop targets for each line slot
     const lineSlots = teamLinesDiv.querySelectorAll('.line div');
     lineSlots.forEach(slot => {
