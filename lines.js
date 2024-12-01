@@ -271,7 +271,7 @@ let line;
     slot.innerHTML = `
       <img src="${player.image}" alt="${player.name}" />
       <span>${player.name}</span>
-      <button class="remove-btn" onclick="removePlayerFromLine('${team.name}', '${category}', ${lineIndex}, '${position}')">Remove</button>
+      <button class="remove-btn" onclick="removePlayerFromLine('${team.name}', '${category}', ${lineNumber}, '${position}')">Remove</button>
       <div>
         <label>Injured</label>
         <input type="checkbox" class="injured-toggle" ${player.injured ? 'checked' : ''} onclick="toggleInjuryStatus(${player.id})">
