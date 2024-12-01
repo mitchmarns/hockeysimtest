@@ -89,7 +89,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       slot.addEventListener("drop", (e) => {
         e.preventDefault();
         const playerId = e.dataTransfer.getData("playerId");
-        const player = document.querySelector(`[data-id="${playerId}"]`);
+        const playerDiv = document.querySelector(`[data-id="${playerId}"]`);
+        const player = playerDiv ? players.find(p => p.id == playerId) : null;
+        
 
         // Validate if the player's position and team match the slot's position
         const slotPosition = slot.dataset.position.split("-")[1];
