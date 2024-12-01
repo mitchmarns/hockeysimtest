@@ -10,7 +10,6 @@ const loadPlayers = async () => {
     const savedData = localStorage.getItem("playersData");
     
     if (savedData) {
-      // Parse saved data from localStorage
       const parsedData = JSON.parse(savedData);
       
       // If valid, assign to playersData
