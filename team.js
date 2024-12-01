@@ -10,39 +10,35 @@ const loadPlayers = async () => {
     const savedData = localStorage.getItem("playersData");
     
     if (savedData) {
+      // Parse saved data from localStorage
       const parsedData = JSON.parse(savedData);
       
-      // Check if the data is an array (old structure)
-      if (Array.isArray(parsedData)) {
-        // Fix old structure (array of players)
-        playersData = { players: parsedData };  
-        localStorage.setItem("playersData", JSON.stringify(playersData));
-      } else if (parsedData && parsedData.players && Array.isArray(parsedData.players)) {
-        // Valid structure
+      // If valid, assign to playersData
+      if (parsedData && parsedData.players && Array.isArray(parsedData.players)) {
         playersData = parsedData;
       } else {
         console.error("Invalid localStorage data structure");
-        playersData = { players: [] }; // Default empty structure
+        playersData = { players: [] };
       }
     } else {
-      // No data in localStorage, fetch from players.json
+      // If no data in localStorage, fetch from players.json
       const response = await fetch("players.json");
       if (!response.ok) {
         throw new Error(`Failed to fetch players.json: ${response.statusText}`);
       }
       const data = await response.json();
       
+      // Ensure the structure is correct before using it
       if (data.players && Array.isArray(data.players)) {
-        playersData = data; // Valid structure
-        localStorage.setItem("playersData", JSON.stringify(playersData)); // Save it in the correct structure
+        playersData = data;
+        localStorage.setItem("playersData", JSON.stringify(playersData)); // Save correct structure in localStorage
       } else {
         console.error("Invalid players.json structure");
-        playersData = { players: [] }; // Default empty structure
+        playersData = { players: [] };
       }
     }
-
-    // After loading, check the structure of playersData
-    console.log("playersData loaded: ", playersData); // Debugging log
+    
+    // After loading, render the players
     renderPlayers("all");
   } catch (error) {
     console.error("Error loading players:", error);
