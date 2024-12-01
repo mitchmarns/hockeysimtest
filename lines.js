@@ -102,13 +102,6 @@ function displayUnassignedPlayers() {
     player.addEventListener('dragstart', (e) => {
       const playerId = player.dataset.playerId;
       const player = getPlayerById(playerId);
-
-      // Prevent dragging if the player is injured or a healthy scratch
-      if (player.injured || player.healthyScratch) {
-        e.preventDefault();
-      } else {
-        e.dataTransfer.setData('player-id', player.dataset.playerId);
-      }
     });
   });
 }
