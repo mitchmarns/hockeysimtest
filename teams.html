@@ -3,40 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="./css/styles.css">
-  <title>Hockey Simulation</title>
+  <title>Assign Players to Teams</title>
+  <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-<div class="container">
-  <h1>Hockey Team Assignment</h1>
-
-  <!-- Available Players Section -->
-  <div id="available-players"></div>
-
-  <!-- Teams Section -->
-  <div id="teams">
-    <div id="Rangers" class="team">
-      <h3>Rangers</h3>
-      <ul></ul> <!-- List of players will be dynamically populated here -->
-    </div>
-    <div id="Devils" class="team">
-      <h3>Devils</h3>
-      <ul></ul>
-    </div>
-    <div id="Islanders" class="team">
-      <h3>Islanders</h3>
-      <ul></ul>
-    </div>
-    <div id="Sabres" class="team">
-      <h3>Sabres</h3>
-      <ul></ul>
-    </div>
+  <h1>Assign Players to Teams</h1>
+  <div id="teams-container">
+    <h2>Teams</h2>
+    <select id="team-filter">
+      <option value="all">All</option>
+      <option value="Rangers">Rangers</option>
+      <option value="Devils">Devils</option>
+      <option value="Islanders">Islanders</option>
+      <option value="Sabres">Sabres</option>
+    </select>
   </div>
-</div>
 
-  
-<a href="https://mitchmarns.github.io/hockeysimtest/lines.html">Continue to assign lines.</a>
+  <div id="players-container">
+    <!-- Players will be dynamically populated here -->
+  </div>
 
-  <script type="module" src="./app.js"></script>
+  <script src="assign_team.js"></script>
 </body>
 </html>
