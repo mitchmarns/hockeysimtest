@@ -298,10 +298,8 @@ function assignPlayerToLine(playerId, team, slot) {
     `;
   } else {
     console.error('Player or line not found!');
-  }
-}
-  }
-};
+  }}
+
 
 
 function updateSlotWithPlayer(slot, player) {
