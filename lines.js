@@ -35,26 +35,17 @@ export async function loadPlayers() {
   }
 }
 
-document.addEventListener('DOMContentLoaded', async () => {
-  await loadPlayers();
-  loadTeamsFromLocalStorage();  // Ensure teams are loaded from LocalStorage
-  displayUnassignedPlayers();   // Display unassigned players
-  displayTeamLines();
-  attachDragEvents();// Display lines for each team
-});
-
 function loadTeamsFromLocalStorage() {
   try {
     const savedTeams = localStorage.getItem('teams');
     if (savedTeams) {
-      const teams = JSON.parse(savedTeams);
-      teams.forEach(team => {
+      const parsedTeams = JSON.parse(savedTeams);
+      parsedTeams.forEach(team => {
         // Ensure each team has valid player references
         team.players.forEach(player => {
           const playerInData = getPlayerById(player.id);
           if (!playerInData) {
             console.warn(`Player with ID ${player.id} is missing from playersData.`);
-            // Optionally, remove this player from the team or handle it differently
             team.players = team.players.filter(p => p.id !== player.id);
           }
         });
@@ -66,7 +57,6 @@ function loadTeamsFromLocalStorage() {
 }
 
 export function getUnassignedPlayers() {
-  // Ensure players that do not have a valid lineAssigned are returned as unassigned
   return playersData.players.filter(player => !player.lineAssigned);
 }
 
@@ -75,47 +65,37 @@ function displayUnassignedPlayers() {
   const unassignedPlayers = getUnassignedPlayers();
 
   if (unassignedPlayers.length === 0) {
-    console.log('No players unassigned to lines.');
     unassignedPlayersContainer.innerHTML = '<p>All players are assigned to lines.</p>';
     return;
   }
 
-  unassignedPlayersContainer.innerHTML = unassignedPlayers.map(player => {
-    return `
-      <div class="player-slot" data-player-id="${player.id}" id="player-${player.id}" draggable="true">
-        <img src="${player.image}" alt="${player.name}" />
-        <span>${player.name}</span>
-        <div>
-          <label>Injured</label>
-          <input type="checkbox" class="injured-toggle" ${player.injured ? 'checked' : ''} onclick="toggleInjuryStatus(${player.id})">
-        </div>
-        <div>
-          <label>Healthy Scratch</label>
-          <input type="checkbox" class="healthy-scratch-toggle" ${player.healthyScratch ? 'checked' : ''} onclick="toggleHealthyScratch(${player.id})">
-        </div>
+  unassignedPlayersContainer.innerHTML = unassignedPlayers.map(player => `
+    <div class="player-slot" data-player-id="${player.id}" id="player-${player.id}" draggable="true">
+      <img src="${player.image}" alt="${player.name}" />
+      <span>${player.name}</span>
+      <div>
+        <label>Injured</label>
+        <input type="checkbox" class="injured-toggle" ${player.injured ? 'checked' : ''} onclick="toggleInjuryStatus(${player.id})">
       </div>
-    `;
-  }).join('');
-  
-// Ensure drag events are reattached after player slots are generated
+    </div>
+  `).join('');
+
   attachDragEvents();
 }
 
 function attachDragEvents() {
-  // Reattach dragstart events for all player slots
   const playerElements = document.querySelectorAll('.player-slot');
   playerElements.forEach(player => {
     player.addEventListener('dragstart', (e) => {
       e.dataTransfer.setData('player-id', player.dataset.playerId);
-      console.log('Dragging player with ID:', player.dataset.playerId); // Debugging log
     });
   });
 }
 
 function displayTeamLines() {
   const teamsContainer = document.getElementById('lines-container');
-  
-  teams.forEach((team) => {
+
+  teams.forEach(team => {
     const teamLinesDiv = document.getElementById(`${team.name}-lines`);
     teamLinesDiv.innerHTML = `
       <h4>Forwards</h4>
@@ -125,20 +105,14 @@ function displayTeamLines() {
       <h4>Goalies</h4>
       ${generateGoalieSlots(team)}
     `;
-    
-    // Set up drop targets for each line slot
+
     const lineSlots = teamLinesDiv.querySelectorAll('.line div');
     lineSlots.forEach(slot => {
-      slot.addEventListener('dragover', (e) => {
-        e.preventDefault(); // Allow drop
-      });
+      slot.addEventListener('dragover', (e) => e.preventDefault());
       slot.addEventListener('drop', (e) => {
         e.preventDefault();
         const playerId = e.dataTransfer.getData('player-id');
-        
-        if (playerId) {
-          assignPlayerToLine(playerId, team, slot); // Call the assignment function
-        }
+        if (playerId) assignPlayerToLine(playerId, team, slot);
       });
     });
   });
@@ -156,11 +130,10 @@ function generateLineSlots(team, category, linesCount, positions) {
           return `
             <div class="player-slot" data-team="${team.name}" data-line="${category} Line ${i}" data-role="${pos}">
               ${player ? `
-                <div class="player-slot" data-player-id="${player.id}">
-                  <img src="${player.image}" alt="${player.name}" />
-                  <span>${player.name}</span>
-                  <button class="remove-btn" onclick="removePlayerFromLine('${team.name}', '${category}', ${i}, '${pos}')">Remove</button>
-                </div>` : ''}
+                <img src="${player.image}" alt="${player.name}" />
+                <span>${player.name}</span>
+                <button class="remove-btn" onclick="removePlayerFromLine('${team.name}', '${category}', ${i}, '${pos}')">Remove</button>
+              ` : ''}
             </div>`;
         }).join('')}
       </div>`;
@@ -175,11 +148,10 @@ function generateGoalieSlots(team) {
     return `
       <div class="player-slot" data-team="${team.name}" data-role="${role}">
         ${player ? `
-          <div class="player-slot" data-player-id="${player.id}">
-            <img src="${player.image}" alt="${player.name}" />
-            <span>${player.name}</span>
-            <button class="remove-btn" onclick="removePlayerFromLine('${team.name}', 'Goalie', 1, '${role}')">Remove</button>
-          </div>` : ''}
+          <img src="${player.image}" alt="${player.name}" />
+          <span>${player.name}</span>
+          <button class="remove-btn" onclick="removePlayerFromLine('${team.name}', 'Goalie', 1, '${role}')">Remove</button>
+        ` : ''}
       </div>`;
   }).join('');
 }
@@ -188,145 +160,19 @@ function removePlayerFromLine(teamName, category, lineNumber, position) {
   const team = teams.find(t => t.name === teamName);
   const line = category === 'Forward' ? team.lines.forwards[lineNumber - 1] : team.lines.defense[lineNumber - 1];
 
-  // Find the player to remove
   const playerId = line[position];
   const player = getPlayerById(playerId);
 
-  if (player) {
-    player.lineAssigned = null; // Reset line assignment
-    player.assigned = false;
-  }
+  if (player) player.lineAssigned = null;
 
-  // Remove player from line
   line[position] = null;
-
-  // Save updated teams and players to localStorage
   localStorage.setItem('teams', JSON.stringify(teams));
-  localStorage.setItem('playersData', JSON.stringify(playersData));
-
-  // Re-render lines and unassigned players
   displayTeamLines();
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+  await loadPlayers();
+  loadTeamsFromLocalStorage();
   displayUnassignedPlayers();
-  attachDragEvents();
-}
-
-function toggleInjuryStatus(playerId) {
-  const player = teams.flatMap(t => t.players).find(p => p.id === playerId);
-  if (player) {
-    player.injured = !player.injured;
-    localStorage.setItem('playersData', JSON.stringify(playersData));
-    displayTeamLines();
-  }
-}
-
-function toggleHealthyScratch(playerId) {
-  const player = teams.flatMap(t => t.players).find(p => p.id === playerId);
-  if (player) {
-    player.healthyScratch = !player.healthyScratch;
-    localStorage.setItem('playersData', JSON.stringify(playersData));
-    displayTeamLines();
-  }
-}
-
-function assignPlayerToLine(playerId, team, slot) {
-  const position = slot.dataset.role;
-  const category = slot.dataset.line.split(' ')[0]; // Forward, Defense, or Goalie
-  const lineNumber = parseInt(slot.dataset.line.split(' ')[2]);
-  
-let line;
-  if (category === 'Forward') {
-    line = team.lines.forwards[lineNumber - 1];
-  } else if (category === 'Defense') {
-    line = team.lines.defense[lineNumber - 1];
-  } else if (category === 'Goalie') {
-    line = team.lines.goalies;
-  }
-
-  // Check if the player exists in playersData
-  const player = getPlayerById(playerId);
-  
-  if (player && line) {
-    if (category === 'Goalie') {
-      // Goalies are direct properties
-      line[position] = playerId;
-    } else {
-      line[position] = playerId; // Assign player to this slot
-    }
-
-    if (team && player) {
-    const line = team.lines[category][lineNumber];
-
-    if (line[position] === null) { // Ensure the slot is empty
-      line[position] = player; // Assign player to the line slot
-      player.assigned = true;
-      player.team = teamName;
-
-      // Update the DOM dynamically
-      const slot = document.querySelector(`[data-team="${teamName}"][data-line="${category}-${lineNumber}"][data-position="${position}"]`);
-      if (slot) {
-        slot.innerHTML = `
-          <img src="${player.image}" alt="${player.name}" />
-          <span>${player.name}</span>
-          <button class="remove-btn" onclick="removePlayerFromLine('${teamName}', '${category}', ${lineNumber}, '${position}')">Remove</button>
-          <div>
-            <label>Injured</label>
-            <input type="checkbox" class="injured-toggle" ${player.injured ? 'checked' : ''} onclick="toggleInjuryStatus(${player.id})">
-          </div>
-        `;
-      }
-    } else {
-      alert(`This slot is already occupied by ${line[position].name}`);
-    }
-  } else {
-    console.error('Team or player not found!');
-  }
-}
-
-    // Update the player's assignment status
-    player.lineAssigned = { team: team.name, category, line: position }; // Store assignment details
-    player.assigned = true;
-
-    // Save updated teams and players to localStorage
-    localStorage.setItem('teams', JSON.stringify(teams));
-    localStorage.setItem('playersData', JSON.stringify(playersData));
-
-    // Re-render lines and player bank
-    displayTeamLines();
-    displayUnassignedPlayers();
-    attachDragEvents();
-}
-
-
-
-function updateSlotWithPlayer(slot, player) {
-  // Find the specific slot where the player was dropped
-  const playerSlot = slot.querySelector('.player-slot');
-
-  // If the slot does not already contain the player, insert the player
-  if (!playerSlot) {
-    const playerElement = document.createElement('div');
-    playerElement.classList.add('player-slot');
-    playerElement.setAttribute('data-player-id', player.id);
-
-    playerElement.innerHTML = `
-      <img src="${player.image}" alt="${player.name}" />
-      <span>${player.name}</span>
-      <button class="remove-btn" onclick="removePlayerFromLine('${player.lineAssigned.team}', '${player.lineAssigned.category}', ${player.lineAssigned.line}, '${slot.dataset.role}')">Remove</button>
-      <div>
-        <label>Injured</label>
-        <input type="checkbox" class="injured-toggle" ${player.injured ? 'checked' : ''} onclick="toggleInjuryStatus(${player.id})">
-      </div>
-      <div>
-        <label>Healthy Scratch</label>
-        <input type="checkbox" class="healthy-scratch-toggle" ${player.healthyScratch ? 'checked' : ''} onclick="toggleHealthyScratch(${player.id})">
-      </div>
-    `;
-    
-    slot.appendChild(playerElement); // Add the player to the slot
-  }
-}
-
-function getPlayerById(playerId) {
-  // Check if player exists in the playersData array
-  return playersData.players.find(player => player.id === parseInt(playerId));
-}
+  displayTeamLines();
+});
