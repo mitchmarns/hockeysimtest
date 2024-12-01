@@ -160,14 +160,6 @@ function generateLineSlots(team, category, linesCount, positions) {
                   <img src="${player.image}" alt="${player.name}" />
                   <span>${player.name}</span>
                   <button class="remove-btn" onclick="removePlayerFromLine('${team.name}', '${category}', ${i}, '${pos}')">Remove</button>
-                  <div>
-                    <label>Injured</label>
-                    <input type="checkbox" class="injured-toggle" ${player.injured ? 'checked' : ''} onclick="toggleInjuryStatus(${player.id})">
-                  </div>
-                  <div>
-                    <label>Healthy Scratch</label>
-                    <input type="checkbox" class="healthy-scratch-toggle" ${player.healthyScratch ? 'checked' : ''} onclick="toggleHealthyScratch(${player.id})">
-                  </div>
                 </div>` : ''}
             </div>`;
         }).join('')}
@@ -239,16 +231,15 @@ function toggleHealthyScratch(playerId) {
 function assignPlayerToLine(playerId, team, slot) {
   const position = slot.dataset.role;
   const category = slot.dataset.line.split(' ')[0]; // Forward, Defense, or Goalie
-
-  let line;
-  let lineIndex = parseInt(lineNumber) - 1; // Convert line number to zero-based index
-
+  const lineNumber = parseInt(slot.dataset.line.split(' ')[2]);
+  
+let line;
   if (category === 'Forward') {
-    line = team.lines.forwards[lineIndex]; // Get the specific forward line
+    line = team.lines.forwards[lineNumber - 1];
   } else if (category === 'Defense') {
-    line = team.lines.defense[lineIndex]; // Get the specific defense line
+    line = team.lines.defense[lineNumber - 1];
   } else if (category === 'Goalie') {
-    line = team.lines.goalies; // Goalies are not indexed by lineNumber
+    line = team.lines.goalies;
   }
 
   // Check if the player exists in playersData
