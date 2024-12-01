@@ -256,11 +256,8 @@ function assignPlayerToLine(playerId, team, slot) {
     }
 
     // Update the player's assignment status
-    const player = getPlayerById(playerId);
-    if (player) {
-      player.lineAssigned = { team: team.name, category, line: position }; // Store assignment details
-      player.assigned = true;
-    }
+    player.lineAssigned = { team: team.name, category, line: position }; // Store assignment details
+    player.assigned = true;
 
     // Save updated teams and players to localStorage
     localStorage.setItem('teams', JSON.stringify(teams));
