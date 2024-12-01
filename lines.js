@@ -81,18 +81,34 @@ function displayUnassignedPlayers() {
 
   unassignedPlayersContainer.innerHTML = unassignedPlayers.map(player => {
     return `
-      <div class="player-slot" draggable="true" data-player-id="${player.id}" id="player-${player.id}">
+      <div class="player-slot" data-player-id="${player.id}" id="player-${player.id}">
         <img src="${player.image}" alt="${player.name}" />
         <span>${player.name}</span>
+        <div>
+          <label>Injured</label>
+          <input type="checkbox" class="injured-toggle" ${player.injured ? 'checked' : ''} onclick="toggleInjuryStatus(${player.id})">
+        </div>
+        <div>
+          <label>Healthy Scratch</label>
+          <input type="checkbox" class="healthy-scratch-toggle" ${player.healthyScratch ? 'checked' : ''} onclick="toggleHealthyScratch(${player.id})">
+        </div>
       </div>
     `;
   }).join('');
-
-  // Add drag events to unassigned players
+  
+  // Prevent injured or healthy scratch players from being assigned
   const playerElements = document.querySelectorAll('.player-slot');
   playerElements.forEach(player => {
     player.addEventListener('dragstart', (e) => {
-      e.dataTransfer.setData('player-id', player.dataset.playerId);
+      const playerId = player.dataset.playerId;
+      const player = getPlayerById(playerId);
+
+      // Prevent dragging if the player is injured or a healthy scratch
+      if (player.injured || player.healthyScratch) {
+        e.preventDefault();
+      } else {
+        e.dataTransfer.setData('player-id', player.dataset.playerId);
+      }
     });
   });
 }
@@ -123,26 +139,7 @@ function displayTeamLines() {
         
         if (playerId) {
           assignPlayerToLine(playerId, team, slot); // Call the assignment function
-
-          const player = getPlayerById(playerId);
-          if (player) {
-      slot.innerHTML = `
-        <img src="${player.image}" alt="${player.name}" />
-        <span>${player.name}</span>
-        <button class="remove-btn" onclick="removePlayerFromLine('${team.name}', '${category}', ${lineNumber}, '${position}')">Remove</button>
-        <div>
-          <label>Injured</label>
-          <input type="checkbox" class="injured-toggle" ${player.injured ? 'checked' : ''} onclick="toggleInjuryStatus(${player.id})">
-        </div>
-        <div>
-          <label>Healthy Scratch</label>
-          <input type="checkbox" class="healthy-scratch-toggle" ${player.healthyScratch ? 'checked' : ''} onclick="toggleHealthyScratch(${player.id})">
-        </div>
-      `;
-    }
-  } else {
-    console.error('No player ID found in drop event!');
-  }
+        }
       });
     });
   });
