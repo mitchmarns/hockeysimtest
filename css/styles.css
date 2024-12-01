@@ -176,7 +176,8 @@ button:hover {
 .line-slot-container {
   display: flex;
   justify-content: space-evenly;
-  margin-bottom: 15px;
+  width: 100%;
+  margin-bottom: 30px;
 }
 
 .line-slot-container h3 {
