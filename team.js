@@ -49,7 +49,7 @@ const loadPlayers = async () => {
     playersData = { players: [] }; // Fallback to empty structure
     renderPlayers("all");
   }
-};
+}
     
     // After loading, check the structure of playersData
     console.log("playersData loaded: ", playersData);
@@ -59,8 +59,7 @@ const loadPlayers = async () => {
     playersData = { players: [] }; // Fallback to empty structure
     renderPlayers("all");
   });
-
-
+  
   // Save updated data to localStorage
   const savePlayers = () => {
     localStorage.setItem("playersData", JSON.stringify({ players: playersData }));
@@ -116,7 +115,8 @@ const loadPlayers = async () => {
   // Filter players by team
   teamFilter.addEventListener("change", (e) => {
     renderPlayers(e.target.value);
-  });
+    
 
   // Load players on page load
   loadPlayers();
+});
