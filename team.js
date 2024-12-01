@@ -50,16 +50,8 @@ const loadPlayers = async () => {
     renderPlayers("all");
   }
 }
-    
-    // After loading, check the structure of playersData
-    console.log("playersData loaded: ", playersData);
-    renderPlayers("all");
-  } catch (error) {
-    console.error("Error loading players:", error);
-    playersData = { players: [] }; // Fallback to empty structure
-    renderPlayers("all");
-  });
-  
+});
+
   // Save updated data to localStorage
   const savePlayers = () => {
     localStorage.setItem("playersData", JSON.stringify({ players: playersData }));
