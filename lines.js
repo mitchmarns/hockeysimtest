@@ -224,12 +224,6 @@ function toggleHealthyScratch(playerId) {
   }
 }
 
-function getUnassignedPlayers() {
-  return teams.flatMap(team => {
-    return team.players.filter(player => !player.lineAssigned); // Check `lineAssigned` property
-  });
-}
-
 function getPlayerById(playerId) {
   return teams.flatMap(team => team.players).find(p => p.id === playerId);
 }
