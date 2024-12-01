@@ -121,8 +121,9 @@ button:hover {
 
 /* Lines Container */
 .lines-container {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  display: flex;
+  flex-direction: row;
+  flex-flow: row wrap;
   gap: 20px;
 }
 
