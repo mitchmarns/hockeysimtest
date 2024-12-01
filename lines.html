@@ -3,57 +3,41 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Team Management</title>
-  <link rel="stylesheet" href="styles.css"> <!-- Optional: If you have CSS for styling -->
+  <title>Assign Players to Lines</title>
+  <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
+  <h1>Assign Players to Lines</h1><br>
+  <a href="https://mitchmarns.github.io/hockeysimtest/special_teams.html">continue to special teams</a>
 
-  <div id="available-players-list">
-    <!-- Dynamically listed players will go here -->
-  </div>
+  <!-- Available Players Section -->
+  <h2>Available Players</h2>
+  <section id="available-players">
+    <div id="available-players-list"></div>
+  </section>
 
-  <div id="rangers-lines" class="team-lines">
-    <div>
-      <h4>Forward Lines</h4>
-      <div class="lines">
-        <div class="line" data-line="Forward Line 1">
-          <div class="player-slot" data-role="LW" data-team="Rangers"></div>
-          <div class="player-slot" data-role="C" data-team="Rangers"></div>
-          <div class="player-slot" data-role="RW" data-team="Rangers"></div>
-        </div>
-        <div class="line" data-line="Forward Line 2">
-          <div class="player-slot" data-role="LW" data-team="Rangers"></div>
-          <div class="player-slot" data-role="C" data-team="Rangers"></div>
-          <div class="player-slot" data-role="RW" data-team="Rangers"></div>
-        </div>
-      </div>
+  <!-- Team Lines Assignment Section -->
+  <section id="lines-container">
+    <h2>Lines by Team</h2>
+
+    <!-- Lines for each team -->
+  <h3>Rangers</h3>
+    <div class="team-lines" id="Rangers-lines">
     </div>
-
-    <div>
-      <h4>Defense Lines</h4>
-      <div class="lines">
-        <div class="line" data-line="Defense Line 1">
-          <div class="player-slot" data-role="LD" data-team="Rangers"></div>
-          <div class="player-slot" data-role="RD" data-team="Rangers"></div>
-        </div>
-        <div class="line" data-line="Defense Line 2">
-          <div class="player-slot" data-role="LD" data-team="Rangers"></div>
-          <div class="player-slot" data-role="RD" data-team="Rangers"></div>
-        </div>
-      </div>
+    
+  <h3>Devils</h3>
+    <div class="team-lines" id="Devils-lines">
     </div>
-
-    <div>
-      <h4>Goalies</h4>
-      <div class="lines">
-        <div class="player-slot" data-role="Starter" data-team="Rangers"></div>
-        <div class="player-slot" data-role="Backup" data-team="Rangers"></div>
-      </div>
+    
+  <h3>Islanders</h3>
+    <div class="team-lines" id="Islanders-lines">
     </div>
-  </div>
+    
+  <h3>Sabres</h3>
+    <div class="team-lines" id="Sabres-lines">
+    </div>
+  </section>
 
-  <!-- Repeat the same structure for other teams (Devils, Islanders, Sabres, etc.) -->
-
-  <script src="main.js"></script>
+  <script type="module" src="lines.js"></script>
 </body>
 </html>
