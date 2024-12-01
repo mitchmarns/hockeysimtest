@@ -1,14 +1,5 @@
 import { loadPlayers, loadTeamsFromLocalStorage, teams } from './team.js';
 
-async function fetchPlayers() {
-  try {
-    const response = await fetch('players.json');
-    players = await response.json();
-  } catch (error) {
-    console.error('Error loading players:', error);
-  }
-}
-
 document.addEventListener('DOMContentLoaded', async () => {
   await loadPlayers();
   loadTeamsFromLocalStorage();
