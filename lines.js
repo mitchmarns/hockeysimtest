@@ -74,7 +74,7 @@ function displayUnassignedPlayers() {
     console.error('Unassigned players container not found!');
     return;
   }
-  
+
   const unassignedPlayers = getUnassignedPlayers();
 
   if (unassignedPlayers.length === 0) {
@@ -186,12 +186,25 @@ function removePlayerFromLine(teamName, category, lineNumber, position) {
   const team = teams.find(t => t.name === teamName);
   const line = category === 'Forward' ? team.lines.forwards[lineNumber - 1] : team.lines.defense[lineNumber - 1];
 
+  // Find the player to remove
+  const playerId = line[position];
+  const player = getPlayerById(playerId);
+
+  if (player) {
+    player.lineAssigned = null; // Reset line assignment
+    player.assigned = false;
+  }
+
   // Remove player from line
   line[position] = null;
 
-  // Update the team lines
+  // Save updated teams and players to localStorage
   localStorage.setItem('teams', JSON.stringify(teams));
-  displayTeamLines(); // Re-render the lines
+  localStorage.setItem('playersData', JSON.stringify(playersData));
+
+  // Re-render lines and unassigned players
+  displayTeamLines();
+  displayUnassignedPlayers();
 }
 
 function toggleInjuryStatus(playerId) {
@@ -214,10 +227,7 @@ function toggleHealthyScratch(playerId) {
 
 function getUnassignedPlayers() {
   return teams.flatMap(team => {
-    return team.players.filter(player => {
-      const isInLine = checkPlayerInLines(player.id, team.lines);
-      return !isInLine; // Only include players not in any line
-    });
+    return team.players.filter(player => !player.lineAssigned); // Check `lineAssigned` property
   });
 }
 
@@ -227,27 +237,29 @@ function getPlayerById(playerId) {
 
 function assignPlayerToLine(playerId, team, slot) {
   const position = slot.dataset.role;
-  const category = slot.dataset.line.split(' ')[0]; // Forward or Defense
+  const category = slot.dataset.line.split(' ')[0]; // Forward, Defense, or Goalie
 
   let line;
   if (category === 'Forward') {
     line = team.lines.forwards.find(f => !f[position]); // Find an available forward line
   } else if (category === 'Defense') {
-    line = team.lines.defense.find(f => !f[position]); // Find an available defense line
+    line = team.lines.defense.find(d => !d[position]); // Find an available defense line
   } else if (category === 'Goalie') {
     line = team.lines.goalies; // Goalie line is a direct object
   }
 
   if (line && playerId) {
+    // Assign the player to the line
     if (category === 'Goalie') {
       line[position] = playerId; // Assign goalie
     } else {
       line[position] = playerId; // Assign to forward or defense line
     }
 
-    // Mark player as assigned
+    // Update the player's assignment status
     const player = getPlayerById(playerId);
     if (player) {
+      player.lineAssigned = { team: team.name, category, line: position }; // Store assignment details
       player.assigned = true;
     }
 
@@ -259,4 +271,4 @@ function assignPlayerToLine(playerId, team, slot) {
     displayTeamLines();
     displayUnassignedPlayers();
   }
-}
+}}
