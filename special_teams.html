@@ -3,13 +3,49 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Special Teams</title>
+  <title>Special Teams Assignment</title>
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-  <h1>Special Teams</h1>
-  <div id="special-teams-container"></div>
+  <h1>Special Teams Assignment</h1>
 
-  <script type="module" src="special_teams.js"></script>
+  <h2>Available Players</h2>
+  <div id="players">
+    <!-- The available players will be dynamically injected here -->
+  </div>
+
+  <h2>Assign to Special Teams</h2>
+
+  <div id="special-teams">
+    <!-- Rangers Powerplay -->
+    <h3>Rangers: Powerplay Unit 1</h3>
+    <div class="line-slot" data-position="Rangers-powerplay-1-LW">LW</div>
+    <div class="line-slot" data-position="Rangers-powerplay-1-C">C</div>
+    <div class="line-slot" data-position="Rangers-powerplay-1-RW">RW</div>
+    <div class="line-slot" data-position="Rangers-powerplay-1-LD">LD</div>
+    <div class="line-slot" data-position="Rangers-powerplay-1-RD">RD</div>
+
+    <h3>Rangers: Powerplay Unit 2</h3>
+    <div class="line-slot" data-position="Rangers-powerplay-2-LW">LW</div>
+    <div class="line-slot" data-position="Rangers-powerplay-2-C">C</div>
+    <div class="line-slot" data-position="Rangers-powerplay-2-RW">RW</div>
+    <div class="line-slot" data-position="Rangers-powerplay-2-LD">LD</div>
+    <div class="line-slot" data-position="Rangers-powerplay-2-RD">RD</div>
+
+    <!-- Rangers Penalty Kill -->
+    <h3>Rangers: Penalty Kill Unit 1</h3>
+    <div class="line-slot" data-position="Rangers-penaltyKill-1-F1">F1</div>
+    <div class="line-slot" data-position="Rangers-penaltyKill-1-F2">F2</div>
+    <div class="line-slot" data-position="Rangers-penaltyKill-1-LD">LD</div>
+    <div class="line-slot" data-position="Rangers-penaltyKill-1-RD">RD</div>
+
+    <h3>Rangers: Penalty Kill Unit 2</h3>
+    <div class="line-slot" data-position="Rangers-penaltyKill-2-F1">F1</div>
+    <div class="line-slot" data-position="Rangers-penaltyKill-2-F2">F2</div>
+    <div class="line-slot" data-position="Rangers-penaltyKill-2-LD">LD</div>
+    <div class="line-slot" data-position="Rangers-penaltyKill-2-RD">RD</div>
+  </div>
+
+  <script src="special_teams.js"></script>
 </body>
 </html>
