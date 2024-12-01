@@ -1,217 +1,80 @@
-let playersData = { players: [] }; // Default structure
-export const teams = [
-  { 
-    name: "Rangers", 
-    players: [], 
-    maxPlayers: 23,
-    lines: {
-      forwards: [
-        { LW: null, C: null, RW: null },
-        { LW: null, C: null, RW: null },
-        { LW: null, C: null, RW: null },
-        { LW: null, C: null, RW: null },
-      ],
-      defense: [
-        { LD: null, RD: null },
-        { LD: null, RD: null },
-        { LD: null, RD: null },
-      ],
-      goalies: { Starter: null, Backup: null },
-      powerplay: [
-        { LW: null, C: null, RW: null, LD: null, RD: null }, // Powerplay Unit 1
-        { LW: null, C: null, RW: null, LD: null, RD: null }, // Powerplay Unit 2
-      ],
-      penaltyKill: [
-        { F1: null, F2: null, LD: null, RD: null }, // Penalty Kill Unit 1
-        { F1: null, F2: null, LD: null, RD: null }, // Penalty Kill Unit 2
-      ],
-    },
-  },
-  { name: "Devils", players: [], maxPlayers: 23,
-    lines: {
-      forwards: [
-        { LW: null, C: null, RW: null },
-        { LW: null, C: null, RW: null },
-        { LW: null, C: null, RW: null },
-        { LW: null, C: null, RW: null },
-      ],
-      defense: [
-        { LD: null, RD: null },
-        { LD: null, RD: null },
-        { LD: null, RD: null },
-      ],
-      goalies: { Starter: null, Backup: null },
-      powerplay: [
-        { LW: null, C: null, RW: null, LD: null, RD: null }, // Powerplay Unit 1
-        { LW: null, C: null, RW: null, LD: null, RD: null }, // Powerplay Unit 2
-      ],
-      penaltyKill: [
-        { F1: null, F2: null, LD: null, RD: null }, // Penalty Kill Unit 1
-        { F1: null, F2: null, LD: null, RD: null }, // Penalty Kill Unit 2
-      ],
-    },
-  },
-  { name: "Islanders", players: [], maxPlayers: 23,
-      lines: {
-      forwards: [
-        { LW: null, C: null, RW: null },
-        { LW: null, C: null, RW: null },
-        { LW: null, C: null, RW: null },
-        { LW: null, C: null, RW: null },
-      ],
-      defense: [
-        { LD: null, RD: null },
-        { LD: null, RD: null },
-        { LD: null, RD: null },
-      ],
-      goalies: { Starter: null, Backup: null },
-    },
-   powerplay: [
-        { LW: null, C: null, RW: null, LD: null, RD: null }, // Powerplay Unit 1
-        { LW: null, C: null, RW: null, LD: null, RD: null }, // Powerplay Unit 2
-      ],
-      penaltyKill: [
-        { F1: null, F2: null, LD: null, RD: null }, // Penalty Kill Unit 1
-        { F1: null, F2: null, LD: null, RD: null }, // Penalty Kill Unit 2
-      ],
-  },
-  { name: "Sabres", players: [], maxPlayers: 23,
-      lines: {
-      forwards: [
-        { LW: null, C: null, RW: null },
-        { LW: null, C: null, RW: null },
-        { LW: null, C: null, RW: null },
-        { LW: null, C: null, RW: null },
-      ],
-      defense: [
-        { LD: null, RD: null },
-        { LD: null, RD: null },
-        { LD: null, RD: null },
-      ],
-      goalies: { Starter: null, Backup: null },
-    },
-   powerplay: [
-        { LW: null, C: null, RW: null, LD: null, RD: null }, // Powerplay Unit 1
-        { LW: null, C: null, RW: null, LD: null, RD: null }, // Powerplay Unit 2
-      ],
-      penaltyKill: [
-        { F1: null, F2: null, LD: null, RD: null }, // Penalty Kill Unit 1
-        { F1: null, F2: null, LD: null, RD: null }, // Penalty Kill Unit 2
-      ],
-  }
-];
+document.addEventListener("DOMContentLoaded", () => {
+  const playersContainer = document.getElementById("players-container");
+  const teamFilter = document.getElementById("team-filter");
 
-export async function loadPlayers() {
-  try {
-    const savedPlayers = localStorage.getItem('playersData');
-    
-    if (savedPlayers) {
-      const data = JSON.parse(savedPlayers);
-      playersData.players = data.players || [];
-      console.log('Players loaded from localStorage:', playersData);
+  let playersData = [];
+  const teams = ["Rangers", "Devils", "Islanders", "Sabres"];
+
+  // Load data from localStorage or fallback to fetch
+  const loadPlayers = async () => {
+    const savedData = localStorage.getItem("playersData");
+    if (savedData) {
+      playersData = JSON.parse(savedData).players;
     } else {
-      const response = await fetch('./players.json');
-      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      const response = await fetch("players.json");
       const data = await response.json();
-      playersData.players = data.players || [];
-
-      localStorage.setItem('playersData', JSON.stringify(playersData));
-      console.log('Players loaded from players.json:', playersData);
-}
-    if (!Array.isArray(playersData.players)) {
-      throw new Error('playersData.players is not an array');
+      playersData = data.players;
+      localStorage.setItem("playersData", JSON.stringify(data));
     }
+    renderPlayers("all");
+  };
 
-  } catch (error) {
-    console.error('Error loading player data:', error);
-  }
-}
+  // Save updated data to localStorage
+  const savePlayers = () => {
+    localStorage.setItem("playersData", JSON.stringify({ players: playersData }));
+  };
 
-export function getAvailablePlayers() {
-  return playersData.players.filter(player => !player.team);
-}
+  // Render players based on selected team filter
+  const renderPlayers = (teamFilterValue) => {
+    playersContainer.innerHTML = ""; // Clear existing content
+    const filteredPlayers = playersData.filter(player =>
+      teamFilterValue === "all" || player.team === teamFilterValue
+    );
 
-export function assignPlayerToTeam(playerId, teamName) {
-  const player = playersData.players.find(p => p.id === playerId);
-  const team = teams.find(t => t.name === teamName);
-
-  if (player && team && !player.team) {
-    if (team.players.length < team.maxPlayers) {
-      player.team = teamName;
-      player.assigned = true;
-
-      team.players.push(player);
-
-      // Save updated teams to localStorage
-      localStorage.setItem('teams', JSON.stringify(teams));
-      localStorage.setItem('playersData', JSON.stringify(playersData));
-
-      console.log("Player assigned and data saved:", { player, teams });
-    } else {
-      console.error('Team is full.');
-    }
-  } else {
-    console.error('Player not found or already assigned.');
-  }
-}
-
-export function loadTeamsFromLocalStorage() {
-  const savedTeams = localStorage.getItem('teams');
-  if (savedTeams) {
-    const parsedTeams = JSON.parse(savedTeams);
-    
-    parsedTeams.forEach(savedTeam => {
-      const team = teams.find(t => t.name === savedTeam.name);
-      if (team) {
-        team.players = savedTeam.players
-          .map(savedPlayer => {
-            const player = playersData.players.find(p => p.id === savedPlayer.id);
-
-          if (player) {
-            player.line = savedPlayer.line || null;
-            player.assigned = savedPlayer.assigned !== undefined ? savedPlayer.assigned : false;
-            player.team = savedPlayer.team || null;
-            player.injured = savedPlayer.injured || false; 
-            player.healthyScratch = savedPlayer.healthyScratch || false; // extra properties after this
-          } else {
-            console.warn(`Player with ID ${savedPlayer.id} not found in playersData.`);
-          }
-          
-        return player || null; // Return null if player is not found
-        }).filter(p => p !== null); // Filter out any null players
-
-        // Update team lines
-        team.lines = savedTeam.lines || team.lines;
-
-        // Update special teams (if applicable)
-        if (savedTeam.specialTeams) {
-          team.specialTeams = savedTeam.specialTeams;
-        }
-        
-        // Ensure the UI reflects the loaded states
-        team.players.forEach((player) => {
-          const playerElement = document.querySelector(`[data-player-id="${player.id}"]`);
-
-          if (playerElement) {
-            // Apply visual indicators for injured or scratched players
-            if (player.injured) {
-              playerElement.classList.add('injured');
-            } else {
-              playerElement.classList.remove('injured');
-            }
-
-            if (player.healthyScratch) {
-              playerElement.classList.add('healthy-scratch');
-            } else {
-              playerElement.classList.remove('healthy-scratch');
-            }
-          }
-        });
-      }
+    filteredPlayers.forEach(player => {
+      const playerCard = document.createElement("div");
+      playerCard.className = "player-card";
+      playerCard.innerHTML = `
+        <img src="${player.image}" alt="${player.name}" class="player-image">
+        <h3>${player.name}</h3>
+        <p>Position: ${player.position}</p>
+        <p>Team: ${player.team || "Unassigned"}</p>
+        <select class="team-select" data-id="${player.id}">
+          <option value="">Assign to team</option>
+          ${teams.map(team => `<option value="${team}" ${player.team === team ? "selected" : ""}>${team}</option>`).join("")}
+        </select>
+      `;
+      playersContainer.appendChild(playerCard);
     });
-  }
-    
-    console.log("Teams loaded from localStorage:", teams);
-  }
 
+    addEventListeners();
+  };
 
+  // Add event listeners to team dropdowns
+  const addEventListeners = () => {
+    const teamSelects = document.querySelectorAll(".team-select");
+    teamSelects.forEach(select => {
+      select.addEventListener("change", (e) => {
+        const playerId = parseInt(e.target.getAttribute("data-id"));
+        const selectedTeam = e.target.value;
+
+        // Update player's team
+        const player = playersData.find(p => p.id === playerId);
+        if (player) {
+          player.team = selectedTeam || null; // Set team or unassign
+          player.assigned = !!selectedTeam; // Mark as assigned if team is selected
+          savePlayers();
+          renderPlayers(teamFilter.value); // Re-render
+        }
+      });
+    });
+  };
+
+  // Filter players by team
+  teamFilter.addEventListener("change", (e) => {
+    renderPlayers(e.target.value);
+  });
+
+  // Load players on page load
+  loadPlayers();
+});
