@@ -1,7 +1,5 @@
 import { loadPlayers, loadTeamsFromLocalStorage, teams } from './team.js';
 
-export let players = []; // Ensure players is declared in this file
-
 document.addEventListener('DOMContentLoaded', async () => {
   await loadPlayers();
   loadTeamsFromLocalStorage();
@@ -71,37 +69,51 @@ function displayTeamLines() {
   teams.forEach(team => {
     const teamLines = document.getElementById(`${team.name}-lines`);
 
-    teamLines.innerHTML = ''; 
-    teamLines.innerHTML += `
-      <div>
-        <h4>Forward Lines</h4>
-        ${generateLineSlots(team, 'Forward', 4, ['LW', 'C', 'RW'])}
-      </div>
-      <div>
-        <h4>Defense Lines</h4>
-        ${generateLineSlots(team, 'Defense', 3, ['LD', 'RD'])}
-      </div>
-      <div>
-        <h4>Goalies</h4>
-        <div class="lines">
-          ${['Starter', 'Backup'].map(role => {
-            const playerId = team.lines.goalies[role];
-            const player = players.find(p => p.id === playerId);
-            return `
-              <div class="player-slot" data-team="${team.name}" data-role="${role}">
-                ${player ? `
-                  <div class="player-slot" data-player-id="${player.id}">
-                    <img src="${player.image}" alt="${player.name}" />
-                    <span>${player.name}</span>
-                    <button class="remove-btn">Remove</button>
-                  </div>
-                  ` : ''}
-              </div>
-              `;
-          }).join('')}
+    // Clear existing content
+    teamLines.innerHTML = '';
+
+    // Add Forward Lines
+    const forwardLinesContainer = document.createElement('div');
+    forwardLinesContainer.innerHTML = `
+      <h4>Forward Lines</h4>
+      ${generateLineSlots(team, 'Forward', 4, ['LW', 'C', 'RW'])}
+    `;
+    teamLines.appendChild(forwardLinesContainer);
+
+    // Add Defense Lines
+    const defenseLinesContainer = document.createElement('div');
+    defenseLinesContainer.innerHTML = `
+      <h4>Defense Lines</h4>
+      ${generateLineSlots(team, 'Defense', 3, ['LD', 'RD'])}
+    `;
+    teamLines.appendChild(defenseLinesContainer);
+
+// Add Goalie Line
+    const goalieLineContainer = document.createElement('div');
+    goalieLineContainer.innerHTML = `
+      <h4>Goalies</h4>
+      <div class="lines">
+        ${['Starter', 'Backup'].map(role => {
+          const assignedPlayerId = team.lines.goalies[role];
+          const assignedPlayer = assignedPlayerId
+            ? team.players.find(p => p.id === assignedPlayerId)
+            : null;
+
+          return `
+        <div class="player-slot" data-team="${team.name}" data-role="${role}">
+          ${assignedPlayer ? `
+            <div class="player-slot" data-player-id="${assignedPlayer.id}">
+              <img src="${assignedPlayer.image}" alt="${assignedPlayer.name}" /><br>
+              <span>${assignedPlayer.name}</span><br>
+              <button class="remove-btn">Remove</button>
+            </div>
+          ` : ''}
         </div>
-      </div>
       `;
+        }).join('')}
+      </div>
+    `;
+    teamLines.appendChild(goalieLineContainer);
   });
 }
 
@@ -109,23 +121,31 @@ function displayTeamLines() {
 function generateLineSlots(team, category, linesCount, positions) {
   let html = '';
   for (let i = 1; i <= linesCount; i++) {
-  const line = category === 'Forward' ? team.lines.forwards[i - 1] : team.lines.defense[i - 1];
-    html += `
-      <div class="line">
-        ${positions.map(pos => {
-          const playerId = line[pos];
-          const player = players.find(p => p.id === playerId);
-          return `
-            <div class="player-slot" data-team="${team.name}" data-line="${category} Line ${i}" data-role="${pos}">
-              ${player ? `
-                <div class="player-slot" data-player-id="${player.id}">
-                  <img src="${player.image}" alt="${player.name}" />
-                  <span>${player.name}</span>
-                  <button class="remove-btn">Remove</button>
-                </div>` : ''}
-            </div>`;
-        }).join('')}
-      </div>`;
+    html += `<div class="line">
+      ${positions.map(pos => {
+        const lineNumber = i - 1; // Convert to 0-based index
+        const assignedPlayerId =
+          category === 'Forward' ? team.lines.forwards[lineNumber][pos] :
+          category === 'Defense' ? team.lines.defense[lineNumber][pos] :
+          null;
+
+        const assignedPlayer = assignedPlayerId
+          ? team.players.find(p => p.id === assignedPlayerId)
+          : null;
+
+        return `
+          <div class="player-slot" data-team="${team.name}" data-line="${category} Line ${i}" data-role="${pos}">
+            ${assignedPlayer ? `
+            <div class="player-slot" data-player-id="${assignedPlayer.id}">
+              <img src="${assignedPlayer.image}" alt="${assignedPlayer.name}" /><br>
+              <span>${assignedPlayer.name}</span><br>
+              <button class="remove-btn">Remove</button>
+            </div>
+            ` : ''}
+          </div>
+        `;
+      }).join('')}
+    </div>`;
   }
   return html;
 }
@@ -176,7 +196,14 @@ document.addEventListener('click', (e) => {
 
           // Update localStorage
           localStorage.setItem('teams', JSON.stringify(teams));
+    
+    if (e.target && e.target.classList.contains('injured-toggle')) {
+      const playerElement = e.target.closest('.player');
+      const playerId = parseInt(playerElement.dataset.id);
+      const player = teams.flatMap(t => t.players).find(p => p.id === playerId);
+
     }
+  }
 });
         
 // toggle button
@@ -192,7 +219,6 @@ document.addEventListener('change', (e) => {
         player.line = null; // Remove the player from any assigned line
       }
 
-      // Update localStorage and re-render
       localStorage.setItem('teams', JSON.stringify(teams));
       displayAvailablePlayers();
       displayTeamLines();
@@ -208,8 +234,8 @@ document.addEventListener('change', (e) => {
         player.line = null; // Remove the player from any assigned line
       }
 
-      // Update localStorage and re-render
       localStorage.setItem('teams', JSON.stringify(teams));
+      
       displayAvailablePlayers();
       displayTeamLines();
     }
@@ -310,8 +336,11 @@ function enableDragAndDrop() {
     } else if (role === 'Starter' || role === 'Backup') {
       team.lines.goalies[role] = player.id;
     }
-});
-    // paste here
+
+    // Update player's status
+    player.line = { teamName, role, line: line || 'Goalie Line' };
+    player.assigned = true;
+    player.team = teamName;
 
     // Remove player from available players list
     displayAvailablePlayers();
@@ -336,7 +365,19 @@ function enableDragAndDrop() {
       displayAvailablePlayers(); // Refresh available players
       localStorage.setItem('teams', JSON.stringify(teams)); // Save changes
     });
-  
+  }
+    // Save changes
+    localStorage.setItem('teams', JSON.stringify(teams));
+    
+    // Update slot UI
+      slot.innerHTML = `
+        <div class="player-slot">
+          <img src="${player.image}" alt="${player.name}" />
+          <span>${player.name}</span>
+          <button class="remove-btn">Remove</button>
+        </div>
+      `;
+      
+
           // Save to localStorage and refresh display
           localStorage.setItem('teams', JSON.stringify(teams));
-  }
