@@ -123,8 +123,27 @@ function displayTeamLines() {
         
         if (playerId) {
           assignPlayerToLine(playerId, team, slot); // Call the assignment function
-        } else {
-          console.error('No player ID found in drop event!');
+
+          const player = getPlayerById(playerId);
+          if (player) {
+      slot.innerHTML = `
+        <img src="${player.image}" alt="${player.name}" />
+        <span>${player.name}</span>
+        <button class="remove-btn" onclick="removePlayerFromLine('${team.name}', '${category}', ${lineNumber}, '${position}')">Remove</button>
+        <div>
+          <label>Injured</label>
+          <input type="checkbox" class="injured-toggle" ${player.injured ? 'checked' : ''} onclick="toggleInjuryStatus(${player.id})">
+        </div>
+        <div>
+          <label>Healthy Scratch</label>
+          <input type="checkbox" class="healthy-scratch-toggle" ${player.healthyScratch ? 'checked' : ''} onclick="toggleHealthyScratch(${player.id})">
+        </div>
+      `;
+    }
+  } else {
+    console.error('No player ID found in drop event!');
+  }
+});
         }
       });
     });
@@ -237,18 +256,10 @@ function assignPlayerToLine(playerId, team, slot) {
 
   // Check if the player exists in playersData
   const player = getPlayerById(playerId);
-  if (!player) {
-    console.error(`Player with ID ${playerId} not found in playersData.`);
-    return; // Prevent assigning a non-existent player
-  }
+  if (player && line) {
+    // Assign player to line
+    line[position] = playerId;
 
-  if (line) {
-    // Assign the player to the line
-    if (category === 'Goalie') {
-      line[position] = playerId; // Assign goalie
-    } else {
-      line[position] = playerId; // Assign to forward or defense line
-    }
 
     // Update the player's assignment status
     player.lineAssigned = { team: team.name, category, line: position }; // Store assignment details
@@ -264,9 +275,6 @@ function assignPlayerToLine(playerId, team, slot) {
     // Save updated teams and players to localStorage
     localStorage.setItem('teams', JSON.stringify(teams));
     localStorage.setItem('playersData', JSON.stringify(playersData));
-
-    // Update the line slot in the DOM
-    updateSlotWithPlayer(slot, player);
 
     // Re-render lines and player bank
     displayTeamLines();
