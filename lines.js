@@ -140,19 +140,37 @@ function assignPlayerToLine(playerId, team, slot) {
   const role = slot.dataset.role;
 
   let lineIndex;
+  
+  // Check if lineCategory contains the correct line information
   if (lineCategory.includes('Forward')) {
-    lineIndex = parseInt(lineCategory.split(' ')[1], 10) - 1; // Extract line number
+    const parts = lineCategory.split(' ');
+    if (parts.length === 3 && !isNaN(parts[2])) {
+      lineIndex = parseInt(parts[2], 10) - 1; // Extract line number (e.g., "Forward Line 1")
+    } else {
+      console.error(`Invalid line category format for ${lineCategory}`);
+      return;
+    }
+
     if (!team.lines.forwards[lineIndex]) {
       console.error(`Line index ${lineIndex} is out of range for team ${team.name}`);
       return;
     }
+
     team.lines.forwards[lineIndex][role] = playerId;
   } else if (lineCategory.includes('Defense')) {
-    lineIndex = parseInt(lineCategory.split(' ')[1], 10) - 1;
+    const parts = lineCategory.split(' ');
+    if (parts.length === 3 && !isNaN(parts[2])) {
+      lineIndex = parseInt(parts[2], 10) - 1; // Extract line number (e.g., "Defense Line 1")
+    } else {
+      console.error(`Invalid line category format for ${lineCategory}`);
+      return;
+    }
+
     if (!team.lines.defense[lineIndex]) {
       console.error(`Line index ${lineIndex} is out of range for team ${team.name}`);
       return;
     }
+
     team.lines.defense[lineIndex][role] = playerId;
   } else if (lineCategory === 'Goalie') {
     team.lines.goalies[role] = playerId;
