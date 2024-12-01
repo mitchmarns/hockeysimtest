@@ -253,6 +253,34 @@ let line;
       line[position] = playerId; // Assign player to this slot
     }
 
+    if (team && player) {
+    const line = team.lines[category][lineNumber];
+
+    if (line[position] === null) { // Ensure the slot is empty
+      line[position] = player; // Assign player to the line slot
+      player.assigned = true;
+      player.team = teamName;
+
+      // Update the DOM dynamically
+      const slot = document.querySelector(`[data-team="${teamName}"][data-line="${category}-${lineNumber}"][data-position="${position}"]`);
+      if (slot) {
+        slot.innerHTML = `
+          <img src="${player.image}" alt="${player.name}" />
+          <span>${player.name}</span>
+          <button class="remove-btn" onclick="removePlayerFromLine('${teamName}', '${category}', ${lineNumber}, '${position}')">Remove</button>
+          <div>
+            <label>Injured</label>
+            <input type="checkbox" class="injured-toggle" ${player.injured ? 'checked' : ''} onclick="toggleInjuryStatus(${player.id})">
+          </div>
+        `;
+      }
+    } else {
+      alert(`This slot is already occupied by ${line[position].name}`);
+    }
+  } else {
+    console.error('Team or player not found!');
+  }
+}
 
     // Update the player's assignment status
     player.lineAssigned = { team: team.name, category, line: position }; // Store assignment details
@@ -266,24 +294,7 @@ let line;
     displayTeamLines();
     displayUnassignedPlayers();
     attachDragEvents();
-
-    // Dynamically update the dropped slot with the player's information
-    slot.innerHTML = `
-      <img src="${player.image}" alt="${player.name}" />
-      <span>${player.name}</span>
-      <button class="remove-btn" onclick="removePlayerFromLine('${team.name}', '${category}', ${lineNumber}, '${position}')">Remove</button>
-      <div>
-        <label>Injured</label>
-        <input type="checkbox" class="injured-toggle" ${player.injured ? 'checked' : ''} onclick="toggleInjuryStatus(${player.id})">
-      </div>
-      <div>
-        <label>Healthy Scratch</label>
-        <input type="checkbox" class="healthy-scratch-toggle" ${player.healthyScratch ? 'checked' : ''} onclick="toggleHealthyScratch(${player.id})">
-      </div>
-    `;
-  } else {
-    console.error('Player or line not found!');
-  }}
+}
 
 
 
