@@ -100,22 +100,17 @@ h1 {
 }
 
 .player-slot {
-  min-width: 150px;
-  gap: 20px;
-  min-height: 100px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  background: #e0e0e0;
-  border-style: 1px dashed #ccc;
-  overflow: hidden;
-  position: relative;
+  width: 120px;
+  height: 120px;
+  border: 1px solid #ccc;
+  margin: 5px;
+  padding: 5px;
+  text-align: center;
 }
 
 .player-slot img {
-  max-width: 200px; 
-  max-height: 200px; 
+  max-width: 100px; 
+  max-height: 100px; 
   object-fit: cover; 
   border-radius: 50%; 
 }
