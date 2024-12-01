@@ -11,11 +11,16 @@ const loadPlayers = async () => {
     const savedData = localStorage.getItem("playersData");
     if (savedData) {
       const parsedData = JSON.parse(savedData);
-      if (parsedData.players) {
-        playersData = parsedData.players;
+      // Handle different structures
+      if (Array.isArray(parsedData)) {
+        // Fix old structure and wrap in an object
+        playersData = { players: parsedData };
+        localStorage.setItem("playersData", JSON.stringify(playersData));
+      } else if (parsedData.players) {
+        playersData = parsedData;
       } else {
         console.error("Invalid localStorage data structure");
-        playersData = [];
+        playersData = { players: [] }; // Default empty structure
       }
     } else {
       const response = await fetch("players.json");
@@ -24,20 +29,21 @@ const loadPlayers = async () => {
       }
       const data = await response.json();
       if (data.players) {
-        playersData = data.players;
+        playersData = data;
         localStorage.setItem("playersData", JSON.stringify(data));
       } else {
         console.error("Invalid players.json structure");
-        playersData = [];
+        playersData = { players: [] };
       }
     }
     renderPlayers("all");
   } catch (error) {
     console.error("Error loading players:", error);
-    playersData = []; // Fallback to empty array
+    playersData = { players: [] }; // Fallback to empty structure
     renderPlayers("all");
   }
 };
+
 
   // Save updated data to localStorage
   const savePlayers = () => {
