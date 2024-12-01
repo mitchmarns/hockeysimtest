@@ -222,11 +222,6 @@ function toggleHealthyScratch(playerId) {
   }
 }
 
-function getPlayerById(playerId) {
-  return teams.flatMap(team => team.players).find(p => p.id === playerId);
-  return playersData.players.find(player => player.id === parseInt(playerId));
-}
-
 function assignPlayerToLine(playerId, team, slot) {
   const position = slot.dataset.role;
   const category = slot.dataset.line.split(' ')[0]; // Forward, Defense, or Goalie
@@ -267,4 +262,9 @@ function assignPlayerToLine(playerId, team, slot) {
     displayTeamLines();
     displayUnassignedPlayers();
   }
-};
+}
+
+function getPlayerById(playerId) {
+  return teams.flatMap(team => team.players).find(p => p.id === playerId);
+  return playersData.players.find(player => player.id === parseInt(playerId));
+}
