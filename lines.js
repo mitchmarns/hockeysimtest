@@ -93,10 +93,13 @@ function displayTeamLines() {
         e.preventDefault(); // Allow drop
       });
       slot.addEventListener('drop', (e) => {
+        e.preventDefault();
         const playerId = e.dataTransfer.getData('player-id');
-        const player = getPlayerById(playerId);
-        if (player && !player.team) {
-          assignPlayerToLine(playerId, team, slot);
+        
+        if (playerId) {
+          assignPlayerToLine(playerId, team, slot); // Call the assignment function
+        } else {
+          console.error('No player ID found in drop event!');
         }
       });
     });
@@ -200,16 +203,25 @@ function assignPlayerToLine(playerId, team, slot) {
 
   let line;
   if (category === 'Forward') {
-    line = team.lines.forwards.find(f => f[position] === null);
-  } else {
-    line = team.lines.defense.find(f => f[position] === null);
+    line = team.lines.forwards.find(f => !f[position]); // Find an available forward line
+  } else if (category === 'Defense') {
+    line = team.lines.defense.find(f => !f[position]); // Find an available defense line
+  } else if (category === 'Goalie') {
+    line = team.lines.goalies; // Goalie line is a direct object
   }
 
-  if (line) {
-    line[position] = playerId;
+  if (line && playerId) {
+    if (category === 'Goalie') {
+      line[position] = playerId; // Assign goalie
+    } else {
+      line[position] = playerId; // Assign to forward or defense line
+    }
+
+    // Mark player as assigned
     const player = getPlayerById(playerId);
-    player.team = team.name;
-    player.assigned = true;
+    if (player) {
+      player.assigned = true;
+    }
 
     // Save updated teams and players to localStorage
     localStorage.setItem('teams', JSON.stringify(teams));
