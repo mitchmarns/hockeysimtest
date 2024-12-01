@@ -242,7 +242,7 @@ function assignPlayerToLine(playerId, team, slot) {
     return; // Prevent assigning a non-existent player
   }
 
-  if (line && playerId) {
+  if (line) {
     // Assign the player to the line
     if (category === 'Goalie') {
       line[position] = playerId; // Assign goalie
@@ -254,15 +254,54 @@ function assignPlayerToLine(playerId, team, slot) {
     player.lineAssigned = { team: team.name, category, line: position }; // Store assignment details
     player.assigned = true;
 
+    // Remove the player from the unassigned players list
+    const unassignedPlayers = getUnassignedPlayers();
+    const index = unassignedPlayers.findIndex(p => p.id === playerId);
+    if (index > -1) {
+      unassignedPlayers.splice(index, 1);
+    }
+
     // Save updated teams and players to localStorage
     localStorage.setItem('teams', JSON.stringify(teams));
     localStorage.setItem('playersData', JSON.stringify(playersData));
+
+    // Update the line slot in the DOM
+    updateSlotWithPlayer(slot, player);
 
     // Re-render lines and player bank
     displayTeamLines();
     displayUnassignedPlayers();
   }
 }
+
+function updateSlotWithPlayer(slot, player) {
+  // Find the specific slot where the player was dropped
+  const playerSlot = slot.querySelector('.player-slot');
+
+  // If the slot does not already contain the player, insert the player
+  if (!playerSlot) {
+    const playerElement = document.createElement('div');
+    playerElement.classList.add('player-slot');
+    playerElement.setAttribute('data-player-id', player.id);
+
+    playerElement.innerHTML = `
+      <img src="${player.image}" alt="${player.name}" />
+      <span>${player.name}</span>
+      <button class="remove-btn" onclick="removePlayerFromLine('${player.lineAssigned.team}', '${player.lineAssigned.category}', ${player.lineAssigned.line}, '${slot.dataset.role}')">Remove</button>
+      <div>
+        <label>Injured</label>
+        <input type="checkbox" class="injured-toggle" ${player.injured ? 'checked' : ''} onclick="toggleInjuryStatus(${player.id})">
+      </div>
+      <div>
+        <label>Healthy Scratch</label>
+        <input type="checkbox" class="healthy-scratch-toggle" ${player.healthyScratch ? 'checked' : ''} onclick="toggleHealthyScratch(${player.id})">
+      </div>
+    `;
+    
+    slot.appendChild(playerElement); // Add the player to the slot
+  }
+}
+
 function getPlayerById(playerId) {
   // Check if player exists in the playersData array
   return playersData.players.find(player => player.id === parseInt(playerId));
