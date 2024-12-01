@@ -3,63 +3,38 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hockey Simulation</title>
+  <title>Hockey Line Assignment</title>
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-  <div id="unassigned-players"></div>
-
-  <div id="lines-container">
-    <!-- Team lines containers will be dynamically injected here -->
-    <div id="Rangers-lines" class="team-lines">
-      <h3>Rangers</h3>
-      <h4>Forwards</h4>
-      <!-- Forward line slots will be dynamically populated here -->
-
-      <h4>Defense</h4>
-      <!-- Defense line slots will be dynamically populated here -->
-
-      <h4>Goalies</h4>
-      <!-- Goalies will be dynamically populated here -->
-    </div>
-
-    <div id="Devils-lines" class="team-lines">
-      <h3>Devils</h3>
-      <h4>Forwards</h4>
-      <!-- Forward line slots for Devils will be dynamically populated here -->
-
-      <h4>Defense</h4>
-      <!-- Defense line slots for Devils will be dynamically populated here -->
-
-      <h4>Goalies</h4>
-      <!-- Goalies for Devils will be dynamically populated here -->
-    </div>
-
-    <div id="Islanders-lines" class="team-lines">
-      <h3>Islanders</h3>
-      <h4>Forwards</h4>
-      <!-- Forward line slots for Islanders will be dynamically populated here -->
-
-      <h4>Defense</h4>
-      <!-- Defense line slots for Islanders will be dynamically populated here -->
-
-      <h4>Goalies</h4>
-      <!-- Goalies for Islanders will be dynamically populated here -->
-    </div>
-
-    <div id="Sabres-lines" class="team-lines">
-      <h3>Sabres</h3>
-      <h4>Forwards</h4>
-      <!-- Forward line slots for Sabres will be dynamically populated here -->
-
-      <h4>Defense</h4>
-      <!-- Defense line slots for Sabres will be dynamically populated here -->
-
-      <h4>Goalies</h4>
-      <!-- Goalies for Sabres will be dynamically populated here -->
-    </div>
+  <h1>Hockey Line Assignment</h1>
+  
+  <h2>Available Players</h2>
+  <div id="players">
+    <div class="player" draggable="true" data-id="1">Bear Cohen</div>
+    <div class="player" draggable="true" data-id="2">Jane Smith</div>
+    <div class="player" draggable="true" data-id="3">John Doe</div>
   </div>
 
-  <script type="module" src="lines.js"></script>
+  <h2>Assign to Lines</h2>
+  <div id="lines">
+    <!-- Rangers Forward Line 1 -->
+    <h3>Rangers: Forward Line 1</h3>
+    <div class="line-slot" data-position="Rangers-forward-1-LW">LW</div>
+    <div class="line-slot" data-position="Rangers-forward-1-C">C</div>
+    <div class="line-slot" data-position="Rangers-forward-1-RW">RW</div>
+
+    <!-- Rangers Defense Line 1 -->
+    <h3>Rangers: Defense Line 1</h3>
+    <div class="line-slot" data-position="Rangers-defense-1-LD">LD</div>
+    <div class="line-slot" data-position="Rangers-defense-1-RD">RD</div>
+
+    <!-- Rangers Goalie -->
+    <h3>Rangers: Goalies</h3>
+    <div class="line-slot" data-position="Rangers-goalies-Starter">Starter</div>
+    <div class="line-slot" data-position="Rangers-goalies-Backup">Backup</div>
+  </div>
+
+  <script src="lines.js"></script>
 </body>
 </html>
