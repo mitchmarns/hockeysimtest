@@ -183,7 +183,12 @@ function toggleHealthyScratch(playerId) {
 }
 
 function getUnassignedPlayers() {
-  return teams.flatMap(team => team.players).filter(player => !player.team);
+  return teams.flatMap(team => {
+    return team.players.filter(player => {
+      const isInLine = checkPlayerInLines(player.id, team.lines);
+      return !isInLine; // Only include players not in any line
+    });
+  });
 }
 
 function getPlayerById(playerId) {
