@@ -1,7 +1,7 @@
-import { teams } from './team.js';
-
 let playersData = { players: [] };
+let teams = [];  // We'll define the teams here based on localStorage or fallback data
 
+// Load players from localStorage or fetch from players.json
 export async function loadPlayers() {
   try {
     const savedPlayers = localStorage.getItem('playersData');
@@ -35,13 +35,14 @@ export async function loadPlayers() {
   }
 }
 
+// Load teams from localStorage or initialize with default data
 function loadTeamsFromLocalStorage() {
   try {
     const savedTeams = localStorage.getItem('teams');
     if (savedTeams) {
-      const parsedTeams = JSON.parse(savedTeams);
-      parsedTeams.forEach(team => {
-        // Ensure each team has valid player references
+      teams = JSON.parse(savedTeams);
+      // Ensure each team has valid player references
+      teams.forEach(team => {
         team.players.forEach(player => {
           const playerInData = getPlayerById(player.id);
           if (!playerInData) {
@@ -50,10 +51,42 @@ function loadTeamsFromLocalStorage() {
           }
         });
       });
+      console.log('Teams loaded from localStorage:', teams);
+    } else {
+      // Fallback to default teams if no data is in localStorage
+      teams = getDefaultTeams();
+      localStorage.setItem('teams', JSON.stringify(teams));
+      console.log('Teams initialized with default data:', teams);
     }
   } catch (error) {
     console.error('Error loading teams:', error);
   }
+}
+
+// Default team data structure if no teams exist in localStorage
+function getDefaultTeams() {
+  return [
+    {
+      name: 'Rangers',
+      players: [],
+      lines: {
+        forwards: [
+          { LW: null, C: null, RW: null },
+          { LW: null, C: null, RW: null },
+          { LW: null, C: null, RW: null },
+          { LW: null, C: null, RW: null }
+        ],
+        defense: [
+          { LD: null, RD: null },
+          { LD: null, RD: null },
+          { LD: null, RD: null }
+        ],
+        goalies: { Starter: null, Backup: null }
+      },
+      maxPlayers: 23
+    },
+    // Add more teams similarly...
+  ];
 }
 
 export function getUnassignedPlayers() {
