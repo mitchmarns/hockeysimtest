@@ -96,7 +96,7 @@ function displayUnassignedPlayers() {
     `;
   }).join('');
   
-// Add drag events to unassigned players
+// Re-attach drag events to unassigned players
   const playerElements = document.querySelectorAll('.player-slot');
   playerElements.forEach(player => {
     player.addEventListener('dragstart', (e) => {
