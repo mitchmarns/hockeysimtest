@@ -1,4 +1,4 @@
-import { players, loadPlayers, loadTeamsFromLocalStorage, teams } from './team.js';
+import { loadPlayers, loadTeamsFromLocalStorage, teams } from './team.js';
 
 let playersData = { players: [] };
 
