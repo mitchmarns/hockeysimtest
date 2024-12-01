@@ -107,6 +107,7 @@ const loadPlayers = async () => {
   // Filter players by team
   teamFilter.addEventListener("change", (e) => {
     renderPlayers(e.target.value);
+  });
     
 
   // Load players on page load
