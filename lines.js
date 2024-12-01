@@ -143,8 +143,6 @@ function displayTeamLines() {
   } else {
     console.error('No player ID found in drop event!');
   }
-});
-        }
       });
     });
   });
@@ -280,7 +278,8 @@ function assignPlayerToLine(playerId, team, slot) {
     displayTeamLines();
     displayUnassignedPlayers();
   }
-}
+};
+
 
 function updateSlotWithPlayer(slot, player) {
   // Find the specific slot where the player was dropped
