@@ -5,11 +5,56 @@ document.addEventListener('DOMContentLoaded', async () => {
   loadTeamsFromLocalStorage();  // Ensure teams are loaded from LocalStorage
   displayUnassignedPlayers();   // Display unassigned players
   displayTeamLines();  // Display lines for each team
+  enableDragAndDrop(); // Enable drag-and-drop functionality
 });
+
+export function getUnassignedLinePlayers() {
+  const unassignedLinePlayers = [];
+  
+  teams.forEach(team => {
+    const teamPlayers = team.players; // Players on this team
+
+    teamPlayers.forEach(player => {
+      // Check if the player is not assigned to any line
+      const isInLine = checkPlayerInLines(player.id, team.lines);
+      if (!isInLine) {
+        unassignedLinePlayers.push(player);
+      }
+    });
+  });
+
+  return unassignedLinePlayers;
+}
+
+// Helper function to check if a player is assigned to any line
+function checkPlayerInLines(playerId, lines) {
+  // Check forwards, defense, and goalies
+  const isForward = lines.forwards.some(line =>
+    Object.values(line).includes(playerId)
+  );
+  const isDefense = lines.defense.some(line =>
+    Object.values(line).includes(playerId)
+  );
+  const isGoalie = Object.values(lines.goalies).includes(playerId);
+
+  return isForward || isDefense || isGoalie;
+}
 
 function displayUnassignedPlayers() {
   const unassignedPlayersContainer = document.getElementById('unassigned-players');
+
+  if (!unassignedPlayersContainer) {
+    console.error('Unassigned players container not found!');
+    return;
+  }
+  
   const unassignedPlayers = getUnassignedPlayers();
+
+  if (unassignedPlayers.length === 0) {
+    console.log('No players unassigned to lines.');
+    unassignedPlayersContainer.innerHTML = '<p>All players are assigned to lines.</p>';
+    return;
+  }
 
   unassignedPlayersContainer.innerHTML = unassignedPlayers.map(player => {
     return `
