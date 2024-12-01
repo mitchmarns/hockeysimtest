@@ -263,8 +263,7 @@ function assignPlayerToLine(playerId, team, slot) {
     displayUnassignedPlayers();
   }
 }
-
 function getPlayerById(playerId) {
-  return teams.flatMap(team => team.players).find(p => p.id === playerId);
+  // Check if player exists in the playersData array
   return playersData.players.find(player => player.id === parseInt(playerId));
 }
