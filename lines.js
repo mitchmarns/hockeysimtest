@@ -78,7 +78,8 @@ function displayTeamLines() {
   teams.forEach(team => {
     const teamLines = document.getElementById(`${team.name}-lines`);
 
-    teamLines.innerHTML = '';
+    teamLines.innerHTML = ''; 
+    teamLines.innerHTML += `
       <div>
         <h4>Forward Lines</h4>
         ${generateLineSlots(team, 'Forward', 4, ['LW', 'C', 'RW'])}
@@ -100,11 +101,14 @@ function displayTeamLines() {
                     <img src="${player.image}" alt="${player.name}" />
                     <span>${player.name}</span>
                     <button class="remove-btn">Remove</button>
-                  </div>` : ''}
-              </div>`;
+                  </div>
+                  ` : ''}
+              </div>
+              `;
           }).join('')}
         </div>
-      </div>`;
+      </div>
+      `;
   });
 }
 
