@@ -1,5 +1,7 @@
 import { teams, loadTeamsFromLocalStorage } from './team.js';
 
+let playersData = { players: [] };
+
 export async function loadPlayers() {
   try {
     const savedPlayers = localStorage.getItem('playersData');
@@ -25,8 +27,6 @@ export async function loadPlayers() {
     console.error('Error loading player data:', error);
   }
 }
-
-let playersData = { players: [] };
 
 document.addEventListener('DOMContentLoaded', async () => {
   await loadPlayers();
