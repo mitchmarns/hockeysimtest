@@ -1,5 +1,7 @@
 import { teams, loadTeamsFromLocalStorage, loadPlayers } from './team.js';
 
+let playersData = { players: [] };
+
 document.addEventListener('DOMContentLoaded', async () => {
   await loadPlayers();
   loadTeamsFromLocalStorage();  // Ensure teams are loaded from LocalStorage
