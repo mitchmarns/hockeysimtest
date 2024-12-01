@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   loadTeamsFromLocalStorage();  // Ensure teams are loaded from LocalStorage
   displayUnassignedPlayers();   // Display unassigned players
   displayTeamLines();  // Display lines for each team
-  enableDragAndDrop(); // Enable drag-and-drop functionality
 });
 
 export function getUnassignedLinePlayers() {
