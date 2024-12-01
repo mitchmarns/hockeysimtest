@@ -39,7 +39,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   await loadPlayers();
   loadTeamsFromLocalStorage();  // Ensure teams are loaded from LocalStorage
   displayUnassignedPlayers();   // Display unassigned players
-  displayTeamLines();  // Display lines for each team
+  displayTeamLines();
+  attachDragEvents();// Display lines for each team
 });
 
 function loadTeamsFromLocalStorage() {
@@ -81,7 +82,7 @@ function displayUnassignedPlayers() {
 
   unassignedPlayersContainer.innerHTML = unassignedPlayers.map(player => {
     return `
-      <div class="player-slot" data-player-id="${player.id}" id="player-${player.id}">
+      <div class="player-slot" data-player-id="${player.id}" id="player-${player.id}" draggable="true">
         <img src="${player.image}" alt="${player.name}" />
         <span>${player.name}</span>
         <div>
@@ -214,6 +215,7 @@ function removePlayerFromLine(teamName, category, lineNumber, position) {
   // Re-render lines and unassigned players
   displayTeamLines();
   displayUnassignedPlayers();
+  attachDragEvents();
 }
 
 function toggleInjuryStatus(playerId) {
@@ -276,6 +278,7 @@ function assignPlayerToLine(playerId, team, slot) {
     // Re-render lines and player bank
     displayTeamLines();
     displayUnassignedPlayers();
+    attachDragEvents();
 
     // Dynamically update the dropped slot with the player's information
     slot.innerHTML = `
