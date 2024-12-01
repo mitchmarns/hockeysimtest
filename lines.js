@@ -311,10 +311,7 @@ function enableDragAndDrop() {
       team.lines.goalies[role] = player.id;
     }
 });
-    // Update player's status
-    player.line = { teamName, role, line: line || 'Goalie Line' };
-    player.assigned = true;
-    player.team = teamName;
+    // paste here
 
     // Remove player from available players list
     displayAvailablePlayers();
