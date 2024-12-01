@@ -52,27 +52,8 @@ export function getUnassignedPlayers() {
   });
 }
 
-// Helper function to check if a player is assigned to any line
-function checkPlayerInLines(playerId, lines) {
-  // Check forwards, defense, and goalies
-  const isForward = lines.forwards.some(line =>
-    Object.values(line).includes(playerId)
-  );
-  const isDefense = lines.defense.some(line =>
-    Object.values(line).includes(playerId)
-  );
-  const isGoalie = Object.values(lines.goalies).includes(playerId);
-
-  return isForward || isDefense || isGoalie;
-}
-
 function displayUnassignedPlayers() {
   const unassignedPlayersContainer = document.getElementById('unassigned-players');
-
-  if (!unassignedPlayersContainer) {
-    console.error('Unassigned players container not found!');
-    return;
-  }
 
   const unassignedPlayers = getUnassignedPlayers();
 
