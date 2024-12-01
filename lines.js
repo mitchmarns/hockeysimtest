@@ -30,6 +30,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       playerDiv.className = "player";
       playerDiv.draggable = true;
       playerDiv.dataset.id = player.id;
+      playerDiv.dataset.team = player.team;
+      playerDiv.dataset.position = player.position;
 
       // image
       const playerImg = document.createElement("img");
@@ -38,8 +40,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       playerImg.className = "player-image";
 
       // name
+// Add player name, ID, position, and team
       const playerName = document.createElement("span");
-      playerName.textContent = player.name;
+      playerName.innerHTML = `${player.name} (#${player.id})<br>Position: ${player.position}<br>Team: ${player.team}`;
 
       playerDiv.appendChild(playerImg);
       playerDiv.appendChild(playerName);
@@ -65,7 +68,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         playerImg.className = "player-image";
 
         const playerName = document.createElement("span");
-        playerName.textContent = player.name;
+        playerName.textContent = `${player.name} (#${player.id})`;
 
         slot.textContent = ''; // Clear the slot
         slot.appendChild(playerImg);
