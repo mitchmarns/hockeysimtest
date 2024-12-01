@@ -6,18 +6,38 @@ document.addEventListener("DOMContentLoaded", () => {
   const teams = ["Rangers", "Devils", "Islanders", "Sabres"];
 
   // Load data from localStorage or fallback to fetch
-  const loadPlayers = async () => {
+const loadPlayers = async () => {
+  try {
     const savedData = localStorage.getItem("playersData");
     if (savedData) {
-      playersData = JSON.parse(savedData).players;
+      const parsedData = JSON.parse(savedData);
+      if (parsedData.players) {
+        playersData = parsedData.players;
+      } else {
+        console.error("Invalid localStorage data structure");
+        playersData = [];
+      }
     } else {
       const response = await fetch("players.json");
+      if (!response.ok) {
+        throw new Error(`Failed to fetch players.json: ${response.statusText}`);
+      }
       const data = await response.json();
-      playersData = data.players;
-      localStorage.setItem("playersData", JSON.stringify(data));
+      if (data.players) {
+        playersData = data.players;
+        localStorage.setItem("playersData", JSON.stringify(data));
+      } else {
+        console.error("Invalid players.json structure");
+        playersData = [];
+      }
     }
     renderPlayers("all");
-  };
+  } catch (error) {
+    console.error("Error loading players:", error);
+    playersData = []; // Fallback to empty array
+    renderPlayers("all");
+  }
+};
 
   // Save updated data to localStorage
   const savePlayers = () => {
