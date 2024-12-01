@@ -2,11 +2,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const playersContainer = document.getElementById("players-container");
   const teamFilter = document.getElementById("team-filter");
 
-  if (!teamFilter) {
-    console.error("teamFilter element not found in the DOM");
-    return;  // Exit if the team filter element is not found
-  }
-
   let playersData = { players: [] };
   const teams = ["Rangers", "Devils", "Islanders", "Sabres"];
 
@@ -20,8 +15,8 @@ const loadPlayers = async () => {
       // Check if the data is an array (old structure)
       if (Array.isArray(parsedData)) {
         // Fix old structure (array of players)
-        playersData = { players: parsedData };  // Wrapping the array into the correct structure
-        localStorage.setItem("playersData", JSON.stringify(playersData)); // Save in the correct structure
+        playersData = { players: parsedData };  
+        localStorage.setItem("playersData", JSON.stringify(playersData));
       } else if (parsedData && parsedData.players && Array.isArray(parsedData.players)) {
         // Valid structure
         playersData = parsedData;
@@ -54,8 +49,7 @@ const loadPlayers = async () => {
     playersData = { players: [] }; // Fallback to empty structure
     renderPlayers("all");
   }
-}
-});
+};
 
   // Save updated data to localStorage
   const savePlayers = () => {
@@ -117,3 +111,4 @@ const loadPlayers = async () => {
 
   // Load players on page load
   loadPlayers();
+});
