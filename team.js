@@ -90,7 +90,7 @@ const loadPlayers = async () => {
         const selectedTeam = e.target.value;
 
         // Update player's team
-        const player = playersData.find(p => p.id === playerId);
+        const player = playersData.players.find(p => p.id === playerId);
         if (player) {
           player.team = selectedTeam || null; // Set team or unassign
           player.assigned = !!selectedTeam; // Mark as assigned if team is selected
