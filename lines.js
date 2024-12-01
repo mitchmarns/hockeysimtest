@@ -1,6 +1,16 @@
 import { loadPlayers, loadTeamsFromLocalStorage, teams } from './team.js';
 
-let playersData = { players: [] };
+export let players = []; // Ensure players is declared in this file
+
+// Load players from a JSON file or API
+export async function loadPlayers() {
+  try {
+    const response = await fetch('players.json');
+    players = await response.json();  // Set the global players array
+  } catch (error) {
+    console.error('Error loading players:', error);
+  }
+}
 
 document.addEventListener('DOMContentLoaded', async () => {
   await loadPlayers();
