@@ -163,8 +163,9 @@ export function loadTeamsFromLocalStorage() {
     parsedTeams.forEach(savedTeam => {
       const team = teams.find(t => t.name === savedTeam.name);
       if (team) {
-        team.players = savedTeam.players.map(savedPlayer => {
-          const player = playersData.players.find(p => p.id === savedPlayer.id);
+        team.players = savedTeam.players
+          .map(savedPlayer => {
+            const player = playersData.players.find(p => p.id === savedPlayer.id);
 
           if (player) {
             player.line = savedPlayer.line || null;
