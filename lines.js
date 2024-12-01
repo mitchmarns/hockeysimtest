@@ -270,4 +270,4 @@ function assignPlayerToLine(playerId, team, slot) {
     displayTeamLines();
     displayUnassignedPlayers();
   }
-}
+};
