@@ -253,6 +253,8 @@ function assignPlayerToLine(playerId, team, slot) {
 
   // Check if the player exists in playersData
   const player = getPlayerById(playerId);
+  
+  if (player && line) {
     if (category === 'Goalie') {
       // Goalies are direct properties
       line[position] = playerId;
