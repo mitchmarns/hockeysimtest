@@ -96,12 +96,11 @@ function displayUnassignedPlayers() {
     `;
   }).join('');
   
-  // Prevent injured or healthy scratch players from being assigned
+// Add drag events to unassigned players
   const playerElements = document.querySelectorAll('.player-slot');
   playerElements.forEach(player => {
     player.addEventListener('dragstart', (e) => {
-      const playerId = player.dataset.playerId;
-      const player = getPlayerById(playerId);
+      e.dataTransfer.setData('player-id', player.dataset.playerId);
     });
   });
 }
