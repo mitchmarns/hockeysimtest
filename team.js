@@ -41,10 +41,12 @@ const loadPlayers = async () => {
       }
     }
 
+    // After loading, check the structure of playersData
+    console.log("playersData loaded: ", playersData); // Debugging log
     renderPlayers("all");
   } catch (error) {
     console.error("Error loading players:", error);
-    playersData = { players: [] }; // Fallback to empty array
+    playersData = { players: [] }; // Fallback to empty structure
     renderPlayers("all");
   }
 };
