@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       // name
 // Add player name, ID, position, and team
       const playerName = document.createElement("span");
-      playerName.innerHTML = `${player.name} (#${player.id})<br>Position: ${player.position}<br>Team: ${player.team}`;
+      playerName.innerHTML = `${player.name} (#${player.id})<br>Position: ${player.position}<br>Team: ${player.team || "Unassigned"}`;
 
       playerDiv.appendChild(playerImg);
       playerDiv.appendChild(playerName);
@@ -97,7 +97,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const slotPosition = slot.dataset.position.split("-")[1];
         const playerTeam = player.dataset.team; 
         
-      if (player.dataset.position === slotPosition && playerTeam === teamName) {
+      if (player && player.position === slotPosition && playerTeam === teamName) {
         // Update UI
         const playerImg = document.createElement("img");
         playerImg.src = player.querySelector("img").src;
