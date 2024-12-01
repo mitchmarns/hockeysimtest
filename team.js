@@ -112,4 +112,3 @@ const loadPlayers = async () => {
 
   // Load players on page load
   loadPlayers();
-});
