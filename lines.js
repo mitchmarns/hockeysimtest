@@ -42,6 +42,28 @@ document.addEventListener('DOMContentLoaded', async () => {
   displayTeamLines();  // Display lines for each team
 });
 
+function loadTeamsFromLocalStorage() {
+  try {
+    const savedTeams = localStorage.getItem('teams');
+    if (savedTeams) {
+      const teams = JSON.parse(savedTeams);
+      teams.forEach(team => {
+        // Ensure each team has valid player references
+        team.players.forEach(player => {
+          const playerInData = getPlayerById(player.id);
+          if (!playerInData) {
+            console.warn(`Player with ID ${player.id} is missing from playersData.`);
+            // Optionally, remove this player from the team or handle it differently
+            team.players = team.players.filter(p => p.id !== player.id);
+          }
+        });
+      });
+    }
+  } catch (error) {
+    console.error('Error loading teams:', error);
+  }
+}
+
 export function getUnassignedPlayers() {
   // Ensure players that do not have a valid lineAssigned are returned as unassigned
   return playersData.players.filter(player => !player.lineAssigned);
@@ -202,6 +224,7 @@ function toggleHealthyScratch(playerId) {
 
 function getPlayerById(playerId) {
   return teams.flatMap(team => team.players).find(p => p.id === playerId);
+  return playersData.players.find(player => player.id === parseInt(playerId));
 }
 
 function assignPlayerToLine(playerId, team, slot) {
@@ -215,6 +238,13 @@ function assignPlayerToLine(playerId, team, slot) {
     line = team.lines.defense.find(d => !d[position]); // Find an available defense line
   } else if (category === 'Goalie') {
     line = team.lines.goalies; // Goalie line is a direct object
+  }
+
+  // Check if the player exists in playersData
+  const player = getPlayerById(playerId);
+  if (!player) {
+    console.error(`Player with ID ${playerId} not found in playersData.`);
+    return; // Prevent assigning a non-existent player
   }
 
   if (line && playerId) {
