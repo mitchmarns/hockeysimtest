@@ -8,35 +8,25 @@ export async function loadPlayers() {
     
     if (savedPlayers) {
       const data = JSON.parse(savedPlayers);
-      if (data && Array.isArray(data.players)) {
-        playersData.players = data.players;
-        console.log('Players loaded from localStorage:', playersData);
-      } else {
-        console.warn('Malformed playersData in localStorage. Falling back to players.json.');
-      }
-    }
-
-    // If localStorage is empty or malformed, load from players.json
-    if (playersData.players.length === 0) {
+      playersData.players = data.players || [];
+      console.log('Players loaded from localStorage:', playersData);
+    } else {
       const response = await fetch('./players.json');
-      if (!response.ok) {
-        throw new Error(`Failed to fetch players.json: HTTP ${response.status}`);
-      }
-
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
       const data = await response.json();
-      if (data && Array.isArray(data.players)) {
-        playersData.players = data.players;
-        localStorage.setItem('playersData', JSON.stringify(playersData));
-        console.log('Players loaded from players.json:', playersData);
-      } else {
-        throw new Error('players.json format is invalid or players key is missing.');
-      }
+      playersData.players = data.players || [];
+
+      localStorage.setItem('playersData', JSON.stringify(playersData));
+      console.log('Players loaded from players.json:', playersData);
+}
+    if (!Array.isArray(playersData.players)) {
+      throw new Error('playersData.players is not an array');
     }
+
   } catch (error) {
     console.error('Error loading player data:', error);
   }
 }
-
 
 document.addEventListener('DOMContentLoaded', async () => {
   await loadPlayers();
