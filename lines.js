@@ -239,7 +239,7 @@ function toggleHealthyScratch(playerId) {
   }
 }
 
-function assignPlayerToLine(playerId, team, slot, category, position) {
+function assignPlayerToLine(playerId, team, slot) {
   const position = slot.dataset.role;
   const category = slot.dataset.line.split(' ')[0]; // Forward, Defense, or Goalie
 
