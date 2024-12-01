@@ -241,35 +241,29 @@ function assignPlayerToLine(playerId, team, slot) {
   const category = slot.dataset.line.split(' ')[0]; // Forward, Defense, or Goalie
 
   let line;
+  let lineIndex = parseInt(lineNumber) - 1; // Convert line number to zero-based index
+
   if (category === 'Forward') {
-    line = team.lines.forwards; // Get the forwards line
+    line = team.lines.forwards[lineIndex]; // Get the specific forward line
   } else if (category === 'Defense') {
-    line = team.lines.defense; // Get the defense line
+    line = team.lines.defense[lineIndex]; // Get the specific defense line
   } else if (category === 'Goalie') {
-    line = team.lines.goalies; // Goalie line is a direct object
+    line = team.lines.goalies; // Goalies are not indexed by lineNumber
   }
 
   // Check if the player exists in playersData
   const player = getPlayerById(playerId);
-  if (player && line) {
-    // Assign player to line
-    line.forEach((l, index) => {
-      if (l[position] === null) {
-        line[index][position] = playerId; // Assign player to this slot
-      }
-    });
+    if (category === 'Goalie') {
+      // Goalies are direct properties
+      line[position] = playerId;
+    } else {
+      line[position] = playerId; // Assign player to this slot
+    }
 
 
     // Update the player's assignment status
     player.lineAssigned = { team: team.name, category, line: position }; // Store assignment details
     player.assigned = true;
-
-    // Remove the player from the unassigned players list
-    const unassignedPlayers = getUnassignedPlayers();
-    const index = unassignedPlayers.findIndex(p => p.id === playerId);
-    if (index > -1) {
-      unassignedPlayers.splice(index, 1);
-    }
 
     // Save updated teams and players to localStorage
     localStorage.setItem('teams', JSON.stringify(teams));
