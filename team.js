@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const playersContainer = document.getElementById("players-container");
   const teamFilter = document.getElementById("team-filter");
 
-  let playersData = [];
+  let playersData = { players: [] };
   const teams = ["Rangers", "Devils", "Islanders", "Sabres"];
 
   // Load data from localStorage or fallback to fetch
