@@ -188,6 +188,13 @@ function assignPlayerToLine(playerId, team, slot) {
   // Mark player as assigned
   player.lineAssigned = { team: team.name, lineCategory, role };
 
+  // Update the slot's inner HTML
+  slot.innerHTML = `
+    <img src="${player.image}" alt="${player.name}" />
+    <span>${player.name}</span>
+    <button class="remove-btn" onclick="removePlayerFromLine('${team.name}', '${lineCategory}', ${lineIndex + 1}, '${role}')">Remove</button>
+  `;
+
   // Update the local storage
   localStorage.setItem('teams', JSON.stringify(teams));
   localStorage.setItem('playersData', JSON.stringify(playersData));
@@ -233,7 +240,11 @@ function generateLineSlots(team, category, linesCount, positions) {
           const playerId = line[pos];
           const player = playersData.players.find(p => p.id === playerId);
           return `
-            <div class="player-slot" data-team="${team.name}" data-line="${category} Line ${i + 1}" data-role="${pos}" draggable="true">
+            <div class="player-slot" 
+                  data-team="${team.name}"
+                  data-line="${category} Line ${i + 1}" 
+                  data-role="${pos}" 
+                  draggable="true">
               ${player ? `
                 <img src="${player.image}" alt="${player.name}" />
                 <span>${player.name}</span>
