@@ -1,4 +1,30 @@
-import { teams, loadTeamsFromLocalStorage, loadPlayers } from './team.js';
+import { teams, loadTeamsFromLocalStorage } from './team.js';
+
+export async function loadPlayers() {
+  try {
+    const savedPlayers = localStorage.getItem('playersData');
+    
+    if (savedPlayers) {
+      const data = JSON.parse(savedPlayers);
+      playersData.players = data.players || [];
+      console.log('Players loaded from localStorage:', playersData);
+    } else {
+      const response = await fetch('./players.json');
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      const data = await response.json();
+      playersData.players = data.players || [];
+
+      localStorage.setItem('playersData', JSON.stringify(playersData));
+      console.log('Players loaded from players.json:', playersData);
+}
+    if (!Array.isArray(playersData.players)) {
+      throw new Error('playersData.players is not an array');
+    }
+
+  } catch (error) {
+    console.error('Error loading player data:', error);
+  }
+}
 
 let playersData = { players: [] };
 
