@@ -3,8 +3,31 @@ import { teams, loadTeamsFromLocalStorage, loadPlayers } from './team.js';
 document.addEventListener('DOMContentLoaded', async () => {
   await loadPlayers();
   loadTeamsFromLocalStorage();  // Ensure teams are loaded from LocalStorage
+  displayUnassignedPlayers();   // Display unassigned players
   displayTeamLines();  // Display lines for each team
 });
+
+function displayUnassignedPlayers() {
+  const unassignedPlayersContainer = document.getElementById('unassigned-players');
+  const unassignedPlayers = getUnassignedPlayers();
+
+  unassignedPlayersContainer.innerHTML = unassignedPlayers.map(player => {
+    return `
+      <div class="player-slot" draggable="true" data-player-id="${player.id}" id="player-${player.id}">
+        <img src="${player.image}" alt="${player.name}" />
+        <span>${player.name}</span>
+      </div>
+    `;
+  }).join('');
+
+  // Add drag events to unassigned players
+  const playerElements = document.querySelectorAll('.player-slot');
+  playerElements.forEach(player => {
+    player.addEventListener('dragstart', (e) => {
+      e.dataTransfer.setData('player-id', player.dataset.playerId);
+    });
+  });
+}
 
 function displayTeamLines() {
   const teamsContainer = document.getElementById('lines-container');
@@ -19,6 +42,20 @@ function displayTeamLines() {
       <h4>Goalies</h4>
       ${generateGoalieSlots(team)}
     `;
+    // Set up drop targets for each line slot
+    const lineSlots = teamLinesDiv.querySelectorAll('.line div');
+    lineSlots.forEach(slot => {
+      slot.addEventListener('dragover', (e) => {
+        e.preventDefault(); // Allow drop
+      });
+      slot.addEventListener('drop', (e) => {
+        const playerId = e.dataTransfer.getData('player-id');
+        const player = getPlayerById(playerId);
+        if (player && !player.team) {
+          assignPlayerToLine(playerId, team, slot);
+        }
+      });
+    });
   });
 }
 
@@ -97,5 +134,40 @@ function toggleHealthyScratch(playerId) {
     player.healthyScratch = !player.healthyScratch;
     localStorage.setItem('playersData', JSON.stringify(playersData));
     displayTeamLines();
+  }
+}
+
+function getUnassignedPlayers() {
+  return teams.flatMap(team => team.players).filter(player => !player.team);
+}
+
+function getPlayerById(playerId) {
+  return teams.flatMap(team => team.players).find(p => p.id === playerId);
+}
+
+function assignPlayerToLine(playerId, team, slot) {
+  const position = slot.dataset.role;
+  const category = slot.dataset.line.split(' ')[0]; // Forward or Defense
+
+  let line;
+  if (category === 'Forward') {
+    line = team.lines.forwards.find(f => f[position] === null);
+  } else {
+    line = team.lines.defense.find(f => f[position] === null);
+  }
+
+  if (line) {
+    line[position] = playerId;
+    const player = getPlayerById(playerId);
+    player.team = team.name;
+    player.assigned = true;
+
+    // Save updated teams and players to localStorage
+    localStorage.setItem('teams', JSON.stringify(teams));
+    localStorage.setItem('playersData', JSON.stringify(playersData));
+
+    // Re-render lines and player bank
+    displayTeamLines();
+    displayUnassignedPlayers();
   }
 }
