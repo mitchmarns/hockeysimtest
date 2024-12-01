@@ -245,9 +245,9 @@ function assignPlayerToLine(playerId, team, slot) {
 
   let line;
   if (category === 'Forward') {
-    line = team.lines.forwards.find(f => !f[position]); // Find an available forward line
+    line = team.lines.forwards; // Get the forwards line
   } else if (category === 'Defense') {
-    line = team.lines.defense.find(d => !d[position]); // Find an available defense line
+    line = team.lines.defense; // Get the defense line
   } else if (category === 'Goalie') {
     line = team.lines.goalies; // Goalie line is a direct object
   }
@@ -256,7 +256,11 @@ function assignPlayerToLine(playerId, team, slot) {
   const player = getPlayerById(playerId);
   if (player && line) {
     // Assign player to line
-    line[position] = playerId;
+    line.forEach((l, index) => {
+      if (l[position] === null) {
+        line[index][position] = playerId; // Assign player to this slot
+      }
+    });
 
 
     // Update the player's assignment status
@@ -277,6 +281,25 @@ function assignPlayerToLine(playerId, team, slot) {
     // Re-render lines and player bank
     displayTeamLines();
     displayUnassignedPlayers();
+
+    // Dynamically update the dropped slot with the player's information
+    slot.innerHTML = `
+      <img src="${player.image}" alt="${player.name}" />
+      <span>${player.name}</span>
+      <button class="remove-btn" onclick="removePlayerFromLine('${team.name}', '${category}', ${lineIndex}, '${position}')">Remove</button>
+      <div>
+        <label>Injured</label>
+        <input type="checkbox" class="injured-toggle" ${player.injured ? 'checked' : ''} onclick="toggleInjuryStatus(${player.id})">
+      </div>
+      <div>
+        <label>Healthy Scratch</label>
+        <input type="checkbox" class="healthy-scratch-toggle" ${player.healthyScratch ? 'checked' : ''} onclick="toggleHealthyScratch(${player.id})">
+      </div>
+    `;
+  } else {
+    console.error('Player or line not found!');
+  }
+}
   }
 };
 
