@@ -1,4 +1,4 @@
-import { teams, loadTeamsFromLocalStorage, loadPlayers, assignPlayerToTeam } from './team.js';
+import { teams, loadTeamsFromLocalStorage, loadPlayers } from './team.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
   await loadPlayers();
