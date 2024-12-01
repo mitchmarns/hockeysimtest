@@ -45,22 +45,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   displayTeamLines();  // Display lines for each team
 });
 
-export function getUnassignedLinePlayers() {
-  const unassignedLinePlayers = [];
-  
-  teams.forEach(team => {
-    const teamPlayers = team.players; // Players on this team
-
-    teamPlayers.forEach(player => {
-      // Check if the player is not assigned to any line
-      const isInLine = checkPlayerInLines(player.id, team.lines);
-      if (!isInLine) {
-        unassignedLinePlayers.push(player);
-      }
-    });
+export function getUnassignedPlayers() {
+  return teams.flatMap(team => {
+    // Filter players where lineAssigned is either null or an empty object
+    return team.players.filter(player => player.lineAssigned === null);
   });
-
-  return unassignedLinePlayers;
 }
 
 // Helper function to check if a player is assigned to any line
