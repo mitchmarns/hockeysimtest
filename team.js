@@ -2,6 +2,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const playersContainer = document.getElementById("players-container");
   const teamFilter = document.getElementById("team-filter");
 
+  if (!teamFilter) {
+    console.error("teamFilter element not found in the DOM");
+    return;  // Exit if the team filter element is not found
+  }
+
   let playersData = { players: [] };
   const teams = ["Rangers", "Devils", "Islanders", "Sabres"];
 
