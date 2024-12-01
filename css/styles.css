@@ -42,6 +42,13 @@ h1 {
   width:100%
 }
 
+#players, #lines {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
 .player {
   padding: 10px;
   border: 1px solid #333;
@@ -303,6 +310,21 @@ button.assign-btn:disabled {
   width: 60px;
   height: 34px;
   margin-right: 10px;
+}
+
+.line-slot {
+  padding: 10px;
+  border: 1px dashed #aaa;
+  background: #fff;
+  border-radius: 5px;
+  text-align: center;
+  height: 40px;
+  line-height: 20px;
+}
+
+.line-slot[data-assigned-player] {
+  background: #e8f7e4;
+  border-color: #66c17b;
 }
 
 .toggle input {
