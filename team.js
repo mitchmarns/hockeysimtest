@@ -5,38 +5,49 @@ document.addEventListener("DOMContentLoaded", () => {
   let playersData = { players: [] };
   const teams = ["Rangers", "Devils", "Islanders", "Sabres"];
 
-  // Load data from localStorage or fallback to fetch
 const loadPlayers = async () => {
   try {
     const savedData = localStorage.getItem("playersData");
+    
     if (savedData) {
       const parsedData = JSON.parse(savedData);
       
-      // Check if the data is valid
+      // Check if the data is an array (old structure)
       if (Array.isArray(parsedData)) {
         // Fix old structure (array of players)
-        playersData = { players: parsedData };
-        localStorage.setItem("playersData", JSON.stringify({ players: playersData }));
+        playersData = { players: parsedData };  // Wrapping the array into the correct structure
+        localStorage.setItem("playersData", JSON.stringify(playersData)); // Save in the correct structure
       } else if (parsedData && parsedData.players && Array.isArray(parsedData.players)) {
-        playersData = parsedData; // Correct structure
+        // Valid structure
+        playersData = parsedData;
       } else {
         console.error("Invalid localStorage data structure");
         playersData = { players: [] }; // Default empty structure
       }
     } else {
+      // No data in localStorage, fetch from players.json
       const response = await fetch("players.json");
       if (!response.ok) {
         throw new Error(`Failed to fetch players.json: ${response.statusText}`);
       }
       const data = await response.json();
+      
       if (data.players && Array.isArray(data.players)) {
         playersData = data; // Valid structure
-        localStorage.setItem("playersData", JSON.stringify({ players: playersData }));
+        localStorage.setItem("playersData", JSON.stringify(playersData)); // Save it in the correct structure
       } else {
         console.error("Invalid players.json structure");
         playersData = { players: [] }; // Default empty structure
       }
     }
+
+    renderPlayers("all");
+  } catch (error) {
+    console.error("Error loading players:", error);
+    playersData = { players: [] }; // Fallback to empty array
+    renderPlayers("all");
+  }
+};
     
     // After loading, check the structure of playersData
     console.log("playersData loaded: ", playersData);
