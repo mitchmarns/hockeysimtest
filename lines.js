@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", async () => {
   const playersContainer = document.getElementById("players");
   const slots = document.querySelectorAll(".line-slot");
-  const teamName = document.getElementById("team-name").textContent;
+  const teamName = document.getElementById("team").textContent;
 
   // Load saved assignments
   const assignments = JSON.parse(localStorage.getItem("lineAssignments")) || {};
