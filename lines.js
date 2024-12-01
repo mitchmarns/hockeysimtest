@@ -277,6 +277,5 @@ function enableDragAndDrop() {
     slot.innerHTML = '';
     slot.appendChild(playerSlot);
   });
-}
-  });
+});
 }
