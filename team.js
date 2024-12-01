@@ -48,9 +48,10 @@ const loadPlayers = async () => {
 };
 
   // Save updated data to localStorage
-  const savePlayers = () => {
-    localStorage.setItem("playersData", JSON.stringify({ players: playersData }));
-  };
+const savePlayers = () => {
+  const dataToSave = { players: playersData.players }; 
+  localStorage.setItem("playersData", JSON.stringify(dataToSave));
+};
 
   // Render players based on selected team filter
   const renderPlayers = (teamFilterValue) => {
