@@ -1,5 +1,4 @@
-let playersData = { players: [] };
-let teams = [];  // We'll define the teams here based on localStorage or fallback data
+
 
 // Load players from localStorage or fetch from players.json
 export async function loadPlayers() {
@@ -34,6 +33,9 @@ export async function loadPlayers() {
     console.error('Error loading player data:', error);
   }
 }
+
+let playersData = { players: [] };
+let teams = [];  // We'll define the teams here based on localStorage or fallback data
 
 // Load teams from localStorage or initialize with default data
 function loadTeamsFromLocalStorage() {
