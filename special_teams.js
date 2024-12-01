@@ -1,134 +1,125 @@
-import { loadTeamsFromLocalStorage, teams } from './team.js';
+document.addEventListener("DOMContentLoaded", async () => {
+  const playersContainer = document.getElementById("players");
+  const slots = document.querySelectorAll(".line-slot");
 
-document.addEventListener('DOMContentLoaded', () => {
-  loadTeamsFromLocalStorage();
-  initializeSpecialTeams();
-  displaySpecialTeams();
-});
+  // Load saved assignments
+  const assignments = JSON.parse(localStorage.getItem("specialTeamsAssignments")) || {};
 
-// Initialize Special Teams Structure
-function initializeSpecialTeams() {
-  teams.forEach(team => {
-    if (!team.specialTeams) {
-      team.specialTeams = {
-        powerplay: [
-          { LW: null, C: null, RW: null, LD: null, RD: null }, // Unit 1
-          { LW: null, C: null, RW: null, LD: null, RD: null }  // Unit 2
-        ],
-        penaltyKill: [
-          { LD: null, RD: null, F1: null, F2: null },          // Unit 1
-          { LD: null, RD: null, F1: null }                    // Unit 2 (3-man PK)
-        ]
-      };
-    }
-  });
-}
+  // Fetch players from localStorage (players should be saved in localStorage)
+  const fetchPlayers = () => {
+    return JSON.parse(localStorage.getItem("playersData")) || [];
+  };
 
-// Display Special Teams UI
-function displaySpecialTeams() {
-  const container = document.getElementById('special-teams-container');
-  container.innerHTML = '';
+  // Populate the "Available Players" section with unassigned players
+  const populateAvailablePlayers = (players) => {
+    playersContainer.innerHTML = ""; // Clear current list
+    const unassignedPlayers = players.filter(
+      (player) => !player.assigned && !assignments[player.specialTeamAssigned]
+    );
 
-  teams.forEach(team => {
-    const teamContainer = document.createElement('div');
-    teamContainer.className = 'team-special-teams';
-    teamContainer.innerHTML = `<h2>${team.name}</h2>`;
-    
-    // Powerplay Units
-    const powerplayContainer = createUnitContainer(team, 'powerplay', ['LW', 'C', 'RW', 'LD', 'RD']);
-    teamContainer.appendChild(powerplayContainer);
+    unassignedPlayers.forEach((player) => {
+      const playerDiv = document.createElement("div");
+      playerDiv.className = "player";
+      playerDiv.draggable = true;
+      playerDiv.dataset.id = player.id;
 
-    // Penalty Kill Units
-    const penaltyKillContainer = createUnitContainer(team, 'penaltyKill', ['LD', 'RD', 'F1', 'F2']);
-    teamContainer.appendChild(penaltyKillContainer);
+      // Create an image element
+      const playerImg = document.createElement("img");
+      playerImg.src = player.image;
+      playerImg.alt = player.name;
+      playerImg.className = "player-image";
 
-    container.appendChild(teamContainer);
-  });
+      // Append image and name to the player div
+      const playerName = document.createElement("span");
+      playerName.textContent = player.name;
 
-  enableDragAndDrop();
-}
+      playerDiv.appendChild(playerImg);
+      playerDiv.appendChild(playerName);
 
-// Create Unit Container
-function createUnitContainer(team, unitType, roles) {
-  const container = document.createElement('div');
-  container.className = `${unitType}-container`;
+      playersContainer.appendChild(playerDiv);
 
-  const unitTitle = unitType === 'powerplay' ? 'Powerplay Units' : 'Penalty Kill Units';
-  container.innerHTML = `<h3>${unitTitle}</h3>`;
-
-  team.specialTeams[unitType].forEach((unit, index) => {
-    const unitDiv = document.createElement('div');
-    unitDiv.className = 'unit';
-    unitDiv.innerHTML = `<h4>${unitType === 'powerplay' ? 'PP' : 'PK'} Unit ${index + 1}</h4>`;
-    
-    roles.forEach(role => {
-      const playerSlot = document.createElement('div');
-      playerSlot.className = 'player-slot';
-      playerSlot.dataset.team = team.name;
-      playerSlot.dataset.unitType = unitType;
-      playerSlot.dataset.unitIndex = index;
-      playerSlot.dataset.role = role;
-
-      const playerId = unit[role];
-      const player = playerId ? team.players.find(p => p.id === playerId) : null;
-
-      playerSlot.innerHTML = player ? `
-        <div class="player" data-id="${player.id}">
-          <img src="${player.image}" alt="${player.name}" />
-          <span>${player.name}</span>
-          <button class="remove-btn">Remove</button>
-        </div>
-      ` : '<span>Empty</span>';
-
-      unitDiv.appendChild(playerSlot);
+      // Add drag event to player
+      playerDiv.addEventListener("dragstart", (e) => {
+        e.dataTransfer.setData("playerId", player.id);
+      });
     });
+  };
 
-    container.appendChild(unitDiv);
-  });
+  // Apply assignments to special teams slots
+  const applyAssignmentsToSlots = (players) => {
+    for (const [slotId, playerId] of Object.entries(assignments)) {
+      const slot = document.querySelector(`[data-position="${slotId}"]`);
+      const player = players.find((p) => p.id === parseInt(playerId));
+      if (slot && player) {
+        const playerImg = document.createElement("img");
+        playerImg.src = player.image;
+        playerImg.alt = player.name;
+        playerImg.className = "player-image";
 
-  return container;
-}
+        const playerName = document.createElement("span");
+        playerName.textContent = player.name;
 
-// Enable Drag-and-Drop for Special Teams
-function enableDragAndDrop() {
-  const container = document.getElementById('special-teams-container');
+        slot.textContent = ''; // Clear the slot
+        slot.appendChild(playerImg);
+        slot.appendChild(playerName);
 
-  // Drag Start
-  container.addEventListener('dragstart', e => {
-    const playerBox = e.target.closest('.player');
-    if (playerBox) {
-      e.dataTransfer.setData('playerId', playerBox.dataset.id);
-      e.dataTransfer.setData('teamName', playerBox.closest('.team-special-teams').querySelector('h2').textContent);
+        slot.dataset.assignedPlayer = playerId;
+      }
     }
-  });
+  };
 
-  // Drag Over
-  container.addEventListener('dragover', e => {
-    e.preventDefault();
-  });
+  // Handle drop events on special teams slots
+  const addDropEventsToSlots = () => {
+    slots.forEach((slot) => {
+      slot.addEventListener("dragover", (e) => {
+        e.preventDefault(); // Allow drop
+      });
 
-  // Drop
-  container.addEventListener('drop', e => {
-    const slot = e.target.closest('.player-slot');
-    if (!slot) return;
+      slot.addEventListener("drop", (e) => {
+        e.preventDefault();
+        const playerId = e.dataTransfer.getData("playerId");
+        const player = document.querySelector(`[data-id="${playerId}"]`);
 
-    const playerId = parseInt(e.dataTransfer.getData('playerId'));
-    const teamName = e.dataTransfer.getData('teamName');
-    const role = slot.dataset.role;
-    const unitType = slot.dataset.unitType;
-    const unitIndex = parseInt(slot.dataset.unitIndex);
+        // Update UI
+        const playerImg = document.createElement("img");
+        playerImg.src = player.querySelector("img").src;
+        playerImg.alt = player.textContent.trim();
+        playerImg.className = "player-image";
 
-    const team = teams.find(t => t.name === teamName);
-    const player = team.players.find(p => p.id === playerId);
+        const playerName = document.createElement("span");
+        playerName.textContent = player.textContent.trim();
 
-    if (!player || !team) return;
+        slot.textContent = ''; // Clear the slot
+        slot.appendChild(playerImg);
+        slot.appendChild(playerName);
 
-    // Assign player to special team slot
-    const unit = team.specialTeams[unitType][unitIndex];
-    unit[role] = player.id;
+        slot.dataset.assignedPlayer = playerId;
 
-    // Persist changes
-    localStorage.setItem('teams', JSON.stringify(teams));
-    displaySpecialTeams();
-  });
-}
+        // Update assignments
+        assignments[slot.dataset.position] = playerId;
+        localStorage.setItem("specialTeamsAssignments", JSON.stringify(assignments));
+
+        // Mark player as assigned
+        const players = fetchPlayers();
+        const updatedPlayers = players.map((p) => {
+          if (p.id === parseInt(playerId)) p.assigned = true;
+          return p;
+        });
+        localStorage.setItem("playersData", JSON.stringify(updatedPlayers));
+
+        // Refresh available players
+        populateAvailablePlayers(updatedPlayers);
+      });
+    });
+  };
+
+  // Initialize the page
+  const init = () => {
+    const players = fetchPlayers();
+    populateAvailablePlayers(players);
+    applyAssignmentsToSlots(players);
+    addDropEventsToSlots();
+  };
+
+  init();
+});
