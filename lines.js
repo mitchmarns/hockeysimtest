@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", async () => {
   const playersContainer = document.getElementById("players");
   const slots = document.querySelectorAll(".line-slot");
+  const teamName = document.getElementById("team-name").textContent;
 
   // Load saved assignments
   const assignments = JSON.parse(localStorage.getItem("lineAssignments")) || {};
@@ -87,6 +88,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         const playerId = e.dataTransfer.getData("playerId");
         const player = document.querySelector(`[data-id="${playerId}"]`);
 
+        // Validate if the player's position and team match the slot's position
+        const slotPosition = slot.dataset.position.split("-")[1];
+        const playerTeam = player.dataset.team; 
+        
+      if (player.dataset.position === slotPosition && playerTeam === teamName) {
         // Update UI
         const playerImg = document.createElement("img");
         playerImg.src = player.querySelector("img").src;
@@ -112,10 +118,14 @@ document.addEventListener("DOMContentLoaded", async () => {
           if (p.id === parseInt(playerId)) p.assigned = true;
           return p;
         });
+        
         localStorage.setItem("playersData", JSON.stringify(updatedPlayers));
 
         // Refresh available players
         populateAvailablePlayers(updatedPlayers);
+      } else {
+        alert("The player cannot be assigned to this slot because either the position or team does not match.");
+        }
       });
     });
   };
