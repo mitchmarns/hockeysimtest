@@ -16,7 +16,7 @@ const loadPlayers = async () => {
       if (Array.isArray(parsedData)) {
         // Fix old structure (array of players)
         playersData = { players: parsedData };
-        localStorage.setItem("playersData", JSON.stringify(playersData));
+        localStorage.setItem("playersData", JSON.stringify({ players: playersData }));
       } else if (parsedData && parsedData.players && Array.isArray(parsedData.players)) {
         playersData = parsedData; // Correct structure
       } else {
@@ -31,7 +31,7 @@ const loadPlayers = async () => {
       const data = await response.json();
       if (data.players && Array.isArray(data.players)) {
         playersData = data; // Valid structure
-        localStorage.setItem("playersData", JSON.stringify(data));
+        localStorage.setItem("playersData", JSON.stringify({ players: playersData }));
       } else {
         console.error("Invalid players.json structure");
         playersData = { players: [] }; // Default empty structure
