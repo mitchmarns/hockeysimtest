@@ -96,11 +96,17 @@ function displayUnassignedPlayers() {
     `;
   }).join('');
   
-// Re-attach drag events to unassigned players
+// Ensure drag events are reattached after player slots are generated
+  attachDragEvents();
+}
+
+function attachDragEvents() {
+  // Reattach dragstart events for all player slots
   const playerElements = document.querySelectorAll('.player-slot');
   playerElements.forEach(player => {
     player.addEventListener('dragstart', (e) => {
       e.dataTransfer.setData('player-id', player.dataset.playerId);
+      console.log('Dragging player with ID:', player.dataset.playerId); // Debugging log
     });
   });
 }
