@@ -106,21 +106,26 @@ function assignPlayerToLine(playerId, team, slot) {
   const lineCategory = slot.dataset.line;
   const role = slot.dataset.role;
 
-  // Prevent duplicate assignment
-  if (player.lineAssigned) {
-    console.warn(`Player ${player.name} is already assigned to a line.`);
-    return;
-  }
-
-  // Assign player to the line
+  let lineIndex;
   if (lineCategory.includes('Forward')) {
-    const lineIndex = parseInt(lineCategory.split(' ')[1], 10) - 1; // Extract line number
+    lineIndex = parseInt(lineCategory.split(' ')[1], 10) - 1; // Extract line number
+    if (!team.lines.forwards[lineIndex]) {
+      console.error(`Line index ${lineIndex} is out of range for team ${team.name}`);
+      return;
+    }
     team.lines.forwards[lineIndex][role] = playerId;
   } else if (lineCategory.includes('Defense')) {
-    const lineIndex = parseInt(lineCategory.split(' ')[1], 10) - 1;
+    lineIndex = parseInt(lineCategory.split(' ')[1], 10) - 1;
+    if (!team.lines.defense[lineIndex]) {
+      console.error(`Line index ${lineIndex} is out of range for team ${team.name}`);
+      return;
+    }
     team.lines.defense[lineIndex][role] = playerId;
   } else if (lineCategory === 'Goalie') {
     team.lines.goalies[role] = playerId;
+  } else {
+    console.error(`Unknown line category: ${lineCategory}`);
+    return;
   }
 
   // Mark player as assigned
