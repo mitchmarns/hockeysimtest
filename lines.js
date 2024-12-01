@@ -1,3 +1,9 @@
+document.addEventListener('DOMContentLoaded', async () => {
+  await loadPlayers();
+  loadTeamsFromLocalStorage();
+  displayUnassignedPlayers();
+  displayTeamLines();
+});
 
 
 // Load players from localStorage or fetch from players.json
@@ -142,8 +148,6 @@ function assignPlayerToLine(playerId, team, slot) {
   const role = slot.dataset.role;
 
   let lineIndex;
-  
-  // Check if lineCategory contains the correct line information
   if (lineCategory.includes('Forward')) {
     const parts = lineCategory.split(' ');
     if (parts.length === 3 && !isNaN(parts[2])) {
@@ -221,19 +225,19 @@ function displayTeamLines() {
 
 function generateLineSlots(team, category, linesCount, positions) {
   let html = '';
-  for (let i = 1; i <= linesCount; i++) {
-    const line = category === 'Forward' ? team.lines.forwards[i - 1] : team.lines.defense[i - 1];
+  for (let i = 0; i < linesCount; i++) {
+    const line = category === 'Forward' ? team.lines.forwards[i] : team.lines.defense[i];
     html += `
       <div class="line">
         ${positions.map(pos => {
           const playerId = line[pos];
-          const player = team.players.find(p => p.id === playerId);
+          const player = playersData.players.find(p => p.id === playerId);
           return `
-            <div class="player-slot" data-team="${team.name}" data-line="${category} Line ${i}" data-role="${pos}">
+            <div class="player-slot" data-team="${team.name}" data-line="${category} Line ${i + 1}" data-role="${pos}" draggable="true">
               ${player ? `
                 <img src="${player.image}" alt="${player.name}" />
                 <span>${player.name}</span>
-                <button class="remove-btn" onclick="removePlayerFromLine('${team.name}', '${category}', ${i}, '${pos}')">Remove</button>
+                <button class="remove-btn" onclick="removePlayerFromLine('${team.name}', '${category}', ${i + 1}, '${pos}')">Remove</button>
               ` : ''}
             </div>`;
         }).join('')}
@@ -270,10 +274,3 @@ function removePlayerFromLine(teamName, category, lineNumber, position) {
   localStorage.setItem('teams', JSON.stringify(teams));
   displayTeamLines();
 }
-
-document.addEventListener('DOMContentLoaded', async () => {
-  await loadPlayers();
-  loadTeamsFromLocalStorage();
-  displayUnassignedPlayers();
-  displayTeamLines();
-});
