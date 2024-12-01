@@ -92,6 +92,49 @@ function attachDragEvents() {
   });
 }
 
+function getPlayerById(playerId) {
+  return playersData.players.find(player => player.id === parseInt(playerId, 10));
+}
+
+function assignPlayerToLine(playerId, team, slot) {
+  const player = getPlayerById(playerId);
+  if (!player) {
+    console.error(`Player with ID ${playerId} not found.`);
+    return;
+  }
+
+  const lineCategory = slot.dataset.line;
+  const role = slot.dataset.role;
+
+  // Prevent duplicate assignment
+  if (player.lineAssigned) {
+    console.warn(`Player ${player.name} is already assigned to a line.`);
+    return;
+  }
+
+  // Assign player to the line
+  if (lineCategory.includes('Forward')) {
+    const lineIndex = parseInt(lineCategory.split(' ')[1], 10) - 1; // Extract line number
+    team.lines.forwards[lineIndex][role] = playerId;
+  } else if (lineCategory.includes('Defense')) {
+    const lineIndex = parseInt(lineCategory.split(' ')[1], 10) - 1;
+    team.lines.defense[lineIndex][role] = playerId;
+  } else if (lineCategory === 'Goalie') {
+    team.lines.goalies[role] = playerId;
+  }
+
+  // Mark player as assigned
+  player.lineAssigned = { team: team.name, lineCategory, role };
+
+  // Update the local storage
+  localStorage.setItem('teams', JSON.stringify(teams));
+  localStorage.setItem('playersData', JSON.stringify(playersData));
+
+  // Refresh the UI
+  displayUnassignedPlayers();
+  displayTeamLines();
+}
+
 function displayTeamLines() {
   const teamsContainer = document.getElementById('lines-container');
 
