@@ -58,8 +58,7 @@ const loadPlayers = async () => {
     console.error("Error loading players:", error);
     playersData = { players: [] }; // Fallback to empty structure
     renderPlayers("all");
-  }
-};
+  });
 
 
   // Save updated data to localStorage
@@ -121,4 +120,3 @@ const loadPlayers = async () => {
 
   // Load players on page load
   loadPlayers();
-});
