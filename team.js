@@ -11,13 +11,14 @@ const loadPlayers = async () => {
     const savedData = localStorage.getItem("playersData");
     if (savedData) {
       const parsedData = JSON.parse(savedData);
-      // Handle different structures
+      
+      // Check if the data is valid
       if (Array.isArray(parsedData)) {
-        // Fix old structure and wrap in an object
+        // Fix old structure (array of players)
         playersData = { players: parsedData };
         localStorage.setItem("playersData", JSON.stringify(playersData));
-      } else if (parsedData.players) {
-        playersData = parsedData;
+      } else if (parsedData && parsedData.players && Array.isArray(parsedData.players)) {
+        playersData = parsedData; // Correct structure
       } else {
         console.error("Invalid localStorage data structure");
         playersData = { players: [] }; // Default empty structure
@@ -28,14 +29,17 @@ const loadPlayers = async () => {
         throw new Error(`Failed to fetch players.json: ${response.statusText}`);
       }
       const data = await response.json();
-      if (data.players) {
-        playersData = data;
+      if (data.players && Array.isArray(data.players)) {
+        playersData = data; // Valid structure
         localStorage.setItem("playersData", JSON.stringify(data));
       } else {
         console.error("Invalid players.json structure");
-        playersData = { players: [] };
+        playersData = { players: [] }; // Default empty structure
       }
     }
+    
+    // After loading, check the structure of playersData
+    console.log("playersData loaded: ", playersData);
     renderPlayers("all");
   } catch (error) {
     console.error("Error loading players:", error);
@@ -53,7 +57,8 @@ const loadPlayers = async () => {
   // Render players based on selected team filter
   const renderPlayers = (teamFilterValue) => {
     playersContainer.innerHTML = ""; // Clear existing content
-    const filteredPlayers = playersData.filter(player =>
+    
+    const filteredPlayers = playersData.players.filter(player =>
       teamFilterValue === "all" || player.team === teamFilterValue
     );
 
