@@ -15,7 +15,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       console.error("Error fetching players:", error);
       return [];
     }
-  };
+  }
+});
 
   // Save updated data to localStorage
   const savePlayers = () => {
@@ -95,4 +96,3 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // Load players on page load
   loadPlayers();
-}
