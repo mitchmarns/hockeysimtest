@@ -70,7 +70,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         const playerName = document.createElement("span");
         playerName.textContent = `${player.name} (#${player.id})`;
 
-        slot.textContent = ''; 
+        slot.textContent = '';
+        slot.classList.add('slot-content'); // Add the CSS class
+        
         slot.appendChild(playerImg);
         slot.appendChild(playerName);
 
