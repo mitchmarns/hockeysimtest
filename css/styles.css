@@ -169,7 +169,7 @@ button:hover {
 }
 
 /* Layout for lines (flexbox for easy alignment) */
-#lines {
+#line {
   display: flex;
   flex-direction: row;
   width: 100%;
