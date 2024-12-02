@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             penaltyKillContainer.appendChild(createSlot(`penaltykill-${i}-D1`, `Unit ${i} - D1`));
             penaltyKillContainer.appendChild(createSlot(`penaltykill-${i}-D2`, `Unit ${i} - D2`));
         }
-    };
+    }}
 
     // Helper function to create slot elements for special teams
     const createSlot = (position, title) => {
@@ -77,9 +77,9 @@ document.addEventListener("DOMContentLoaded", async () => {
             playersContainer.appendChild(playerDiv);
         
     });
-
+    }
 
     // Call render functions
     renderSpecialTeams(teamName); // Populate special team slots (Powerplay & Penalty Kill)
     populateAvailablePlayers(players, teamName); // Populate available players for the team
-}});
+});
