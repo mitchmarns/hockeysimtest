@@ -148,6 +148,7 @@ const applyAssignmentsToSlots = (players) => {
         const playerName = document.createElement("span");
         playerName.textContent = `${player.name} (#${player.id})`;
 
+        slot.classList.add('slot-content');
         slot.textContent = ''; 
         slot.appendChild(playerImg);
         slot.appendChild(playerName);
