@@ -23,10 +23,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   };
 
   // Load players from localStorage
-  const loadPlayersFromLocalStorage = () => {
+const loadPlayersFromLocalStorage = () => {
     const savedData = localStorage.getItem("playersData");
     if (savedData) {
       playersData = JSON.parse(savedData);
+    } else {
+      playersData = { players: [] }; // Set to empty array if no data exists
     }
   };
 
@@ -90,6 +92,13 @@ const addEventListeners = () => {
         playersData.players = await fetchPlayers();
         savePlayersToLocalStorage(); // Save to localStorage for persistence
       }
+
+      // If no players data is found in localStorage, fetch from JSON
+      if (playersData.players.length === 0) {
+        playersData.players = await fetchPlayers();
+        savePlayersToLocalStorage(); // Save to localStorage for persistence
+      }
+      
       renderPlayers("all");
     } catch (error) {
       console.error("Error loading players:", error);
