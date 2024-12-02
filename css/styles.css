@@ -335,13 +335,17 @@ button:hover {
 }
 
 #powerplay .special-teams-container {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
     gap: 15px;
 }
 
 #penaltykill .special-teams-container {
-    grid-template-columns: repeat(4, 1fr);
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 15px;
 }
 
 /* Player drag and drop styles */
