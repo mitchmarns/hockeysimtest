@@ -71,18 +71,27 @@ document.addEventListener("DOMContentLoaded", async () => {
             playerImg.alt = player.name;
             playerDiv.appendChild(playerImg);
 
+            const playerInfo = document.createElement("div");
+            playerInfo.className = "player-info";
+
             const playerName = document.createElement("span");
             playerName.textContent = `${player.name} #${player.id}`;
             playerDiv.appendChild(playerName);
 
-            playerDiv.addEventListener("dragstart", (e) => {
+            const playerPosition = document.createElement("span");
+            playerPosition.className = "player-position";
+            playerPosition.textContent = `Position: ${player.position}`;
+            playerInfo.appendChild(playerPosition);
+        
+            playerDiv.appendChild(playerInfo);
+        
+             playerDiv.addEventListener("dragstart", (e) => {
                 e.dataTransfer.setData("playerId", player.id);
             });
-
-            playersContainer.appendChild(playerDiv);
         
+            playersContainer.appendChild(playerDiv);
         });
-    }
+    };
 
     // Handle the drop event
     const handleDrop = (event) => {
