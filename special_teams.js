@@ -45,6 +45,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         slot.classList.add("special-team-slot");
         slot.dataset.position = position;
         slot.innerHTML = `<h3>${title}</h3>`;
+
+        // Add drag-and-drop event listeners
+        slot.ondragover = (e) => e.preventDefault(); // Allow the drop
+        slot.ondrop = handleDrop; // Handle the drop event
+
         return slot;
     };
 
@@ -76,8 +81,33 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             playersContainer.appendChild(playerDiv);
         
-    });
+        });
     }
+
+    // Handle the drop event
+    const handleDrop = (event) => {
+        event.preventDefault();
+
+        const playerId = event.dataTransfer.getData("playerId");
+        const droppedSlot = event.currentTarget;
+        const position = droppedSlot.dataset.position;
+
+        // Find the player by ID
+        const player = players.find((p) => p.id === parseInt(playerId));
+        if (player) {
+            // Update the player's assignment
+            player.lineAssigned = position;
+
+            // Update the slot content to show the player's details
+            droppedSlot.innerHTML = `
+                <div class="slot-content">
+                    <img src="${player.image}" alt="${player.name}" class="player-image">
+                    <span>${player.name}</span>
+                </div>
+            `;
+            droppedSlot.classList.add("assigned");
+        }
+    };
 
     // Handle team selection change
     const onTeamChange = () => {
