@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       console.error("Error fetching players:", error);
       return [];
     }
-  });
+  };
     
     // After loading, render the players
     renderPlayers("all");
@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 const savePlayers = () => {
   const dataToSave = { players: playersData.players }; 
   localStorage.setItem("playersData", JSON.stringify(dataToSave));
-};
+});
 
   // Render players based on selected team filter
   const renderPlayers = (teamFilterValue) => {
