@@ -92,9 +92,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         const playerDiv = document.querySelector(`[data-id="${playerId}"]`);
         const player = playerDiv ? players.find(p => p.id == playerId) : null;
 
-        // Debugging logs
-        console.log("Dropped player:", player);
-        console.log("Slot position:", slot.dataset.position);
+        if (!player) {
+          alert("Error: Player data not found.");
+          return;
+        }
 
         // Extract relevant information from data-position
         const positionParts = slot.dataset.position.split('-');
@@ -103,19 +104,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         const slotLineNumber = positionParts[2]; // '1'
         const slotPosition = positionParts[3];  // 'LW'
 
-        console.log("Slot team:", slotTeam);
-        console.log("Slot line number:", slotLineNumber);
-        console.log("Slot position:", slotPosition);
-
         // Validate if the player's position and team match the slot's position
         const playerTeam = player.team;
         const playerPosition = player.position; 
-  
-        console.log("Player's team:", playerTeam);
-        console.log("Player's position:", playerPosition);
-        
-      if (player && player.position === slotPosition && playerTeam === teamName) {
-        // Update UI
+
+      //update ui
+      if (playerTeam === slotTeam && playerPosition === slotPosition) {
         const playerImg = document.createElement("img");
         playerImg.src = player.querySelector("img").src;
         playerImg.alt = player.textContent.trim();
