@@ -333,8 +333,7 @@ button:hover {
     margin-bottom: 10px;
 }
 
-#powerplay .special-teams-container,
-#penaltykill .special-teams-container {
+#powerplay .special-teams-container {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     gap: 15px;
