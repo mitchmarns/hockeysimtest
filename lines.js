@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const playerName = document.createElement("span");
         playerName.textContent = `${player.name} (#${player.id})`;
 
-        slot.textContent = ''; // Clear the slot
+        slot.textContent = ''; 
         slot.appendChild(playerImg);
         slot.appendChild(playerName);
 
@@ -91,11 +91,17 @@ document.addEventListener("DOMContentLoaded", async () => {
         const playerId = e.dataTransfer.getData("playerId");
         const playerDiv = document.querySelector(`[data-id="${playerId}"]`);
         const player = playerDiv ? players.find(p => p.id == playerId) : null;
-        
+
+        // Debugging logs
+        console.log("Dropped player:", player);
+        console.log("Slot position:", slot.dataset.position);
 
         // Validate if the player's position and team match the slot's position
         const slotPosition = slot.dataset.position.split("-")[1];
         const playerTeam = player.team; 
+
+        console.log("Player's team:", playerTeam);
+        console.log("Slot position (expected):", slotPosition);
         
       if (player && player.position === slotPosition && playerTeam === teamName) {
         // Update UI
@@ -107,7 +113,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const playerName = document.createElement("span");
         playerName.textContent = player.textContent.trim();
 
-        slot.textContent = ''; // Clear the slot
+        slot.textContent = ''; 
         slot.appendChild(playerImg);
         slot.appendChild(playerName);
 
