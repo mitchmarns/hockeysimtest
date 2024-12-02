@@ -329,6 +329,7 @@ button:hover {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    gap: 20px;
 }
 
 #powerplay h2, #penaltykill h2 {
