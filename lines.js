@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const populateAvailablePlayers = (players) => {
     playersContainer.innerHTML = ""; // Clear current list
     const unassignedPlayers = players.filter(
-      (player) => !player.assigned && !assignments[player.lineAssigned]
+      (player) => !player.lineAssigned && !assignments[player.lineAssigned]
     );
 
     unassignedPlayers.forEach((player) => {
@@ -117,12 +117,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         assignments[slot.dataset.position] = playerId;
         localStorage.setItem("lineAssignments", JSON.stringify(assignments));
 
-        // Mark player as assigned
-        const players = JSON.parse(localStorage.getItem("playersData")) || [];
-        const updatedPlayers = players.map((p) => {
-          if (p.id === parseInt(playerId)) p.assigned = true;
-          return p;
-        });
+          // Mark player as assigned (set lineAssigned)
+          const updatedPlayers = players.map((p) => {
+            if (p.id === parseInt(playerId)) {
+              p.lineAssigned = slot.dataset.position; // Set lineAssigned instead of assigned
+            }
+            return p;
+          });
         
         localStorage.setItem("playersData", JSON.stringify(updatedPlayers));
 
