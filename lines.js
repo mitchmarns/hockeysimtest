@@ -96,9 +96,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         console.log("Dropped player:", player);
         console.log("Slot position:", slot.dataset.position);
 
-        // Validate if the player's position and team match the slot's position
-        const slotPosition = slot.dataset.position.split("-")[1];
-        const playerTeam = player.team; 
+        // Extract relevant information from data-position
+        const positionParts = slot.dataset.position.split('-');
+        const slotTeam = positionParts[0];   // 'Rangers'
+        const slotLineType = positionParts[1];  // 'forward'
+        const slotLineNumber = positionParts[2]; // '1'
+        const slotPosition = positionParts[3];  // 'LW'
 
         console.log("Player's team:", playerTeam);
         console.log("Slot position (expected):", slotPosition);
