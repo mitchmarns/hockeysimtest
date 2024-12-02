@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       // name
 // Add player name, ID, position, and team
       const playerName = document.createElement("span");
-      playerName.textContent = `${player.name} (#${player.id})<br>Position: ${player.position}<br>Team: ${player.team || "Unassigned"}`;
+      playerName.textContent = `${player.name} #${player.id} ${player.team || "Unassigned"} ${player.position}`;
 
       playerDiv.appendChild(playerImg);
       playerDiv.appendChild(playerName);
