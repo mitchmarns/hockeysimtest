@@ -142,10 +142,7 @@ button:hover {
 
 /* Line Slots */
 .line-slot {
-  display: flex;
-  flex-basis: auto;
-  flex-direction: row;
-  flex-flow: wrap;
+  flex: 1 1 auto;
   width: 100px;
   height: 100px;
   text-align: center;
@@ -172,7 +169,7 @@ button:hover {
 }
 
 /* Layout for lines (flexbox for easy alignment) */
-#line {
+.line {
   display: flex;
   flex-direction: row;
   width: 100%;
