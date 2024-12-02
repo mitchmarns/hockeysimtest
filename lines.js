@@ -88,9 +88,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       slot.addEventListener("drop", (e) => {
         e.preventDefault();
+        
         const playerId = e.dataTransfer.getData("playerId");
         const playerDiv = document.querySelector(`[data-id="${playerId}"]`);
-        const player = playerDiv ? players.find(p => p.id == playerId) : null;
+        const player = players.find((p) => p.id == playerId);
 
         if (!player) {
           alert("Error: Player data not found.");
