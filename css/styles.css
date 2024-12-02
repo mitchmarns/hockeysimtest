@@ -142,7 +142,7 @@ button:hover {
 
 /* Line Slots */
 .line-slot {
-  display: inline-block;
+  flex: 1 1 auto;
   width: 100px;
   height: 100px;
   text-align: center;
@@ -177,15 +177,13 @@ button:hover {
 }
 
 .line-slot-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;  
-  width: 100%;
   margin-bottom: 20px;
 }
 
 .line-slot-row {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
   gap: 10px; /* Space between slots */
   margin-top: 5px; /* Space between heading and slots */
 }
