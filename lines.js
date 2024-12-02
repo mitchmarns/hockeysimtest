@@ -109,10 +109,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         const playerPosition = player.position; 
 
       //update ui
-      if (playerTeam === slotTeam && playerPosition === slotPosition) {
+      if (player.team === slotTeam && player.position === slotPosition) {
+        // Update UI: Add player to the slot
         const playerImg = document.createElement("img");
-        playerImg.src = player.querySelector("img").src;
-        playerImg.alt = player.textContent.trim();
+        playerImg.src = player.image; // Use player.image from the object
+        playerImg.alt = player.name;
         playerImg.className = "player-image";
 
         const playerName = document.createElement("span");
