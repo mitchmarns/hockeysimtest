@@ -112,4 +112,4 @@ document.addEventListener("DOMContentLoaded", async () => {
     populateAvailablePlayers(players);
     applyAssignmentsToSlots(players);
     addDropEventsToSlots();
-});
+
