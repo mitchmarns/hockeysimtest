@@ -247,39 +247,104 @@ button:hover {
   font-size: 0.9rem;
 }
 
-/* Special Teams Grid */
-.special-teams-container {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
-}
-
-.special-team-unit {
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 15px;
-}
-
-.special-team-unit h3 {
-  font-size: 1rem;
-  margin-bottom: 10px;
-}
-
-.special-team-unit .droppable {
-  min-height: 80px;
-  border: 2px dashed #007bff;
-  padding: 10px;
-  border-radius: 5px;
-  background-color: #f8f9fa;
-}
-
-.special-team-unit .droppable.hover {
-  background-color: #e2e6ea;
-}
-
 .player-image, .team-logo {
   max-width: 150px;
   border-radius: 50%;
   margin-bottom: 10px;
+}
+
+/* Special Teams Section */
+.special-teams-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.special-team-slot {
+    width: 100px;
+    height: 120px;
+    border: 2px solid #007BFF;
+    border-radius: 8px;
+    background-color: #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    text-align: center;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.special-team-slot h3 {
+    font-size: 0.9rem;
+    margin: 0;
+    padding: 0;
+}
+
+.special-team-slot .slot-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.special-team-slot .player-image {
+    width: 30px;
+    height: 30px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-bottom: 5px;
+}
+
+/* Hover effect for slots */
+.special-team-slot:hover {
+    background-color: #b3d8ff;
+}
+
+/* Active drag indicator */
+.special-team-slot.dragging {
+    background-color: #a5c8ff;
+    border-color: #0056b3;
+}
+
+/* Styling for assigned player images */
+.special-team-slot.assigned {
+    background-color: #c8e6c9;
+}
+
+.special-team-slot.assigned img {
+    border-radius: 50%;
+}
+
+/* Flexbox layout for powerplay and penalty kill units */
+#powerplay, #penaltykill {
+    padding: 10px;
+    border: 2px solid #333;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    margin: 20px 0;
+}
+
+#powerplay h2, #penaltykill h2 {
+    text-align: center;
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+#powerplay .special-teams-container,
+#penaltykill .special-teams-container {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 15px;
+}
+
+#penaltykill .special-teams-container {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+/* Player drag and drop styles */
+.player.dragging {
+    opacity: 0.5;
 }
