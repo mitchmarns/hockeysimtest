@@ -144,7 +144,7 @@ button:hover {
 .line-slot {
   display: inline-block;
   width: 100px;
-  height: 50px;
+  height: 100px;
   text-align: center;
   background-color: #f9f9f9;
   border: 1px solid #ccc;
@@ -182,6 +182,12 @@ button:hover {
   align-items: center;  
   width: 100%;
   margin-bottom: 20px;
+}
+
+.line-slot-row {
+  display: flex;
+  gap: 10px; /* Space between slots */
+  margin-top: 5px; /* Space between heading and slots */
 }
 
 .line-slot-container h3 {
