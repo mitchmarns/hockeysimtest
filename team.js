@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       console.error("Error fetching players:", error);
       return [];
     }
-  };
+  });
     
     // After loading, render the players
     renderPlayers("all");
@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.error("Error loading players:", error);
     playersData = { players: [] }; // Fallback to empty structure
     renderPlayers("all");
-  });
+  }
 
   // Save updated data to localStorage
 const savePlayers = () => {
