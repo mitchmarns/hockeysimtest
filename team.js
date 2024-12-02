@@ -5,37 +5,17 @@ document.addEventListener("DOMContentLoaded", async () => {
   let playersData = { players: [] };
   const teams = ["Rangers", "Devils", "Islanders", "Sabres"];
 
-const loadPlayers = async () => {
-  try {
-    const savedData = localStorage.getItem("playersData");
-    
-    if (savedData) {
-      const parsedData = JSON.parse(savedData);
-      
-      // If valid, assign to playersData
-      if (parsedData && parsedData.players && Array.isArray(parsedData.players)) {
-        playersData = parsedData;
-      } else {
-        console.error("Invalid localStorage data structure");
-        playersData = { players: [] };
-      }
-    } else {
-      // If no data in localStorage, fetch from players.json
+// Fetch players from players.json
+  const fetchPlayers = async () => {
+    try {
       const response = await fetch("players.json");
-      if (!response.ok) {
-        throw new Error(`Failed to fetch players.json: ${response.statusText}`);
-      }
       const data = await response.json();
-      
-      // Ensure the structure is correct before using it
-      if (data.players && Array.isArray(data.players)) {
-        playersData = data;
-        localStorage.setItem("playersData", JSON.stringify(playersData)); // Save correct structure in localStorage
-      } else {
-        console.error("Invalid players.json structure");
-        playersData = { players: [] };
-      }
+      return data.players; // Assuming the structure is { "players": [...] }
+    } catch (error) {
+      console.error("Error fetching players:", error);
+      return [];
     }
+  };
     
     // After loading, render the players
     renderPlayers("all");
