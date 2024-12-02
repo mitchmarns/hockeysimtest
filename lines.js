@@ -118,7 +118,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         playerImg.className = "player-image";
 
         const playerName = document.createElement("span");
-        playerName.textContent = player.textContent.trim();
+        playerName.textContent = `${player.name} (#${player.id})`;
 
         slot.textContent = ''; 
         slot.appendChild(playerImg);
