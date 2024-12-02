@@ -120,6 +120,22 @@ button:hover {
   margin-top: 10px;
 }
 
+.player-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.player-info span {
+    font-size: 0.9rem;
+    margin: 2px 0;
+}
+
+.player-position {
+    font-style: italic;
+    color: #666;
+}
+
 /* Lines Container */
 .lines-container {
   display: flex;
