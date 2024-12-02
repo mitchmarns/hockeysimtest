@@ -8,7 +8,7 @@ const loadPlayers = () => {
 };
 
 document.addEventListener("DOMContentLoaded", async () => {
-    const teamName = document.getElementById("team").textContent;
+    const teamSelector = document.getElementById("team-selector");
 
     // Load players (assumed static data for now)
     const players = loadPlayers();
@@ -79,7 +79,16 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
     }
 
-    // Call render functions
-    renderSpecialTeams(teamName); // Populate special team slots (Powerplay & Penalty Kill)
-    populateAvailablePlayers(players, teamName); // Populate available players for the team
+    // Handle team selection change
+    const onTeamChange = () => {
+        const selectedTeam = teamSelector.value;
+        renderSpecialTeams(selectedTeam);
+        populateAvailablePlayers(players, selectedTeam);
+    };
+
+    // Add event listener for dropdown changes
+    teamSelector.addEventListener("change", onTeamChange);
+    
+    // Initial render for the default team
+    onTeamChange();
 });
