@@ -75,10 +75,11 @@ document.addEventListener("DOMContentLoaded", async () => {
             });
 
             playersContainer.appendChild(playerDiv);
-        });
-    };
+        
+    });
+
 
     // Call render functions
     renderSpecialTeams(teamName); // Populate special team slots (Powerplay & Penalty Kill)
     populateAvailablePlayers(players, teamName); // Populate available players for the team
-});
+}});
