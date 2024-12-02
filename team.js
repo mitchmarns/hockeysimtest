@@ -15,8 +15,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       console.error("Error fetching players:", error);
       return [];
     }
-  }
-});
+  };
 
   // Save updated data to localStorage
   const savePlayers = () => {
@@ -52,23 +51,32 @@ document.addEventListener("DOMContentLoaded", async () => {
   };
 
   // Add event listeners to team dropdowns
-  const addEventListeners = () => {
+const addEventListeners = () => {
     const teamSelects = document.querySelectorAll(".team-select");
-    teamSelects.forEach(select => {
+    teamSelects.forEach((select) => {
       select.addEventListener("change", (e) => {
         const playerId = parseInt(e.target.getAttribute("data-id"));
         const selectedTeam = e.target.value;
-
-        // Update player's team
-        const player = playersData.players.find(p => p.id === playerId);
+        const player = playersData.players.find((p) => p.id === playerId);
         if (player) {
-          player.team = selectedTeam || null; // Set team or unassign
-          player.assigned = !!selectedTeam; // Mark as assigned if team is selected
+          player.team = selectedTeam || null;
+          player.assigned = !!selectedTeam;
           savePlayers();
-          renderPlayers(teamFilter.value); // Re-render
+          renderPlayers(teamFilter.value);
         }
       });
     });
+  };
+
+  const loadPlayers = async () => {
+    try {
+      playersData.players = await fetchPlayers();
+      renderPlayers("all");
+    } catch (error) {
+      console.error("Error loading players:", error);
+      playersData = { players: [] };
+      renderPlayers("all");
+    }
   };
 
   // Filter players by team
@@ -77,22 +85,5 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   // Load players on page load
-  const loadPlayers = async () => {
-    try {
-      const savedPlayers = JSON.parse(localStorage.getItem("playersData"));
-      if (savedPlayers && savedPlayers.players) {
-        playersData = savedPlayers;
-      } else {
-        playersData.players = await fetchPlayers();
-        savePlayers(); // Save fetched data to localStorage
-      }
-      renderPlayers("all");
-    } catch (error) {
-      console.error("Error loading players:", error);
-      playersData = { players: [] }; // Fallback to empty structure
-      renderPlayers("all");
-    }
-  };
-
-  // Load players on page load
   loadPlayers();
+});
