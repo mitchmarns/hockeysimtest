@@ -95,3 +95,4 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // Load players on page load
   loadPlayers();
+}
