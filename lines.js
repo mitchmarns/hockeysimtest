@@ -15,78 +15,97 @@ document.addEventListener("DOMContentLoaded", async () => {
     return [];
   };
 
+  // Apply the assignment to the player and update the stored players data
+  const updatePlayerAssignment = (playerId, slotPosition) => {
+    const playersData = JSON.parse(localStorage.getItem("playersData"));
+    
+    // Ensure players data exists
+    if (!playersData || !playersData.players) {
+      return; // Exit if players data isn't loaded correctly
+    }
+  
+    // Find the player and update their assignment
+    playersData.players.forEach((player) => {
+      if (player.id === parseInt(playerId)) {
+        player.lineAssigned = slotPosition; // Update line assignment
+      }
+    });
+    
+  // Update localStorage with the modified players data
+  localStorage.setItem("playersData", JSON.stringify(playersData));
+};
+
   // Get players from localStorage
   const players = loadPlayers();
 
-  // Populate the "Available Players" section with unassigned players
-  const populateAvailablePlayers = (players) => {
-    playersContainer.innerHTML = ""; // Clear current list
-    const unassignedPlayers = players.filter(
-      (player) => !player.lineAssigned && !assignments[player.lineAssigned]
-    );
+// Populate the "Available Players" section with unassigned players
+const populateAvailablePlayers = (players) => {
+  playersContainer.innerHTML = ""; // Clear current list
+  const unassignedPlayers = players.filter(
+    (player) => !player.lineAssigned && !assignments[player.lineAssigned]
+  );
 
-    unassignedPlayers.forEach((player) => {
-      const playerDiv = document.createElement("div");
-      playerDiv.className = "player";
-      playerDiv.draggable = true;
-      playerDiv.dataset.id = player.id;
-      playerDiv.dataset.team = player.team;
-      playerDiv.dataset.position = player.position;
+  unassignedPlayers.forEach((player) => {
+    const playerDiv = document.createElement("div");
+    playerDiv.className = "player";
+    playerDiv.draggable = true;
+    playerDiv.dataset.id = player.id;
+    playerDiv.dataset.team = player.team;
+    playerDiv.dataset.position = player.position;
 
-      // image
+    // image
+    const playerImg = document.createElement("img");
+    playerImg.src = player.image;
+    playerImg.alt = player.name;
+    playerImg.className = "player-image";
+
+    // name
+    const playerName = document.createElement("span");
+    playerName.textContent = `${player.name} #${player.id} ${player.team || "Unassigned"} ${player.position}`;
+
+    playerDiv.appendChild(playerImg);
+    playerDiv.appendChild(playerName);
+
+    playersContainer.appendChild(playerDiv);
+      
+    // Add drag event to player
+    playerDiv.addEventListener("dragstart", (e) => {
+      e.dataTransfer.setData("playerId", player.id);
+    });
+  });
+};
+
+// Apply assignments to slots
+const applyAssignmentsToSlots = (players) => {
+  for (const [slotId, playerId] of Object.entries(assignments)) {
+    const slot = document.querySelector(`[data-position="${slotId}"]`);
+    const player = players.find((p) => p.id === parseInt(playerId));
+      
+    if (slot && player) {
+      // Check if player was already assigned
+      const existingPlayerImg = slot.querySelector("img");
+      if (existingPlayerImg) {
+        existingPlayerImg.remove(); // Remove previous player image if any
+      }
+        
       const playerImg = document.createElement("img");
       playerImg.src = player.image;
       playerImg.alt = player.name;
       playerImg.className = "player-image";
 
-      // name
-// Add player name, ID, position, and team
       const playerName = document.createElement("span");
-      playerName.textContent = `${player.name} #${player.id} ${player.team || "Unassigned"} ${player.position}`;
+      playerName.textContent = `${player.name} (#${player.id})`;
 
-      playerDiv.appendChild(playerImg);
-      playerDiv.appendChild(playerName);
-
-      playersContainer.appendChild(playerDiv);
-      
-      // Add drag event to player
-      playerDiv.addEventListener("dragstart", (e) => {
-        e.dataTransfer.setData("playerId", player.id);
-      });
-    });
-  };
-
-  // Apply assignments to slots
-  const applyAssignmentsToSlots = (players) => {
-    for (const [slotId, playerId] of Object.entries(assignments)) {
-      const slot = document.querySelector(`[data-position="${slotId}"]`);
-      const player = players.find((p) => p.id === parseInt(playerId));
-      
-      if (slot && player) {
-        // Check if player was already assigned
-        const existingPlayerImg = slot.querySelector("img");
-        if (existingPlayerImg) {
-          existingPlayerImg.remove(); // Remove previous player image if any
-        }
+      slot.classList.add('slot-content');
+      slot.textContent = '';
         
-        const playerImg = document.createElement("img");
-        playerImg.src = player.image;
-        playerImg.alt = player.name;
-        playerImg.className = "player-image";
+      slot.appendChild(playerImg);
+      slot.appendChild(playerName);
 
-        const playerName = document.createElement("span");
-        playerName.textContent = `${player.name} (#${player.id})`;
-
-        slot.classList.add('slot-content');
-        slot.textContent = '';
-        
-        slot.appendChild(playerImg);
-        slot.appendChild(playerName);
-
-        slot.dataset.assignedPlayer = playerId;
-      }
+      slot.dataset.assignedPlayer = playerId;
     }
-  };
+  }
+};
 
   // Handle drop events on slots
   const addDropEventsToSlots = () => {
@@ -139,15 +158,14 @@ document.addEventListener("DOMContentLoaded", async () => {
         assignments[slot.dataset.position] = playerId;
         localStorage.setItem("lineAssignments", JSON.stringify(assignments));
 
-          // Mark player as assigned (set lineAssigned)
-          const updatedPlayers = players.map((p) => {
+          // Mark player as assigned
+          players.forEach((p) => {
             if (p.id === parseInt(playerId)) {
               p.lineAssigned = slot.dataset.position; 
             }
-            return p;
           });
         
-        localStorage.setItem("playersData", JSON.stringify(updatedPlayers));
+        localStorage.setItem("playersData", JSON.stringify({ players }));
 
         // Refresh available players
         populateAvailablePlayers(updatedPlayers);
