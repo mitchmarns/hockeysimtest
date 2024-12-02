@@ -6,17 +6,17 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Load saved assignments
   const assignments = JSON.parse(localStorage.getItem("lineAssignments")) || {};
 
-  // Fetch players from players.json
-  const fetchPlayers = async () => {
-    try {
-      const response = await fetch("players.json");
-      const data = await response.json();
-      return data.players; // Assuming the structure is { "players": [...] }
-    } catch (error) {
-      console.error("Error fetching players:", error);
-      return [];
+// Load players from localStorage
+  const loadPlayers = () => {
+    const playersData = JSON.parse(localStorage.getItem("playersData"));
+    if (playersData && playersData.players) {
+      return playersData.players;
     }
+    return [];
   };
+
+  // Get players from localStorage
+  const players = loadPlayers();
 
   // Populate the "Available Players" section with unassigned players
   const populateAvailablePlayers = (players) => {
@@ -135,17 +135,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   };
 
-  // Initialize the page
-  const init = async () => {
-    const players = await fetchPlayers();
-
-    // Save players to localStorage for persistence
-    localStorage.setItem("playersData", JSON.stringify(players));
-
+// Initialize the page
+  const init = () => {
     populateAvailablePlayers(players);
     applyAssignmentsToSlots(players);
     addDropEventsToSlots();
   };
 
   init();
+});
 });
