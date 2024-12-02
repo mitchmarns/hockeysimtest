@@ -2,8 +2,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   const playersContainer = document.getElementById("players-container");
   const teamFilter = document.getElementById("team-filter");
 
-  let playersData = { players: [] };
   const teams = ["Rangers", "Devils", "Islanders", "Sabres"];
+  let playersData = { players: [] };
 
 // Fetch players from players.json
   const fetchPlayers = async () => {
