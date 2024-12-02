@@ -23,8 +23,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.error("Error loading players:", error);
     playersData = { players: [] }; // Fallback to empty structure
     renderPlayers("all");
-  }
-};
+  });
 
   // Save updated data to localStorage
 const savePlayers = () => {
@@ -87,4 +86,3 @@ const savePlayers = () => {
 
   // Load players on page load
   loadPlayers();
-});
