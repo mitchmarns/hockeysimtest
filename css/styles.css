@@ -143,8 +143,8 @@ button:hover {
 
 /* Line Slots */
 .line-slot {
-  width: 100px;
-  min-height: 100px;
+  min-width: 150px;
+  min-height: 150px;
   text-align: center;
   background-color: #f9f9f9;
   border: 2px dashed #ccc;
