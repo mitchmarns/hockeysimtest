@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   const playersContainer = document.getElementById("players-container");
   const teamFilter = document.getElementById("team-filter");
 
