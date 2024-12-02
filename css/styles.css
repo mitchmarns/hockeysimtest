@@ -89,6 +89,7 @@ button:hover {
 
 .players-container {
   display: flex;
+  flex-flow: row;
   flex-wrap: wrap;
   gap: 15px;
   justify-content: space-around;
