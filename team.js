@@ -17,10 +17,17 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   };
 
-  // Save updated data to localStorage
-  const savePlayers = () => {
-    const dataToSave = { players: playersData.players };
-    localStorage.setItem("playersData", JSON.stringify(dataToSave));
+// Save updated data to localStorage
+  const savePlayersToLocalStorage = () => {
+    localStorage.setItem("playersData", JSON.stringify(playersData));
+  };
+
+  // Load players from localStorage
+  const loadPlayersFromLocalStorage = () => {
+    const savedData = localStorage.getItem("playersData");
+    if (savedData) {
+      playersData = JSON.parse(savedData);
+    }
   };
 
   // Render players based on selected team filter
@@ -57,32 +64,39 @@ const addEventListeners = () => {
       select.addEventListener("change", (e) => {
         const playerId = parseInt(e.target.getAttribute("data-id"));
         const selectedTeam = e.target.value;
+        
         const player = playersData.players.find((p) => p.id === playerId);
         if (player) {
           player.team = selectedTeam || null;
           player.assigned = !!selectedTeam;
-          savePlayers();
+          savePlayersToLocalStorage();
           renderPlayers(teamFilter.value);
         }
       });
     });
   };
 
-  const loadPlayers = async () => {
-    try {
-      playersData.players = await fetchPlayers();
-      renderPlayers("all");
-    } catch (error) {
-      console.error("Error loading players:", error);
-      playersData = { players: [] };
-      renderPlayers("all");
-    }
-  };
-
   // Filter players by team
   teamFilter.addEventListener("change", (e) => {
     renderPlayers(e.target.value);
   });
+
+  // Load players on page load
+  const loadPlayers = async () => {
+    try {
+      loadPlayersFromLocalStorage(); // Attempt to load from localStorage
+      if (playersData.players.length === 0) {
+        // Fetch from server if localStorage is empty
+        playersData.players = await fetchPlayers();
+        savePlayersToLocalStorage(); // Save to localStorage for persistence
+      }
+      renderPlayers("all");
+    } catch (error) {
+      console.error("Error loading players:", error);
+      playersData = { players: [] }; // Fallback to empty structure
+      renderPlayers("all");
+    }
+  };
 
   // Load players on page load
   loadPlayers();
