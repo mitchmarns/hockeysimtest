@@ -61,7 +61,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     for (const [slotId, playerId] of Object.entries(assignments)) {
       const slot = document.querySelector(`[data-position="${slotId}"]`);
       const player = players.find((p) => p.id === parseInt(playerId));
+      
       if (slot && player) {
+        // Check if player was already assigned
+        const existingPlayerImg = slot.querySelector("img");
+        if (existingPlayerImg) {
+          existingPlayerImg.remove(); // Remove previous player image if any
+        }
+        
         const playerImg = document.createElement("img");
         playerImg.src = player.image;
         playerImg.alt = player.name;
