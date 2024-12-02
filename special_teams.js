@@ -1,147 +1,113 @@
 document.addEventListener("DOMContentLoaded", async () => {
-    const playersContainer = document.getElementById("players");
-    const slots = document.querySelectorAll(".special-team-slot");
-    const teamName = document.getElementById("team").textContent;
+    const teamName = document.getElementById("team").textContent;  // Get the team name from the HTML
+    const players = loadPlayers(); // Get players from localStorage or a predefined array
 
+    // Function to render special teams (Powerplay and Penalty Kill)
+    const renderSpecialTeams = (teamName) => {
+        const powerplayContainer = document.getElementById("powerplay-units");
+        const penaltyKillContainer = document.getElementById("penaltykill-units");
     // Load saved assignments
     const assignments = JSON.parse(localStorage.getItem("specialTeamsAssignments")) || {};
 
-    // Load players from localStorage
-    const loadPlayers = () => {
-        const playersData = JSON.parse(localStorage.getItem("playersData"));
-        if (playersData && playersData.players) {
-            return playersData.players;
+// Clear the existing content in both sections
+        powerplayContainer.innerHTML = "";
+        penaltyKillContainer.innerHTML = "";
+
+        // Create Powerplay slots (5 slots)
+        for (let i = 1; i <= 2; i++) {
+            const powerplayUnit = document.createElement("div");
+            powerplayUnit.classList.add("special-team-slot");
+            powerplayUnit.innerHTML = `<h3>Unit ${i} - LW</h3>`;
+            powerplayUnit.dataset.position = `powerplay-${i}-LW`;
+            powerplayContainer.appendChild(powerplayUnit);
+
+            const powerplayC = document.createElement("div");
+            powerplayC.classList.add("special-team-slot");
+            powerplayC.innerHTML = `<h3>Unit ${i} - C</h3>`;
+            powerplayC.dataset.position = `powerplay-${i}-C`;
+            powerplayContainer.appendChild(powerplayC);
+
+            const powerplayRW = document.createElement("div");
+            powerplayRW.classList.add("special-team-slot");
+            powerplayRW.innerHTML = `<h3>Unit ${i} - RW</h3>`;
+            powerplayRW.dataset.position = `powerplay-${i}-RW`;
+            powerplayContainer.appendChild(powerplayRW);
+
+            const powerplayLD = document.createElement("div");
+            powerplayLD.classList.add("special-team-slot");
+            powerplayLD.innerHTML = `<h3>Unit ${i} - LD</h3>`;
+            powerplayLD.dataset.position = `powerplay-${i}-LD`;
+            powerplayContainer.appendChild(powerplayLD);
+
+            const powerplayRD = document.createElement("div");
+            powerplayRD.classList.add("special-team-slot");
+            powerplayRD.innerHTML = `<h3>Unit ${i} - RD</h3>`;
+            powerplayRD.dataset.position = `powerplay-${i}-RD`;
+            powerplayContainer.appendChild(powerplayRD);
         }
-        return [];
+
+        // Create Penalty Kill slots (4 slots)
+        for (let i = 1; i <= 2; i++) {
+            const penaltyKillF1 = document.createElement("div");
+            penaltyKillF1.classList.add("special-team-slot");
+            penaltyKillF1.innerHTML = `<h3>Unit ${i} - F1</h3>`;
+            penaltyKillF1.dataset.position = `penaltykill-${i}-F1`;
+            penaltyKillContainer.appendChild(penaltyKillF1);
+
+            const penaltyKillF2 = document.createElement("div");
+            penaltyKillF2.classList.add("special-team-slot");
+            penaltyKillF2.innerHTML = `<h3>Unit ${i} - F2</h3>`;
+            penaltyKillF2.dataset.position = `penaltykill-${i}-F2`;
+            penaltyKillContainer.appendChild(penaltyKillF2);
+
+            const penaltyKillD1 = document.createElement("div");
+            penaltyKillD1.classList.add("special-team-slot");
+            penaltyKillD1.innerHTML = `<h3>Unit ${i} - D1</h3>`;
+            penaltyKillD1.dataset.position = `penaltykill-${i}-D1`;
+            penaltyKillContainer.appendChild(penaltyKillD1);
+
+            const penaltyKillD2 = document.createElement("div");
+            penaltyKillD2.classList.add("special-team-slot");
+            penaltyKillD2.innerHTML = `<h3>Unit ${i} - D2</h3>`;
+            penaltyKillD2.dataset.position = `penaltykill-${i}-D2`;
+            penaltyKillContainer.appendChild(penaltyKillD2);
+        }
     };
 
-    // Apply the assignment to the player and update the stored players data
-    const updatePlayerAssignment = (playerId, slotPosition) => {
-        const playersData = JSON.parse(localStorage.getItem("playersData"));
-        if (!playersData || !playersData.players) {
-            return;
-        }
+    // Populate available players based on the current team
+    const populateAvailablePlayers = (players, teamName) => {
+        const playersContainer = document.getElementById("players");
+        playersContainer.innerHTML = ""; // Clear current list
 
-        playersData.players.forEach((player) => {
-            if (player.id === parseInt(playerId)) {
-                player.specialTeamsAssigned = slotPosition;
-            }
-        });
-
-        localStorage.setItem("playersData", JSON.stringify(playersData));
-    };
-
-    const players = loadPlayers();
-
-    // Populate the "Available Players" section with unassigned players
-    const populateAvailablePlayers = (players) => {
-        playersContainer.innerHTML = "";
-        const unassignedPlayers = players.filter(
-            (player) => !player.specialTeamsAssigned && !assignments[player.specialTeamsAssigned]
-        );
-
-        unassignedPlayers.forEach((player) => {
+        const availablePlayers = players.filter(player => player.team === teamName && !player.lineAssigned);
+        availablePlayers.forEach(player => {
             const playerDiv = document.createElement("div");
             playerDiv.className = "player";
             playerDiv.draggable = true;
             playerDiv.dataset.id = player.id;
-            playerDiv.dataset.team = player.team;
-            playerDiv.dataset.position = player.position;
 
             const playerImg = document.createElement("img");
             playerImg.src = player.image;
             playerImg.alt = player.name;
-            playerImg.className = "player-image";
+            playerDiv.appendChild(playerImg);
 
             const playerName = document.createElement("span");
-            playerName.textContent = `${player.name} #${player.id} ${player.team || "Unassigned"} ${player.position}`;
-
-            playerDiv.appendChild(playerImg);
+            playerName.textContent = `${player.name} #${player.id}`;
             playerDiv.appendChild(playerName);
 
-            playersContainer.appendChild(playerDiv);
-
-            // Add drag event to player
             playerDiv.addEventListener("dragstart", (e) => {
                 e.dataTransfer.setData("playerId", player.id);
             });
+
+            playersContainer.appendChild(playerDiv);
         });
     };
 
-    // Apply assignments to special team slots
-    const applyAssignmentsToSlots = (players) => {
-        for (const [slotId, playerId] of Object.entries(assignments)) {
-            const slot = document.querySelector(`[data-position="${slotId}"]`);
-            const player = players.find((p) => p.id === parseInt(playerId));
+    // Call render functions
+    renderSpecialTeams(teamName);
+    populateAvailablePlayers(players, teamName);
+});
 
-            if (slot && player) {
-                const existingPlayerImg = slot.querySelector("img");
-                if (existingPlayerImg) {
-                    existingPlayerImg.remove();
-                }
-
-                const playerImg = document.createElement("img");
-                playerImg.src = player.image;
-                playerImg.alt = player.name;
-                playerImg.className = "player-image";
-
-                const playerName = document.createElement("span");
-                playerName.textContent = `${player.name} (#${player.id})`;
-
-                slot.classList.add('slot-content');
-                slot.textContent = '';
-                slot.appendChild(playerImg);
-                slot.appendChild(playerName);
-
-                slot.dataset.assignedPlayer = playerId;
-            }
-        }
-    };
-
-    // Handle drop events on slots
-    const addDropEventsToSlots = () => {
-        slots.forEach((slot) => {
-            slot.addEventListener("dragover", (e) => {
-                e.preventDefault();
-            });
-
-            slot.addEventListener("drop", (e) => {
-                e.preventDefault();
-                
-                const playerId = e.dataTransfer.getData("playerId");
-                const playerDiv = document.querySelector(`[data-id="${playerId}"]`);
-                const player = players.find((p) => p.id == playerId);
-
-                if (!player) {
-                    alert("Error: Player data not found.");
-                    return;
-                }
-
-                const positionParts = slot.dataset.position.split('-');
-                const slotTeam = positionParts[0];   // 'powerplay'
-                const slotUnit = positionParts[1];   // '1'
-                const slotPosition = positionParts[2];  // 'LW'
-
-                if (player.team === slotTeam && player.position === slotPosition) {
-                    const playerImg = document.createElement("img");
-                    playerImg.src = player.image;
-                    playerImg.alt = player.name;
-
-                    slot.textContent = '';
-                    slot.appendChild(playerImg);
-
-                    assignments[slot.dataset.position] = player.id;
-
-                    updatePlayerAssignment(player.id, slot.dataset.position);
-                    localStorage.setItem("specialTeamsAssignments", JSON.stringify(assignments));
-                    populateAvailablePlayers(players);
-                    applyAssignmentsToSlots(players);
-                } else {
-                    alert("This player is not eligible for this slot.");
-                }
-            });
-        });
-    };
 
     populateAvailablePlayers(players);
     applyAssignmentsToSlots(players);
