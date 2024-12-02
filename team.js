@@ -16,20 +16,12 @@ document.addEventListener("DOMContentLoaded", async () => {
       return [];
     }
   };
-    
-    // After loading, render the players
-    renderPlayers("all");
-  } catch (error) {
-    console.error("Error loading players:", error);
-    playersData = { players: [] }; // Fallback to empty structure
-    renderPlayers("all");
-  }
 
   // Save updated data to localStorage
-const savePlayers = () => {
-  const dataToSave = { players: playersData.players }; 
-  localStorage.setItem("playersData", JSON.stringify(dataToSave));
-});
+  const savePlayers = () => {
+    const dataToSave = { players: playersData.players };
+    localStorage.setItem("playersData", JSON.stringify(dataToSave));
+  };
 
   // Render players based on selected team filter
   const renderPlayers = (teamFilterValue) => {
@@ -82,7 +74,24 @@ const savePlayers = () => {
   teamFilter.addEventListener("change", (e) => {
     renderPlayers(e.target.value);
   });
-    
+
+  // Load players on page load
+  const loadPlayers = async () => {
+    try {
+      const savedPlayers = JSON.parse(localStorage.getItem("playersData"));
+      if (savedPlayers && savedPlayers.players) {
+        playersData = savedPlayers;
+      } else {
+        playersData.players = await fetchPlayers();
+        savePlayers(); // Save fetched data to localStorage
+      }
+      renderPlayers("all");
+    } catch (error) {
+      console.error("Error loading players:", error);
+      playersData = { players: [] }; // Fallback to empty structure
+      renderPlayers("all");
+    }
+  };
 
   // Load players on page load
   loadPlayers();
