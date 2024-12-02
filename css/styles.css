@@ -122,9 +122,11 @@ button:hover {
 /* Lines Container */
 .lines-container {
   display: flex;
-  flex-direction: row;
-  flex-flow: row wrap;
+  flex-direction: column;
   gap: 20px;
+  margin: 0 auto;
+  width: 90%;
+  max-width: 1200px;
 }
 
 /* Team Container */
