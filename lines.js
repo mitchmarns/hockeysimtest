@@ -95,7 +95,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         // Validate if the player's position and team match the slot's position
         const slotPosition = slot.dataset.position.split("-")[1];
-        const playerTeam = player.dataset.team; 
+        const playerTeam = player.team; 
         
       if (player && player.position === slotPosition && playerTeam === teamName) {
         // Update UI
@@ -120,7 +120,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           // Mark player as assigned (set lineAssigned)
           const updatedPlayers = players.map((p) => {
             if (p.id === parseInt(playerId)) {
-              p.lineAssigned = slot.dataset.position; // Set lineAssigned instead of assigned
+              p.lineAssigned = slot.dataset.position; 
             }
             return p;
           });
