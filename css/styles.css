@@ -217,6 +217,13 @@ button:hover {
   margin-bottom: 10px;
 }
 
+.slot-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center horizontally */
+  text-align: center;  /* Center text */
+}
+
 /* Drag-and-Drop Zone */
 .droppable {
   min-height: 100px;
