@@ -103,8 +103,16 @@ document.addEventListener("DOMContentLoaded", async () => {
         const slotLineNumber = positionParts[2]; // '1'
         const slotPosition = positionParts[3];  // 'LW'
 
+        console.log("Slot team:", slotTeam);
+        console.log("Slot line number:", slotLineNumber);
+        console.log("Slot position:", slotPosition);
+
+        // Validate if the player's position and team match the slot's position
+        const playerTeam = player.team;
+        const playerPosition = player.position; 
+  
         console.log("Player's team:", playerTeam);
-        console.log("Slot position (expected):", slotPosition);
+        console.log("Player's position:", playerPosition);
         
       if (player && player.position === slotPosition && playerTeam === teamName) {
         // Update UI
