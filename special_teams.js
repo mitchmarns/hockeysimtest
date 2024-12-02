@@ -24,35 +24,18 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         // Create Powerplay slots (5 slots: LW, C, RW, LD, RD)
         for (let i = 1; i <= 2; i++) {
-            const powerplayUnit = createSlot(`powerplay-${i}-LW`, `Unit ${i} - LW`);
-            powerplayContainer.appendChild(powerplayUnit);
-
-            const powerplayC = createSlot(`powerplay-${i}-C`, `Unit ${i} - C`);
-            powerplayContainer.appendChild(powerplayC);
-
-            const powerplayRW = createSlot(`powerplay-${i}-RW`, `Unit ${i} - RW`);
-            powerplayContainer.appendChild(powerplayRW);
-
-            const powerplayLD = createSlot(`powerplay-${i}-LD`, `Unit ${i} - LD`);
-            powerplayContainer.appendChild(powerplayLD);
-
-            const powerplayRD = createSlot(`powerplay-${i}-RD`, `Unit ${i} - RD`);
-            powerplayContainer.appendChild(powerplayRD);
-        }
+            powerplayContainer.appendChild(createSlot(`powerplay-${i}-LW`, `Unit ${i} - LW`));
+            powerplayContainer.appendChild(createSlot(`powerplay-${i}-C`, `Unit ${i} - C`));
+            powerplayContainer.appendChild(createSlot(`powerplay-${i}-RW`, `Unit ${i} - RW`));
+            powerplayContainer.appendChild(createSlot(`powerplay-${i}-LD`, `Unit ${i} - LD`));
+            powerplayContainer.appendChild(createSlot(`powerplay-${i}-RD`, `Unit ${i} - RD`));
 
         // Create Penalty Kill slots (4 slots: F1, F2, D1, D2)
         for (let i = 1; i <= 2; i++) {
-            const penaltyKillF1 = createSlot(`penaltykill-${i}-F1`, `Unit ${i} - F1`);
-            penaltyKillContainer.appendChild(penaltyKillF1);
-
-            const penaltyKillF2 = createSlot(`penaltykill-${i}-F2`, `Unit ${i} - F2`);
-            penaltyKillContainer.appendChild(penaltyKillF2);
-
-            const penaltyKillD1 = createSlot(`penaltykill-${i}-D1`, `Unit ${i} - D1`);
-            penaltyKillContainer.appendChild(penaltyKillD1);
-
-            const penaltyKillD2 = createSlot(`penaltykill-${i}-D2`, `Unit ${i} - D2`);
-            penaltyKillContainer.appendChild(penaltyKillD2);
+            penaltyKillContainer.appendChild(createSlot(`penaltykill-${i}-F1`, `Unit ${i} - F1`));
+            penaltyKillContainer.appendChild(createSlot(`penaltykill-${i}-F2`, `Unit ${i} - F2`));
+            penaltyKillContainer.appendChild(createSlot(`penaltykill-${i}-D1`, `Unit ${i} - D1`));
+            penaltyKillContainer.appendChild(createSlot(`penaltykill-${i}-D2`, `Unit ${i} - D2`));
         }
     };
 
