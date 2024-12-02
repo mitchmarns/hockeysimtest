@@ -169,7 +169,7 @@ const applyAssignmentsToSlots = (players) => {
         localStorage.setItem("playersData", JSON.stringify({ players }));
 
         // Refresh available players
-        populateAvailablePlayers(updatedPlayers);
+        populateAvailablePlayers(players);
       } else {
         alert("The player cannot be assigned to this slot because either the position or team does not match.");
         }
