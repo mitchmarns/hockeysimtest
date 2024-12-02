@@ -144,4 +144,4 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   init();
 });
-});
+
