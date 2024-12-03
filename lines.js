@@ -42,8 +42,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 const populateAvailablePlayers = (players) => {
   playersContainer.innerHTML = ""; // Clear current list
   const unassignedPlayers = players.filter(
-    (player) => 
-      !player.lineAssigned && // Player is not assigned to a line
+    (player) => !player.lineAssigned // Player is not assigned to a line
   );
 
   unassignedPlayers.forEach((player) => {
