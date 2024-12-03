@@ -174,3 +174,4 @@ const renderSpecialTeams = (teamName) => {
     
     // Initial render for the default team
     onTeamChange();
+});
