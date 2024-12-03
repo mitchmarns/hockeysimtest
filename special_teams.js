@@ -7,6 +7,11 @@ const loadPlayers = () => {
     return []; // Return an empty array if no data is found
 };
 
+// Save players data to localStorage
+const savePlayers = (players) => {
+    localStorage.setItem("playersData", JSON.stringify({ players }));
+};
+
 document.addEventListener("DOMContentLoaded", async () => {
     const teamSelector = document.getElementById("team-selector");
 
@@ -106,6 +111,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (player) {
             // Update the player's assignment
             player.lineAssigned = position;
+
+            // Save the updated players data
+            savePlayers(players);
 
             // Update the slot content to show the player's details
             droppedSlot.innerHTML = `
