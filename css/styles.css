@@ -389,6 +389,7 @@ button:hover {
 
 button.disabled {
   background-color: #ccc;
+  cursor: not-allowed;
 }
 
 .player-info {
