@@ -12,7 +12,7 @@ const savePlayers = (players) => {
 };
 
 // Create a toggle button for injury and healthy scratch
-const createToggleButton = (player, type) => {
+const createToggleButton = (player, type, players) => {
     const button = document.createElement("button");
     button.textContent = type === "injury" ? 
         (player.injured ? "Mark as Healthy" : "Mark as Injured") : 
@@ -35,7 +35,7 @@ const createToggleButton = (player, type) => {
 
 // Render the player list
 const renderPlayerList = () => {
-    const players = loadPlayers();
+    const players = loadPlayers();  // Load players here, so we have the latest state
     const playersList = document.getElementById("players-list");
     playersList.innerHTML = ""; // Clear current list
 
@@ -47,8 +47,9 @@ const renderPlayerList = () => {
         playerInfoDiv.classList.add("player-info");
         playerInfoDiv.innerHTML = `<strong>${player.name}</strong> (ID: ${player.id})`;
 
-        const injuryButton = createToggleButton(player, "injury");
-        const healthyScratchButton = createToggleButton(player, "healthyScratch");
+        // Create buttons for toggling injury and healthy scratch states
+        const injuryButton = createToggleButton(player, "injury", players);
+        const healthyScratchButton = createToggleButton(player, "healthyScratch", players);
 
         // Append buttons to the player div
         playerDiv.appendChild(playerInfoDiv);
