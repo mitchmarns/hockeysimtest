@@ -48,8 +48,8 @@ document.addEventListener("DOMContentLoaded", async () => {
                 slot.classList.add("assigned");
             }
             powerplayContainer.appendChild(slot);
-        }}
         });
+    }
     
 
         // Create Penalty Kill slots (4 slots: F1, F2, D1, D2)
@@ -72,7 +72,9 @@ document.addEventListener("DOMContentLoaded", async () => {
                 slot.classList.add("assigned");
             }
             penaltyKillContainer.appendChild(slot);
-        }
+        });
+    }
+};
 
     // Helper function to create slot elements for special teams
     const createSlot = (position, title) => {
@@ -94,7 +96,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         playersContainer.innerHTML = ""; // Clear current list
 
         // Filter players by team and line assignment status
-        const availablePlayers = players.filter(player => player.team === teamName && !player.lineAssigned);
+        const availablePlayers = players.filter(player => player.team === teamName && !player.specialTeamAssigned);
         availablePlayers.forEach(player => {
             const playerDiv = document.createElement("div");
             playerDiv.className = "player";
