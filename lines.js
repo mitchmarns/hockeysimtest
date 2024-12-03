@@ -44,8 +44,6 @@ const populateAvailablePlayers = (players) => {
   const unassignedPlayers = players.filter(
     (player) => 
       !player.lineAssigned && // Player is not assigned to a line
-      !player.injured &&      // Player is not injured
-      !player.healthyScratch  // Player is not a healthy scratch
   );
 
   unassignedPlayers.forEach((player) => {
@@ -55,6 +53,13 @@ const populateAvailablePlayers = (players) => {
     playerDiv.dataset.id = player.id;
     playerDiv.dataset.team = player.team;
     playerDiv.dataset.position = player.position;
+
+    // Apply a class or style based on injury or scratch status
+    if (player.injured) {
+      playerDiv.classList.add("injured");  // Add a class for injured players
+    } else if (player.healthyScratch) {
+      playerDiv.classList.add("healthy-scratch");  // Add a class for healthy scratched players
+    }
 
     // image
     const playerImg = document.createElement("img");
