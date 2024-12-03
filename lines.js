@@ -56,8 +56,10 @@ const populateAvailablePlayers = (players) => {
     // Apply a class or style based on injury or scratch status
     if (player.injured) {
       playerDiv.classList.add("injured");  // Add a class for injured players
+      playerDiv.draggable = false;  // Prevent dragging for injured players
     } else if (player.healthyScratch) {
       playerDiv.classList.add("healthy-scratch");  // Add a class for healthy scratched players
+      playerDiv.draggable = false;  // Prevent dragging for healthy scratched players
     }
 
     // image
