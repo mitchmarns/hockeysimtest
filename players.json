@@ -29,6 +29,7 @@
         "puckTracking": 87,
         "agility": 82,
         "hockeyIQ": 86
+        "aggression": 68
         }
     },
     {
@@ -60,6 +61,7 @@
         "puckTracking": 87,
         "agility": 82,
         "hockeyIQ": 86
+        "aggression": 68
         }
     },
     {
@@ -96,6 +98,7 @@
         "penaltyKilling": 78,
         "powerPlaySkill": 81,
         "poise": 83
+        "aggression": 68
         }
     },
     {
@@ -132,6 +135,7 @@
         "penaltyKilling": 78,
         "powerPlaySkill": 81,
         "poise": 83
+        "aggression": 68
         }
     },
       {
@@ -168,6 +172,7 @@
         "penaltyKilling": 78,
         "powerPlaySkill": 81,
         "poise": 83
+        "aggression": 68
         }
       },
     {
@@ -204,6 +209,7 @@
         "penaltyKilling": 78,
         "powerPlaySkill": 81,
         "poise": 83
+        "aggression": 68
         }
     },
     {
@@ -240,6 +246,7 @@
         "penaltyKilling": 78,
         "powerPlaySkill": 81,
         "poise": 83
+        "aggression": 68
         }
     },
     {
@@ -276,6 +283,7 @@
         "penaltyKilling": 78,
         "powerPlaySkill": 81,
         "poise": 83
+        "aggression": 68
         }
     },
     {
@@ -312,6 +320,7 @@
         "penaltyKilling": 78,
         "powerPlaySkill": 81,
         "poise": 83
+        "aggression": 68
         }
     },
     {
@@ -348,6 +357,7 @@
         "penaltyKilling": 78,
         "powerPlaySkill": 81,
         "poise": 83
+        "aggression": 68
         }
     },
     {
@@ -384,6 +394,7 @@
         "penaltyKilling": 78,
         "powerPlaySkill": 81,
         "poise": 83
+        "aggression": 68
         }
     },
     {
@@ -415,6 +426,7 @@
           "puckTracking": 87,
           "agility": 82,
           "hockeyIQ": 86
+          "aggression": 68
         }
     },
     {
@@ -451,6 +463,7 @@
         "penaltyKilling": 78,
         "powerPlaySkill": 81,
         "poise": 83
+        "aggression": 68
         }
     },
     {
@@ -480,6 +493,7 @@
         "endurance": 80,
         "hockeyIQ": 85,
         "leadership": 76
+        "aggression": 68
         }
     }
   ]
