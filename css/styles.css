@@ -411,3 +411,27 @@ button:hover {
 .player-info {
   margin-bottom: 20px;
 }
+
+/* Visual cue for injured players */
+.player.injured {
+  background-color: lightgray; /* Light gray background */
+  opacity: 0.5;  /* Slightly transparent */
+  color: gray;  /* Gray text color */
+  border: 1px solid gray;  /* Optional border for distinction */
+}
+
+.player.injured .player-image {
+  opacity: 0.5; /* Make the player image slightly transparent */
+}
+
+/* Visual cue for healthy scratched players */
+.player.healthy-scratch {
+  background-color: #f0e68c; /* Light yellow background */
+  opacity: 0.8; /* Slightly transparent */
+  color: #8b8000;  /* Brownish-yellow text color */
+  border: 1px solid #8b8000;  /* Optional border for distinction */
+}
+
+.player.healthy-scratch .player-image {
+  opacity: 0.8; /* Make the player image slightly transparent */
+}
