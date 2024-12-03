@@ -18,12 +18,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Load players (assumed static data for now)
     const players = loadPlayers();
 
-    // Function to render special teams (Powerplay and Penalty Kill)
+
+
+// Render lines
 const renderSpecialTeams = (teamName) => {
     const powerplayContainer = document.getElementById("powerplay");
     const penaltyKillContainer = document.getElementById("penaltykill");
-
-    // Clear the existing content in both sections
+    
     powerplayContainer.innerHTML = "";
     penaltyKillContainer.innerHTML = "";
 
@@ -53,15 +54,6 @@ const renderSpecialTeams = (teamName) => {
     }
 
     // Create Penalty Kill slots (4 slots: F1, F2, D1, D2)
-    const renderSpecialTeams = (teamName) => {
-        const powerplayContainer = document.getElementById("powerplay");
-        const penaltyKillContainer = document.getElementById("penaltykill");
-
-    // Clear the existing content in both sections
-    powerplayContainer.innerHTML = "";
-    penaltyKillContainer.innerHTML = "";
-
-    // Create Powerplay slots (5 slots: LW, C, RW, LD, RD)
     for (let i = 1; i <= 2; i++) {
         ["F1", "F2", "D1", "D2"].forEach((position) => {
             const slotId = `penaltykill-${i}-${position}`;
