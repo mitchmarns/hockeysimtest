@@ -18,16 +18,25 @@ const createToggleButton = (player, type, players) => {
         (player.injured ? "Mark as Healthy" : "Mark as Injured") : 
         (player.healthyScratch ? "Remove from Healthy Scratch" : "Add to Healthy Scratch");
 
-    // Toggle functionality
+    // Toggle functionality with confirmation
     button.addEventListener("click", () => {
-        if (type === "injury") {
-            player.injured = !player.injured; // Toggle injury status
-        } else if (type === "healthyScratch") {
-            player.healthyScratch = !player.healthyScratch; // Toggle healthy scratch status
-        }
+        const action = type === "injury" ? 
+            (player.injured ? "healthy" : "injured") : 
+            (player.healthyScratch ? "remove from healthy scratch" : "add to healthy scratch");
 
-        savePlayers(players); // Save updated player data
-        renderPlayerList(); // Re-render the player list with updated statuses
+        const confirmationMessage = `Are you sure you want to ${action} ${player.name}?`;
+
+        if (window.confirm(confirmationMessage)) {
+            // If confirmed, toggle the player's status
+            if (type === "injury") {
+                player.injured = !player.injured; // Toggle injury status
+            } else if (type === "healthyScratch") {
+                player.healthyScratch = !player.healthyScratch; // Toggle healthy scratch status
+            }
+
+            savePlayers(players); // Save updated player data
+            renderPlayerList(); // Re-render the player list with updated statuses
+        }
     });
 
     return button;
