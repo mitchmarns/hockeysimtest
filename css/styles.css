@@ -435,3 +435,7 @@ button:hover {
 .player.healthy-scratch .player-image {
   opacity: 0.8; /* Make the player image slightly transparent */
 }
+
+.player[draggable="false"] {
+  opacity: 0.3; /* Make it clear that they cannot be dragged */
+}
