@@ -14,9 +14,21 @@
       "image": "https://assets.nhle.com/mugs/nhl/20242025/BOS/8480280.png",
       "skills": {
         "glove": 92,
-        "stick": 89,
+        "stickHandling": 89,
         "legs": 85,
-        "speed": 78
+        "reboundControl": 84,
+        "positioning": 90,
+        "fiveHole": 88,
+        "speed": 78,
+        "reflexes": 91,
+        "durability": 80,
+        "leadership": 76,
+        "vision": 88,
+        "confidence": 83,
+        "communication": 79,
+        "puckTracking": 87,
+        "agility": 82,
+        "hockeyIQ": 86
         }
     },
     {
@@ -32,10 +44,22 @@
       "healthyScratch": false,
       "image": "https://assets.nhle.com/mugs/nhl/20242025/ANA/8480843.png",
       "skills": {
-        "glove": 87,
-        "stick": 89,
-        "legs": 89,
-        "speed": 80
+        "glove": 92,
+        "stickHandling": 89,
+        "legs": 85,
+        "reboundControl": 84,
+        "positioning": 90,
+        "fiveHole": 88,
+        "speed": 78,
+        "reflexes": 91,
+        "durability": 80,
+        "leadership": 76,
+        "vision": 88,
+        "confidence": 83,
+        "communication": 79,
+        "puckTracking": 87,
+        "agility": 82,
+        "hockeyIQ": 86
         }
     },
     {
@@ -51,10 +75,27 @@
       "healthyScratch": false,
       "image": "https://assets.nhle.com/mugs/nhl/20242025/ANA/8481533.png",
       "skills": {
-        "shooting": 87,
+        "shootingAccuracy": 87,
+        "shootingPower": 85,
         "passing": 87,
+        "puckControl": 82,
+        "speed": 88,
+        "acceleration": 84,
+        "agility": 86,
+        "balance": 78,
         "defense": 77,
-        "speed": 88
+        "stickChecking": 81,
+        "bodyChecking": 75,
+        "endurance": 80,
+        "hockeyIQ": 85,
+        "leadership": 76,
+        "vision": 84,
+        "creativity": 82,
+        "faceoff": 72,
+        "shotBlocking": 79,
+        "penaltyKilling": 78,
+        "powerPlaySkill": 81,
+        "poise": 83
         }
     },
     {
@@ -70,10 +111,27 @@
       "healthyScratch": false,
       "image": "https://assets.nhle.com/mugs/nhl/20242025/TOR/8478483.png",
       "skills": {
-        "shooting": 88,
-        "passing": 75,
-        "defense": 70,
-        "speed": 90
+        "shootingAccuracy": 87,
+        "shootingPower": 85,
+        "passing": 87,
+        "puckControl": 82,
+        "speed": 88,
+        "acceleration": 84,
+        "agility": 86,
+        "balance": 78,
+        "defense": 77,
+        "stickChecking": 81,
+        "bodyChecking": 75,
+        "endurance": 80,
+        "hockeyIQ": 85,
+        "leadership": 76,
+        "vision": 84,
+        "creativity": 82,
+        "faceoff": 72,
+        "shotBlocking": 79,
+        "penaltyKilling": 78,
+        "powerPlaySkill": 81,
+        "poise": 83
         }
     },
       {
@@ -89,10 +147,27 @@
       "healthyScratch": false,
       "image": "https://assets.nhle.com/mugs/nhl/20242025/TOR/8478904.png",
       "skills": {
-        "shooting": 75,
-        "passing": 75,
-        "defense": 81,
-        "speed": 78
+        "shootingAccuracy": 87,
+        "shootingPower": 85,
+        "passing": 87,
+        "puckControl": 82,
+        "speed": 88,
+        "acceleration": 84,
+        "agility": 86,
+        "balance": 78,
+        "defense": 77,
+        "stickChecking": 81,
+        "bodyChecking": 75,
+        "endurance": 80,
+        "hockeyIQ": 85,
+        "leadership": 76,
+        "vision": 84,
+        "creativity": 82,
+        "faceoff": 72,
+        "shotBlocking": 79,
+        "penaltyKilling": 78,
+        "powerPlaySkill": 81,
+        "poise": 83
         }
       },
     {
@@ -108,10 +183,27 @@
       "healthyScratch": false,
       "image": "https://assets.nhle.com/mugs/nhl/20242025/TOR/8482720.png",
       "skills": {
-        "shooting": 87,
-        "passing": 85,
-        "defense": 79,
-        "speed": 86
+        "shootingAccuracy": 87,
+        "shootingPower": 85,
+        "passing": 87,
+        "puckControl": 82,
+        "speed": 88,
+        "acceleration": 84,
+        "agility": 86,
+        "balance": 78,
+        "defense": 77,
+        "stickChecking": 81,
+        "bodyChecking": 75,
+        "endurance": 80,
+        "hockeyIQ": 85,
+        "leadership": 76,
+        "vision": 84,
+        "creativity": 82,
+        "faceoff": 72,
+        "shotBlocking": 79,
+        "penaltyKilling": 78,
+        "powerPlaySkill": 81,
+        "poise": 83
         }
     },
     {
@@ -127,10 +219,27 @@
       "healthyScratch": false,
       "image": "https://assets.nhle.com/mugs/nhl/20242025/CAR/8482093.png",
       "skills": {
-        "shooting": 89,
-        "passing": 90,
-        "defense": 80,
-        "speed": 89
+        "shootingAccuracy": 87,
+        "shootingPower": 85,
+        "passing": 87,
+        "puckControl": 82,
+        "speed": 88,
+        "acceleration": 84,
+        "agility": 86,
+        "balance": 78,
+        "defense": 77,
+        "stickChecking": 81,
+        "bodyChecking": 75,
+        "endurance": 80,
+        "hockeyIQ": 85,
+        "leadership": 76,
+        "vision": 84,
+        "creativity": 82,
+        "faceoff": 72,
+        "shotBlocking": 79,
+        "penaltyKilling": 78,
+        "powerPlaySkill": 81,
+        "poise": 83
         }
     },
     {
@@ -146,10 +255,27 @@
       "healthyScratch": false,
       "image": "https://assets.nhle.com/mugs/nhl/20242025/SEA/8478407.png",
       "skills": {
-        "shooting": 80,
-        "passing": 85,
-        "defense": 95,
-        "speed": 82
+        "shootingAccuracy": 87,
+        "shootingPower": 85,
+        "passing": 87,
+        "puckControl": 82,
+        "speed": 88,
+        "acceleration": 84,
+        "agility": 86,
+        "balance": 78,
+        "defense": 77,
+        "stickChecking": 81,
+        "bodyChecking": 75,
+        "endurance": 80,
+        "hockeyIQ": 85,
+        "leadership": 76,
+        "vision": 84,
+        "creativity": 82,
+        "faceoff": 72,
+        "shotBlocking": 79,
+        "penaltyKilling": 78,
+        "powerPlaySkill": 81,
+        "poise": 83
         }
     },
     {
@@ -165,10 +291,27 @@
       "healthyScratch": false,
       "image": "https://assets.nhle.com/mugs/nhl/20242025/TOR/8479318.png",
       "skills": {
-        "shooting": 95,
-        "passing": 90,
-        "defense": 88,
-        "speed": 87
+        "shootingAccuracy": 87,
+        "shootingPower": 85,
+        "passing": 87,
+        "puckControl": 82,
+        "speed": 88,
+        "acceleration": 84,
+        "agility": 86,
+        "balance": 78,
+        "defense": 77,
+        "stickChecking": 81,
+        "bodyChecking": 75,
+        "endurance": 80,
+        "hockeyIQ": 85,
+        "leadership": 76,
+        "vision": 84,
+        "creativity": 82,
+        "faceoff": 72,
+        "shotBlocking": 79,
+        "penaltyKilling": 78,
+        "powerPlaySkill": 81,
+        "poise": 83
         }
     },
     {
@@ -184,10 +327,27 @@
       "healthyScratch": false,
       "image": "https://assets.nhle.com/mugs/nhl/20242025/CAR/8480830.png",
       "skills": {
-        "shooting": 91,
-        "passing": 89,
-        "defense": 79,
-        "speed": 88
+        "shootingAccuracy": 87,
+        "shootingPower": 85,
+        "passing": 87,
+        "puckControl": 82,
+        "speed": 88,
+        "acceleration": 84,
+        "agility": 86,
+        "balance": 78,
+        "defense": 77,
+        "stickChecking": 81,
+        "bodyChecking": 75,
+        "endurance": 80,
+        "hockeyIQ": 85,
+        "leadership": 76,
+        "vision": 84,
+        "creativity": 82,
+        "faceoff": 72,
+        "shotBlocking": 79,
+        "penaltyKilling": 78,
+        "powerPlaySkill": 81,
+        "poise": 83
         }
     },
     {
@@ -203,10 +363,27 @@
       "healthyScratch": false,
       "image": "https://assets.nhle.com/mugs/nhl/20242025/DAL/8482740.png",
       "skills": {
-        "shooting": 88,
-        "passing": 89,
-        "defense": 82,
-        "speed": 88
+        "shootingAccuracy": 87,
+        "shootingPower": 85,
+        "passing": 87,
+        "puckControl": 82,
+        "speed": 88,
+        "acceleration": 84,
+        "agility": 86,
+        "balance": 78,
+        "defense": 77,
+        "stickChecking": 81,
+        "bodyChecking": 75,
+        "endurance": 80,
+        "hockeyIQ": 85,
+        "leadership": 76,
+        "vision": 84,
+        "creativity": 82,
+        "faceoff": 72,
+        "shotBlocking": 79,
+        "penaltyKilling": 78,
+        "powerPlaySkill": 81,
+        "poise": 83
         }
     },
     {
@@ -222,10 +399,22 @@
       "healthyScratch": false,
       "image": "https://assets.nhle.com/mugs/nhl/20242025/TOR/8479361.png",
       "skills": {
-        "glove": 92,
-        "stick": 84,
-        "legs": 87,
-        "speed": 80
+         "glove": 92,
+          "stickHandling": 89,
+          "legs": 85,
+          "reboundControl": 84,
+          "positioning": 90,
+          "fiveHole": 88,
+          "speed": 78,
+          "reflexes": 91,
+          "durability": 80,
+          "leadership": 76,
+          "vision": 88,
+          "confidence": 83,
+          "communication": 79,
+          "puckTracking": 87,
+          "agility": 82,
+          "hockeyIQ": 86
         }
     },
     {
@@ -241,10 +430,27 @@
       "healthyScratch": false,
       "image": "https://assets.nhle.com/mugs/nhl/20242025/TOR/8477939.png",
       "skills": {
-        "shooting": 90,
-        "passing": 92,
-        "defense": 80,
-        "speed": 90
+        "shootingAccuracy": 87,
+        "shootingPower": 85,
+        "passing": 87,
+        "puckControl": 82,
+        "speed": 88,
+        "acceleration": 84,
+        "agility": 86,
+        "balance": 78,
+        "defense": 77,
+        "stickChecking": 81,
+        "bodyChecking": 75,
+        "endurance": 80,
+        "hockeyIQ": 85,
+        "leadership": 76,
+        "vision": 84,
+        "creativity": 82,
+        "faceoff": 72,
+        "shotBlocking": 79,
+        "penaltyKilling": 78,
+        "powerPlaySkill": 81,
+        "poise": 83
         }
     },
     {
@@ -260,10 +466,20 @@
       "healthyScratch": false,
       "image": "https://assets.nhle.com/mugs/nhl/20242025/BOS/8477956.png",
       "skills": {
-        "shooting": 95,
-        "passing": 95,
-        "defense": 80,
-        "speed": 91
+        "shootingAccuracy": 87,
+        "shootingPower": 85,
+        "passing": 87,
+        "puckControl": 82,
+        "speed": 88,
+        "acceleration": 84,
+        "agility": 86,
+        "balance": 78,
+        "defense": 77,
+        "stickChecking": 81,
+        "bodyChecking": 75,
+        "endurance": 80,
+        "hockeyIQ": 85,
+        "leadership": 76
         }
     }
   ]
