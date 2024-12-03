@@ -133,6 +133,11 @@ const applyAssignmentsToSlots = (players) => {
           return;
         }
 
+        if (player.injured || player.healthyScratch) {
+        alert(`${player.name} cannot be assigned to a line because they are either injured or a healthy scratch.`);
+        return;  // Prevent the player from being dropped
+      }
+
         // Extract relevant information from data-position
         const positionParts = slot.dataset.position.split('-');
         const slotTeam = positionParts[0];   // 'Rangers'
