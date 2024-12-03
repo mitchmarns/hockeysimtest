@@ -18,7 +18,108 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Load players (assumed static data for now)
     const players = loadPlayers();
 
+// Helper function to create slot elements for special teams
+    const createSlot = (position, title) => {
+        const slot = document.createElement("div");
+        slot.classList.add("special-team-slot");
+        slot.dataset.position = position;
+        slot.innerHTML = `<h3>${title}</h3>`;
 
+        // Add drag-and-drop event listeners
+        slot.ondragover = (e) => e.preventDefault(); // Allow the drop
+        slot.ondrop = handleDrop; // Handle the drop event
+
+        return slot;
+    };
+
+// Populate available players based on the current team
+    const populateAvailablePlayers = (players, teamName) => {
+        const playersContainer = document.getElementById("players");
+        playersContainer.innerHTML = ""; // Clear current list
+
+        // Filter players by team and line assignment status
+        const availablePlayers = players.filter(player => 
+            player.team === teamName && 
+            !player.specialTeamAssigned
+        );
+        
+        availablePlayers.forEach(player => {
+            const playerDiv = document.createElement("div");
+            playerDiv.className = "player";
+            playerDiv.draggable = true;
+            playerDiv.dataset.id = player.id;
+
+            // Apply styles based on injury or scratch status
+            if (player.injured) {
+                playerDiv.classList.add("injured");
+                playerDiv.title = "This player is injured and cannot be assigned.";
+            } else if (player.healthyScratch) {
+                playerDiv.classList.add("healthy-scratch");
+                playerDiv.title = "This player is a healthy scratch and cannot be assigned.";
+            }
+
+            const playerImg = document.createElement("img");
+            playerImg.src = player.image;
+            playerImg.alt = player.name;
+            playerDiv.appendChild(playerImg);
+
+            const playerInfo = document.createElement("div");
+            playerInfo.className = "player-info";
+
+            const playerName = document.createElement("span");
+            playerName.textContent = `${player.name} #${player.id}`;
+            playerDiv.appendChild(playerName);
+
+            const playerPosition = document.createElement("span");
+            playerPosition.className = "player-position";
+            playerPosition.textContent = `Position: ${player.position}`;
+            playerInfo.appendChild(playerPosition);
+        
+            playerDiv.appendChild(playerInfo);
+
+            if (!player.injured && !player.healthyScratch) {
+                playerDiv.addEventListener("dragstart", (e) => {
+                    e.dataTransfer.setData("playerId", player.id);
+                });
+            }
+        
+             playerDiv.addEventListener("dragstart", (e) => {
+                e.dataTransfer.setData("playerId", player.id);
+            });
+        
+            playersContainer.appendChild(playerDiv);
+        });
+    };
+
+// Handle the drop event
+    const handleDrop = (event) => {
+        event.preventDefault();
+
+        const playerId = event.dataTransfer.getData("playerId");
+        const droppedSlot = event.currentTarget;
+        const position = droppedSlot.dataset.position;
+
+        // Find the player by ID
+        const player = players.find((p) => p.id === parseInt(playerId));
+        if (player && !player.injured && !player.healthyScratch) {
+            // Update the player's assignment
+            player.specialTeamAssigned = position;
+
+            // Save the updated players data
+            savePlayers(players);
+
+            // Update the slot content to show the player's details
+            droppedSlot.innerHTML = `
+                <div class="slot-content">
+                    <img src="${player.image}" alt="${player.name}" class="player-image">
+                    <span>${player.name}</span>
+                </div>
+            `;
+            droppedSlot.classList.add("assigned");
+        } else {
+            alert("This player cannot be assigned due to their status.");
+        }
+    };
 
 // Render lines
 const renderSpecialTeams = (teamName) => {
@@ -78,89 +179,6 @@ const renderSpecialTeams = (teamName) => {
         });
     }
 };
-
-
-    // Helper function to create slot elements for special teams
-    const createSlot = (position, title) => {
-        const slot = document.createElement("div");
-        slot.classList.add("special-team-slot");
-        slot.dataset.position = position;
-        slot.innerHTML = `<h3>${title}</h3>`;
-
-        // Add drag-and-drop event listeners
-        slot.ondragover = (e) => e.preventDefault(); // Allow the drop
-        slot.ondrop = handleDrop; // Handle the drop event
-
-        return slot;
-    };
-
-    // Populate available players based on the current team
-    const populateAvailablePlayers = (players, teamName) => {
-        const playersContainer = document.getElementById("players");
-        playersContainer.innerHTML = ""; // Clear current list
-
-        // Filter players by team and line assignment status
-        const availablePlayers = players.filter(player => player.team === teamName && !player.specialTeamAssigned);
-        availablePlayers.forEach(player => {
-            const playerDiv = document.createElement("div");
-            playerDiv.className = "player";
-            playerDiv.draggable = true;
-            playerDiv.dataset.id = player.id;
-
-            const playerImg = document.createElement("img");
-            playerImg.src = player.image;
-            playerImg.alt = player.name;
-            playerDiv.appendChild(playerImg);
-
-            const playerInfo = document.createElement("div");
-            playerInfo.className = "player-info";
-
-            const playerName = document.createElement("span");
-            playerName.textContent = `${player.name} #${player.id}`;
-            playerDiv.appendChild(playerName);
-
-            const playerPosition = document.createElement("span");
-            playerPosition.className = "player-position";
-            playerPosition.textContent = `Position: ${player.position}`;
-            playerInfo.appendChild(playerPosition);
-        
-            playerDiv.appendChild(playerInfo);
-        
-             playerDiv.addEventListener("dragstart", (e) => {
-                e.dataTransfer.setData("playerId", player.id);
-            });
-        
-            playersContainer.appendChild(playerDiv);
-        });
-    };
-
-    // Handle the drop event
-    const handleDrop = (event) => {
-        event.preventDefault();
-
-        const playerId = event.dataTransfer.getData("playerId");
-        const droppedSlot = event.currentTarget;
-        const position = droppedSlot.dataset.position;
-
-        // Find the player by ID
-        const player = players.find((p) => p.id === parseInt(playerId));
-        if (player) {
-            // Update the player's assignment
-            player.specialTeamAssigned = position;
-
-            // Save the updated players data
-            savePlayers(players);
-
-            // Update the slot content to show the player's details
-            droppedSlot.innerHTML = `
-                <div class="slot-content">
-                    <img src="${player.image}" alt="${player.name}" class="player-image">
-                    <span>${player.name}</span>
-                </div>
-            `;
-            droppedSlot.classList.add("assigned");
-        }
-    };
 
     // Handle team selection change
     const onTeamChange = () => {
