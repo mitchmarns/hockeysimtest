@@ -1,5 +1,5 @@
 // Load players from localStorage
-  const loadPlayers = () => {
+  const loadPlayersFromStorage = () => {
     const playersData = JSON.parse(localStorage.getItem("playersData"));
     if (playersData && playersData.players) {
       return playersData.players;
