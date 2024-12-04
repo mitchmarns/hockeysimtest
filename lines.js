@@ -144,8 +144,7 @@ const applyAssignmentsToSlots = (players) => {
         const positionParts = slot.dataset.position.split('-');
         const slotTeam = positionParts[0];   // 'Rangers'
         const slotLineType = positionParts[1];  // 'forward'
-        const slotLineNumber = positionParts[2]; // '1'
-        const slotPosition = positionParts[3];  // 'LW'
+        const slotPosition = positionParts[2];  // 'LW'
 
         // Validate if the player's position and team match the slot's position
         if (player.team === slotTeam && 
