@@ -40,7 +40,7 @@ function simulatePeriod(teamA, teamB, periodNum, cumulativeScores) {
     let teamBScore = 0;
 
     // Simulate multiple scoring attempts per period
-    const scoringChances = 15; // Average number of scoring chances per period
+    const scoringChances = 30; // Average number of scoring chances per period
     for (let i = 0; i < scoringChances; i++) {
         teamAScore += calculateTeamScore(teamA.players, getGoalieSkill(teamB.players));
         teamBScore += calculateTeamScore(teamB.players, getGoalieSkill(teamA.players));
@@ -138,9 +138,9 @@ function calculateTeamScore(players, goalieSkill) {
             const shotSuccessChance = (offense / 100) * 0.4; 
             const goalieSaveChance = (100 - goalieSkill) / 100;
 
-            if (Math.random() < (shotSuccessChance * goalieSaveChance)) {
-                            score++;
-                        }
+            if (Math.random() < (baseGoalChance + shotSuccessChance * goalieSaveChance)) {
+                score++;
+            }
                     }
                 });
             
