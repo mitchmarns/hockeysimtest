@@ -49,7 +49,11 @@ function simulatePeriod(teamA, teamB, periodNum) {
     log.push(`${teamA.name} scored ${teamAScore} goals this period.`);
     log.push(`${teamB.name} scored ${teamBScore} goals this period.`);
 
-    return { teamAScore, teamBScore, log };
+    // Update cumulative scores
+    cumulativeScores.teamA += teamAScore;
+    cumulativeScores.teamB += teamBScore;
+
+    return { teamAScore, teamBScore, log, cumulativeScores };
 }
 
 function getGoalieSkill(players) {
@@ -125,26 +129,23 @@ function calculateTeamScore(players, goalieSkill) {
     players.forEach(player => {
         if (!player.injured) {
             // Calculate offensive ability based on weighted stats
-            const offense = (player.skills.slapShotAccuracy * 0.5 + 
-                             player.skills.wristShotAccuracy * 0.4 + 
-                             player.skills.puckControl * 0.3); 
+            const offense = (player.skills.slapShotAccuracy * 0.6 + 
+                             player.skills.wristShotAccuracy * 0.5 + 
+                             player.skills.puckControl * 0.4); 
 
             // Adjust the chance of a goal based on the goalie’s skill
-            const baseGoalChance = 0.05;
-            const shotSuccessChance = (offense / 100) * 0.35; 
+            const baseGoalChance = 0.1;
+            const shotSuccessChance = (offense / 100) * 0.4; 
             const goalieSaveChance = (100 - goalieSkill) / 100;
 
-            // Simulate shot outcome, considering the goalie’s save chance
-            const isGoalScored = Math.random() < (shotSuccessChance * goalieSaveChance);
-
-            if (isGoalScored) {
-                score++;
+            if (Math.random() < (shotSuccessChance * goalieSaveChance)) {
+                            score++;
+                        }
+                    }
+                });
+            
+                return score;
             }
-        }
-    });
-
-    return score;
-}
 
 // Handle injuries
 function handleInjuries(team) {
@@ -201,8 +202,11 @@ function simulateGame() {
     let teamBScore = 0;
     const gameLog = [`${teamA.name} vs. ${teamB.name}`];
 
+    // Initialize cumulative scores object
+    let cumulativeScores = { teamA: 0, teamB: 0 };
+
     for (let period = 1; period <= 3; period++) {
-        const { teamAScore: periodAScore, teamBScore: periodBScore, log } = simulatePeriod(teamA, teamB, period);
+        const { teamAScore: periodAScore, teamBScore: periodBScore, log, cumulativeScores: updatedCumulativeScores } = simulatePeriod(teamA, teamB, period, cumulativeScores);
         teamAScore += periodAScore;
         teamBScore += periodBScore;
         gameLog.push(...log);
