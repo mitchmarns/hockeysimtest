@@ -439,3 +439,67 @@ button:hover {
 .player[draggable="false"] {
   opacity: 0.3; /* Make it clear that they cannot be dragged */
 }
+
+header {
+  background: #003366;
+  color: #fff;
+  padding: 1rem;
+  text-align: center;
+}
+
+header h1 {
+  font-size: 2rem;
+}
+
+main {
+  flex: 1;
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.game-container {
+  max-width: 800px;
+  width: 100%;
+  text-align: center;
+}
+
+.btn {
+  background: #003366;
+  color: #fff;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  margin-bottom: 1.5rem;
+}
+
+.btn:hover {
+  background: #0055cc;
+}
+
+/* Log Container */
+.log-container {
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 1rem;
+  max-height: 400px;
+  overflow-y: auto;
+  text-align: left;
+}
+
+.log-container p {
+  margin-bottom: 0.5rem;
+}
+
+/* Footer Styles */
+footer {
+  background: #003366;
+  color: #fff;
+  text-align: center;
+  padding: 1rem;
+}
