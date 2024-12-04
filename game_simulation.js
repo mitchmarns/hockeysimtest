@@ -47,6 +47,67 @@ function simulatePeriod(teamA, teamB, periodNum) {
     return { teamAScore, teamBScore, log };
 }
 
+function simulateOvertime(teamA, teamB) {
+    const log = ["Overtime Start:"];
+    const overtimeOutcome = Math.random() * 100;
+    let teamAScore = 0;
+    let teamBScore = 0;
+
+    if (overtimeOutcome < 45) {
+        // Team A wins
+        teamAScore = 1;
+        log.push(`${teamA.name} scores in overtime!`);
+    } else if (overtimeOutcome < 90) {
+        // Team B wins
+        teamBScore = 1;
+        log.push(`${teamB.name} scores in overtime!`);
+    } else {
+        // Shootout needed
+        log.push("Overtime ends in a tie. Proceeding to a shootout.");
+    }
+
+    return { teamAScore, teamBScore, log };
+}
+
+function simulateShootout(teamA, teamB) {
+    const log = ["Shootout Start:"];
+    let teamAScore = 0;
+    let teamBScore = 0;
+
+    // Simulate 3 shootout rounds
+    for (let round = 1; round <= 3; round++) {
+        const teamAShot = Math.random() < 0.3; // 30% chance for a goal
+        const teamBShot = Math.random() < 0.3;
+
+        if (teamAShot) {
+            teamAScore++;
+            log.push(`${teamA.name} scores in shootout round ${round}.`);
+        }
+        if (teamBShot) {
+            teamBScore++;
+            log.push(`${teamB.name} scores in shootout round ${round}.`);
+        }
+    }
+
+    // Sudden death if tied after 3 rounds
+    while (teamAScore === teamBScore) {
+        const teamAShot = Math.random() < 0.3;
+        const teamBShot = Math.random() < 0.3;
+
+        if (teamAShot && !teamBShot) {
+            teamAScore++;
+            log.push(`${teamA.name} scores and wins in sudden death!`);
+            break;
+        } else if (teamBShot && !teamAShot) {
+            teamBScore++;
+            log.push(`${teamB.name} scores and wins in sudden death!`);
+            break;
+        }
+    }
+
+    return { teamAScore, teamBScore, log };
+}
+
 // Calculate team score based on players' offensive stats
 function calculateTeamScore(players, goalieSkill) {
     let score = 0;
