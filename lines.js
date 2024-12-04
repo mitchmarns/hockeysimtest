@@ -148,11 +148,11 @@ const applyAssignmentsToSlots = (players) => {
         const slotPosition = positionParts[3];  // 'LW'
 
         // Validate if the player's position and team match the slot's position
-        const playerTeam = player.team;
-        const playerPosition = player.position; 
+        if (player.team === slotTeam && 
+            ((player.position === slotPosition) || 
+             (slotLineType === 'goalies' && (slotPosition === 'Starter' || slotPosition === 'Backup') && 
+              (player.position === 'Starter' || player.position === 'Backup')))) {
 
-      //update ui
-      if (player.team === slotTeam && player.position === slotPosition) {
         // Update UI: Add player to the slot
         const playerImg = document.createElement("img");
         playerImg.src = player.image; // Use player.image from the object
