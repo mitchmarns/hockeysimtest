@@ -134,8 +134,8 @@ function calculateTeamScore(players, goalieSkill) {
                              player.skills.puckControl * 0.3); 
 
             // Adjust the chance of a goal based on the goalie’s skill
-            const baseGoalChance = 0.1;
-            const shotSuccessChance = (offense / 100) * 0.5; 
+            const baseGoalChance = 0.3;
+            const shotSuccessChance = (offense / 100) * 0.7; 
             const goalieSaveChance = (100 - goalieSkill) / 100;
 
             if (Math.random() < (baseGoalChance + shotSuccessChance * goalieSaveChance)) {
