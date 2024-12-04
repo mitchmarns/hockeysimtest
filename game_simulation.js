@@ -159,11 +159,17 @@ function handleInjuries(team) {
     return injuredLog;
 }
 
-// simulate penalties
 function simulatePenalties(teamA, teamB) {
     const penaltyTeam = Math.random() > 0.8 ? teamA : teamB; // 20% chance of penalty
     const aggressivePlayers = penaltyTeam.players.filter(player => player.skills.aggressiveness > 80); // Higher aggressiveness = higher chance of penalty
-    const penalizedPlayer = aggressivePlayers[Math.floor(Math.random() * aggressivePlayers.length)];
+    
+    let penalizedPlayer;
+    if (aggressivePlayers.length > 0) {
+        penalizedPlayer = aggressivePlayers[Math.floor(Math.random() * aggressivePlayers.length)];
+    } else {
+        penalizedPlayer = penaltyTeam.players[Math.floor(Math.random() * penaltyTeam.players.length)]; // Default to random player
+    }
+
     return `${penalizedPlayer.name} from ${penaltyTeam.name} receives a penalty.`;
 }
 
