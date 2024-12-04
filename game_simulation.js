@@ -115,12 +115,12 @@ function calculateTeamScore(players, goalieSkill) {
     players.forEach(player => {
         if (!player.injured) {
             // Calculate offensive ability based on weighted stats
-            const offense = (player.skills.slapShotAccuracy * 0.4 + 
+            const offense = (player.skills.slapShotAccuracy * 0.5 + 
                              player.skills.wristShotAccuracy * 0.4 + 
-                             player.skills.puckControl * 0.2);
+                             player.skills.puckControl * 0.3); // Increased weights for offense
 
             // Adjust the chance of a goal based on the goalie’s skill
-            const shotSuccessChance = (offense / 100) * 0.25;
+            const shotSuccessChance = (offense / 100) * 0.35; // Boost the base success chance
             const goalieSaveChance = (100 - goalieSkill) / 100; // Higher goalie skill means higher save chance
 
             // Simulate shot outcome, considering the goalie’s save chance
