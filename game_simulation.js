@@ -134,7 +134,7 @@ function calculateTeamScore(players, goalieSkill) {
                              player.skills.puckControl * 0.3); 
 
             // Adjust the chance of a goal based on the goalie’s skill
-            const baseGoalChance = 0.3;
+            const baseGoalChance = 0.6;
             const shotSuccessChance = (offense / 100) * 0.7; 
             const goalieSaveChance = (100 - goalieSkill) / 100;
 
@@ -147,11 +147,11 @@ function calculateTeamScore(players, goalieSkill) {
                 return score;
             }
 
-// Handle injuries
+// Handle injuries with a 2% chance per player
 function handleInjuries(team) {
     const injuredLog = [];
     team.players.forEach(player => {
-        if (!player.injured && Math.random() > 0.95) { // 5% chance of injury
+        if (!player.injured && Math.random() > 0.98) { // 2% chance of injury
             player.injured = true;
             injuredLog.push(`${player.name} from ${team.name} is injured.`);
         }
@@ -159,10 +159,11 @@ function handleInjuries(team) {
     return injuredLog;
 }
 
-// Simulate penalties
+// simulate penalties
 function simulatePenalties(teamA, teamB) {
-    const penaltyTeam = Math.random() > 0.5 ? teamA : teamB;
-    const penalizedPlayer = penaltyTeam.players[Math.floor(Math.random() * penaltyTeam.players.length)];
+    const penaltyTeam = Math.random() > 0.8 ? teamA : teamB; // 20% chance of penalty
+    const aggressivePlayers = penaltyTeam.players.filter(player => player.skills.aggressiveness > 80); // Higher aggressiveness = higher chance of penalty
+    const penalizedPlayer = aggressivePlayers[Math.floor(Math.random() * aggressivePlayers.length)];
     return `${penalizedPlayer.name} from ${penaltyTeam.name} receives a penalty.`;
 }
 
