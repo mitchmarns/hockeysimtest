@@ -121,6 +121,21 @@ function simulateGame() {
         gameLog.push(...injuryLogA, ...injuryLogB);
     }
 
+    // Check for overtime or shootout
+    if (teamAScore === teamBScore) {
+      const overtimeResult = simulateOvertime(teamA, teamB);
+      teamAScore += overtimeResult.teamAScore;
+      teamBScore += overtimeResult.teamBScore;
+      gameLog.push(...overtimeResult.log);
+
+      if (overtimeResult.teamAScore === 0 && overtimeResult.teamBScore === 0) {
+        const shootoutResult = simulateShootout(teamA, teamB);
+        teamAScore += shootoutResult.teamAScore;
+        teamBScore += shootoutResult.teamBScore;
+        gameLog.push(...shootoutResult.log);
+      }
+    }
+
     // Determine the winner
     const winner = teamAScore > teamBScore ? teamA.name : teamB.name;
     gameLog.push(`Final Score: ${teamA.name} ${teamAScore} - ${teamBScore} ${teamB.name}`);
