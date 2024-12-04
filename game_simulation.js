@@ -1,11 +1,11 @@
 // Load players from localStorage
-function loadPlayersFromStorage() {
-    const playersData = JSON.parse(localStorage.getItem('players')) || [];
-    if (playersData.length === 0) {
-        console.error("No players found in localStorage!");
+  const loadPlayers = () => {
+    const playersData = JSON.parse(localStorage.getItem("playersData"));
+    if (playersData && playersData.players) {
+      return playersData.players;
     }
-    return playersData;
-}
+    return [];
+  };
 
 // Group players by team
 function groupPlayersByTeam(players) {
