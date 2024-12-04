@@ -48,24 +48,22 @@ function simulatePeriod(teamA, teamB, periodNum) {
 }
 
 // Calculate team score based on players' offensive stats
-function calculateTeamScore(players) {
+function calculateTeamScore(players, goalieSkill) {
     let score = 0;
 
     players.forEach(player => {
         if (!player.injured) {
-            // Weights for each skill
-            const slapShotWeight = 0.4; // Slapshot is important for a direct goal
-            const wristShotWeight = 0.4; // Wrist shot also plays a significant role
-            const puckControlWeight = 0.2; // Puck control is important but less for direct scoring
-
             // Calculate offensive ability based on weighted stats
-            const offense = (player.skills.slapShotAccuracy * slapShotWeight + 
-                             player.skills.wristShotAccuracy * wristShotWeight + 
-                             player.skills.puckControl * puckControlWeight);
+            const offense = (player.skills.slapShotAccuracy * 0.4 + 
+                             player.skills.wristShotAccuracy * 0.4 + 
+                             player.skills.puckControl * 0.2);
 
-            // Use a random chance to simulate the likelihood of scoring based on the offensive stat
-            const shotSuccessChance = offense / 100; // Convert to a percentage
-            const isGoalScored = Math.random() < shotSuccessChance; // Simulate shot outcome
+            // Adjust the chance of a goal based on the goalie’s skill
+            const shotSuccessChance = (offense / 100) * 0.25;
+            const goalieSaveChance = (100 - goalieSkill) / 100; // Higher goalie skill means higher save chance
+
+            // Simulate shot outcome, considering the goalie’s save chance
+            const isGoalScored = Math.random() < (shotSuccessChance * goalieSaveChance);
 
             if (isGoalScored) {
                 score++;
