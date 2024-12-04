@@ -117,11 +117,11 @@ function calculateTeamScore(players, goalieSkill) {
             // Calculate offensive ability based on weighted stats
             const offense = (player.skills.slapShotAccuracy * 0.5 + 
                              player.skills.wristShotAccuracy * 0.4 + 
-                             player.skills.puckControl * 0.3); // Increased weights for offense
+                             player.skills.puckControl * 0.3) * (0.9 + Math.random() * 0.2); 
 
             // Adjust the chance of a goal based on the goalie’s skill
-            const shotSuccessChance = (offense / 100) * 0.35; // Boost the base success chance
-            const goalieSaveChance = (100 - goalieSkill) / 100; // Higher goalie skill means higher save chance
+            const shotSuccessChance = (offense / 100) * 0.35; 
+            const goalieSaveChance = (100 - goalieSkill) / 100;
 
             // Simulate shot outcome, considering the goalie’s save chance
             const isGoalScored = Math.random() < (shotSuccessChance * goalieSaveChance);
@@ -152,6 +152,27 @@ function simulatePenalties(teamA, teamB) {
     const penaltyTeam = Math.random() > 0.5 ? teamA : teamB;
     const penalizedPlayer = penaltyTeam.players[Math.floor(Math.random() * penaltyTeam.players.length)];
     return `${penalizedPlayer.name} from ${penaltyTeam.name} receives a penalty.`;
+}
+
+function simulatePowerPlay(team, opposingGoalieSkill) {
+    let extraGoals = 0;
+
+    team.players.forEach(player => {
+        if (!player.injured) {
+            const offense = (player.skills.slapShotAccuracy * 0.6 +
+                             player.skills.wristShotAccuracy * 0.4 +
+                             player.skills.puckControl * 0.3);
+
+            const powerPlayChance = (offense / 100) * 0.5; // Higher chance during power plays
+            const goalieSaveChance = (100 - opposingGoalieSkill) / 100;
+
+            if (Math.random() < (powerPlayChance * goalieSaveChance)) {
+                extraGoals++;
+            }
+        }
+    });
+
+    return extraGoals;
 }
 
 // Simulate the game
