@@ -50,14 +50,29 @@ function simulatePeriod(teamA, teamB, periodNum) {
 // Calculate team score based on players' offensive stats
 function calculateTeamScore(players) {
     let score = 0;
+
     players.forEach(player => {
         if (!player.injured) {
-            const offense = (player.skills.slapShotAccuracy + player.skills.wristShotAccuracy + player.skills.puckControl) / 3;
-            if (Math.random() * 100 < offense) {
+            // Weights for each skill
+            const slapShotWeight = 0.4; // Slapshot is important for a direct goal
+            const wristShotWeight = 0.4; // Wrist shot also plays a significant role
+            const puckControlWeight = 0.2; // Puck control is important but less for direct scoring
+
+            // Calculate offensive ability based on weighted stats
+            const offense = (player.skills.slapShotAccuracy * slapShotWeight + 
+                             player.skills.wristShotAccuracy * wristShotWeight + 
+                             player.skills.puckControl * puckControlWeight);
+
+            // Use a random chance to simulate the likelihood of scoring based on the offensive stat
+            const shotSuccessChance = offense / 100; // Convert to a percentage
+            const isGoalScored = Math.random() < shotSuccessChance; // Simulate shot outcome
+
+            if (isGoalScored) {
                 score++;
             }
         }
     });
+
     return score;
 }
 
