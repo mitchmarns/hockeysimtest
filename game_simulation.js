@@ -34,7 +34,7 @@ function setupGame(teams) {
 }
 
 // Simulate a period
-function simulatePeriod(teamA, teamB, periodNum) {
+function simulatePeriod(teamA, teamB, periodNum, cumulativeScores) {
     const log = [`Period ${periodNum} Start:`];
     let teamAScore = 0;
     let teamBScore = 0;
