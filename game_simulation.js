@@ -36,15 +36,25 @@ function setupGame(teams) {
 // Simulate a period
 function simulatePeriod(teamA, teamB, periodNum) {
     const log = [`Period ${periodNum} Start:`];
+    let teamAScore = 0;
+    let teamBScore = 0;
 
-    // Calculate goals using player skills
-    const teamAScore = calculateTeamScore(teamA.players);
-    const teamBScore = calculateTeamScore(teamB.players);
+    // Simulate multiple scoring attempts per period
+    const scoringChances = 15; // Average number of scoring chances per period
+    for (let i = 0; i < scoringChances; i++) {
+        teamAScore += calculateTeamScore(teamA.players, getGoalieSkill(teamB.players));
+        teamBScore += calculateTeamScore(teamB.players, getGoalieSkill(teamA.players));
+    }
 
-    log.push(`${teamA.name} scored ${teamAScore} goals.`);
-    log.push(`${teamB.name} scored ${teamBScore} goals.`);
+    log.push(`${teamA.name} scored ${teamAScore} goals this period.`);
+    log.push(`${teamB.name} scored ${teamBScore} goals this period.`);
 
     return { teamAScore, teamBScore, log };
+}
+
+function getGoalieSkill(players) {
+    const goalie = players.find(player => player.position === "Starter");
+    return goalie ? (goalie.skills.glove + goalie.skills.stick + goalie.skills.legs) / 3 : 50; // Default skill if no goalie
 }
 
 function simulateOvertime(teamA, teamB) {
@@ -117,9 +127,10 @@ function calculateTeamScore(players, goalieSkill) {
             // Calculate offensive ability based on weighted stats
             const offense = (player.skills.slapShotAccuracy * 0.5 + 
                              player.skills.wristShotAccuracy * 0.4 + 
-                             player.skills.puckControl * 0.3) * (0.9 + Math.random() * 0.2); 
+                             player.skills.puckControl * 0.3); 
 
             // Adjust the chance of a goal based on the goalie’s skill
+            const baseGoalChance = 0.05;
             const shotSuccessChance = (offense / 100) * 0.35; 
             const goalieSaveChance = (100 - goalieSkill) / 100;
 
