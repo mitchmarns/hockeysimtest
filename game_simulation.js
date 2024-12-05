@@ -64,12 +64,8 @@ function goalieSaveCheck(goalie, shooter) {
 // Simulate period with early exit for overtime
 function simulatePeriod(homeTeam, awayTeam, isOvertime = false) {
   let plays = [];
-  let goalScored = false; // Flag to track if a goal is scored
-
-  const maxEvents = isOvertime ? 20 : 30; // Shorten the event count for overtime
-
-  for (let i = 0; i < maxEvents; i++) { // Simulate #of "events" in a period
-    const event = Math.random();
+ const maxEvents = getRandomInt(15) + 10; // Random number of events between 10 and 25
+  let periodGoals = 0; // Track the goals scored in this period
     
     if (event < 0.2) {
       // Penalty event
