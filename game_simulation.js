@@ -42,6 +42,38 @@ function groupPlayersByTeam(players) {
         };
     }
 
+// Calculate team score based on players' offensive stats and the opposing goalie's skill
+function calculateTeamScore(players, goalieSkill) {
+    let score = 0;
+
+    players.forEach(player => {
+        if (!player.injured) {
+            // Get player skills for scoring calculation
+            const slapShot = player.skills.slapShotAccuracy || 0;
+            const wristShot = player.skills.wristShotAccuracy || 0;
+            const puckControl = player.skills.puckControl || 0;
+            
+            // Calculate the player's offensive ability
+            const offense = (slapShot * 0.6 + wristShot * 0.4 + puckControl * 0.3);
+
+            // Base goal chance and shot success probability
+            const baseGoalChance = 0.9; // Default chance for a goal attempt
+            const shotSuccessChance = (offense / 100) * 0.7; // Player's skill determining shot chance
+            const goalieSaveChance = (100 - goalieSkill) / 100; // Opponent goalie defense
+
+            // Calculate the actual chance of scoring a goal
+            const goalChance = baseGoalChance + shotSuccessChance * goalieSaveChance;
+
+            // If the calculated chance is higher than a random value, score a goal
+            if (Math.random() < goalChance) {
+                score++;
+            }
+        }
+    });
+
+    return score;
+}
+
 // Simulate a period
 function simulatePeriod(teamA, teamB, periodNum, cumulativeScores) {
     const log = [`Period ${periodNum} Start:`];
