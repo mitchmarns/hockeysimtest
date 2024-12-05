@@ -111,6 +111,31 @@ function simulatePeriod(teamA, teamB, periodNum, cumulativeScores) {
     return { teamAScore, teamBScore, log, cumulativeScores };
 }
 
+// Simulate a penalty for one of the teams
+function simulatePenalties(teamA, teamB) {
+    // Determine if a penalty occurs (20% chance for a penalty in a period)
+    if (Math.random() > 0.8) {
+        // Randomly pick which team gets the penalty
+        const penalizedTeam = Math.random() > 0.5 ? teamA : teamB;
+
+        // Find a player to penalize based on aggression (higher aggressiveness = higher chance of penalty)
+        const aggressivePlayers = penalizedTeam.players.filter(player => player.skills.aggression > 80);
+        let penalizedPlayer;
+
+        if (aggressivePlayers.length > 0) {
+            // Pick a random player from aggressive players
+            penalizedPlayer = aggressivePlayers[Math.floor(Math.random() * aggressivePlayers.length)];
+        } else {
+            // If no aggressive players, penalize a random player
+            penalizedPlayer = penalizedTeam.players[Math.floor(Math.random() * penalizedTeam.players.length)];
+        }
+
+        return `${penalizedPlayer.name} from ${penalizedTeam.name} receives a penalty.`;
+    }
+    // No penalty occurred
+    return "No penalties this period.";
+}
+
 // Simulate the game
 function simulateGame() {
     const players = loadPlayersFromStorage();
