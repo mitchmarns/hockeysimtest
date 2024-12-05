@@ -165,11 +165,37 @@ function simulateGame() {
   const awayTeam = teams[awayTeamName];
 
   gameLog.push(`Game start: ${homeTeamName} vs. ${awayTeamName}`);
+    
   for (let i = 1; i <= 3; i++) {
     gameLog.push(`--- Period ${i} ---`);
     gameLog = gameLog.concat(simulatePeriod(homeTeam, awayTeam));
   }
-  gameLog.push(`Final Score: ${homeTeamName} ${scores.home} - ${scores.away} ${awayTeamName}`);
+  gameLog.push(`End of regulation: ${homeTeamName} ${scores.home} - ${scores.away} ${awayTeamName}`);
+    // Check for tie and add overtime if needed
+  if (scores.home === scores.away) {
+    gameLog.push("Game is tied, starting overtime!");
+
+    // Simulate overtime
+    let overtimePeriod = simulatePeriod(homeTeam, awayTeam);
+    gameLog.push(`--- Overtime ---`);
+    gameLog = gameLog.concat(overtimePeriod);
+
+    // If a goal is scored during overtime, end the game with the winner
+    if (scores.home > scores.away) {
+      gameLog.push(`${homeTeamName} wins in overtime! Final Score: ${scores.home} - ${scores.away}`);
+    } else {
+      gameLog.push(`${awayTeamName} wins in overtime! Final Score: ${scores.away} - ${scores.home}`);
+    }
+  } else {
+    // If no overtime, display the winner
+    if (scores.home > scores.away) {
+      gameLog.push(`${homeTeamName} wins! Final Score: ${scores.home} - ${scores.away}`);
+    } else {
+      gameLog.push(`${awayTeamName} wins! Final Score: ${scores.away} - ${scores.home}`);
+    }
+  }
+
+  // Display the final game log
   displayGameLog();
 }
 
