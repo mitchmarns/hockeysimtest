@@ -47,7 +47,7 @@ function getRandomInt(max) {
 }
 
 function calculateSkill(player) {
-  return (player.skills.glove + player.skills.stick + player.skills.legs + player.skills.speed) / 8;
+  return (player.skills.glove + player.skills.stick + player.skills.legs + player.skills.speed) / 4;
 }
 
 function goalieSaveCheck(goalie, shooter) {
