@@ -138,6 +138,8 @@ function calculateTeamScore(players, goalieSkill) {
             const shotSuccessChance = (offense / 100) * 0.7; 
             const goalieSaveChance = (100 - goalieSkill) / 100;
 
+            const goalChance = baseGoalChance + shotSuccessChance * goalieSaveChance;
+
             if (Math.random() < (baseGoalChance + shotSuccessChance * goalieSaveChance)) {
                 score++;
             }
