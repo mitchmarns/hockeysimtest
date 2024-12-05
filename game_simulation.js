@@ -68,11 +68,11 @@ function calculateTeamScore(players, goalieSkill) {
             const puckControl = player.skills.puckControl || 0;
             
             // Calculate the player's offensive ability
-            const offense = (slapShot * 0.6 + wristShot * 0.4 + puckControl * 0.3);
+            const offense = (slapShot * 0.5 + wristShot * 0.4 + puckControl * 0.1);
 
             // Base goal chance and shot success probability
             const baseGoalChance = 0.1; // Default chance for a goal attempt
-            const shotSuccessChance = (offense / 100) * 0.7; // Player's skill determining shot chance
+            const shotSuccessChance = (offense / 100) * 0.5; // Player's skill determining shot chance
             const goalieSaveChance = (100 - goalieSkill) / 100; // Opponent goalie defense
 
             // Calculate the actual chance of scoring a goal
