@@ -66,59 +66,52 @@ function simulatePeriod(homeTeam, awayTeam) {
       // Goal event
       const scoringTeamName = Math.random() < 0.5 ? homeTeam.name : awayTeam.name;
       const lineAssignments = JSON.parse(localStorage.getItem('lineAssignments')) || {};
-      const activeLine = lineAssignments[scoringTeamName]?.forwardLines?.[0]; // Use first forward line as active line
-      
-      if (activeLine) {
-        const linePlayers = [
-          activeLine.LW,
-          activeLine.C,
-          activeLine.RW
-        ].filter(playerId => playerId); // Remove null or undefined slots
+
+        // Extract players for the first forward line of the scoring team
+          const lineKeys = ["LW", "C", "RW"].map(
+            pos => `${scoringTeamName}-forward-1-${pos}`
+          );
+          const linePlayerIDs = lineKeys.map(key => lineAssignments[key]).filter(id => id);
         
-        // Retrieve player data by IDs
-        const players = linePlayers.map(playerId => 
-          scoringTeam.players.find(player => player.id === playerId)
-        ).filter(player => player); // Ensure all players are valid
-    
-        if (players.length > 0) {
-          const scorer = players[getRandomInt(players.length)];
-          let assist1 = null;
-          let assist2 = null;
-    
-          // Determine assists
-          if (players.length > 1 && Math.random() < 0.7) { // Ensure at least one assist
-            do {
-              assist1 = players[getRandomInt(players.length)];
-            } while (assist1 === scorer);
-          }
-          if (players.length > 2 && assist1 && Math.random() < 0.5) { // Ensure secondary assist
-            do {
-              assist2 = players[getRandomInt(players.length)];
-            } while (assist2 === scorer || assist2 === assist1);
-          }
-    
-          // Construct play description
-          let playDescription = `Goal scored by ${scorer.name}`;
-          if (assist1) {
-            playDescription += `, assisted by ${assist1.name}`;
-            if (assist2) {
-              playDescription += ` and ${assist2.name}`;
+          if (linePlayerIDs.length > 0) {
+            const scoringTeam = scoringTeamName === homeTeam.name ? homeTeam : awayTeam;
+        
+            // Find player objects by IDs
+            const players = linePlayerIDs
+              .map(id => scoringTeam.players.find(player => player.id == id))
+              .filter(player => player);
+        
+            const scorer = players[getRandomInt(players.length)];
+            let assist1 = null;
+            let assist2 = null;
+        
+            // Randomly determine assists
+            if (players.length > 1 && Math.random() < 0.7) {
+              do {
+                assist1 = players[getRandomInt(players.length)];
+              } while (assist1 === scorer);
             }
-          }
-          plays.push(playDescription);
-    
-          // Update scores
-          if (scoringTeamName === homeTeam.name) {
-            scores.home++;
+            if (players.length > 2 && assist1 && Math.random() < 0.5) {
+              do {
+                assist2 = players[getRandomInt(players.length)];
+              } while (assist2 === scorer || assist2 === assist1);
+            }
+        
+            // Generate play description
+            let playDescription = `Goal scored by ${scorer.name}`;
+            if (assist1) playDescription += `, assisted by ${assist1.name}`;
+            if (assist2) playDescription += ` and ${assist2.name}`;
+            plays.push(playDescription);
+        
+            // Update scores
+            if (scoringTeamName === homeTeam.name) {
+              scores.home++;
+            } else {
+              scores.away++;
+            }
           } else {
-            scores.away++;
+            console.warn(`No active line found for team: ${scoringTeamName}`);
           }
-        } else {
-          console.error("Active line has no valid players:", activeLine);
-        }
-      } else {
-        console.error("No active line found for team:", scoringTeamName);
-      }
     } else if (event < 0.7) {
       // Injury event
       const team = Math.random() < 0.5 ? homeTeam : awayTeam;
