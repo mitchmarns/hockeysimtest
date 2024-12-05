@@ -66,7 +66,7 @@ function simulatePeriod(homeTeam, awayTeam, isOvertime = false) {
   let plays = [];
   let goalScored = false; // Flag to track if a goal is scored
 
-  const maxEvents = isOvertime ? 20 : 20; // Shorten the event count for overtime
+  const maxEvents = isOvertime ? 20 : 30; // Shorten the event count for overtime
 
   for (let i = 0; i < maxEvents; i++) { // Simulate #of "events" in a period
     const event = Math.random();
