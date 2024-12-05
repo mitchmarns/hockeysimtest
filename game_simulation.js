@@ -54,13 +54,16 @@ function goalieSaveCheck(goalie, shooter) {
   const shooterSkill = (shooter.skills.glove + shooter.skills.stick + shooter.skills.legs + shooter.skills.speed) / 4;
   const goalieSkill = (goalie.skills.glove + goalie.skills.stick + goalie.skills.legs + goalie.skills.speed) / 4;
 
-  return shooterSkill < goalieSkill; // Goalie's skill is greater than shooter's skill, goalie saves it
+  const saveChance = goalieSkill - shooterSkill; // Positive means goalie is more likely to save
+  const randomChance = Math.random() * 100; // Random number between 0 and 100
+  
+  return randomChance < saveChance; // If saveChance is greater than the random value, goalie saves
 }
 
 // Simulate period
 function simulatePeriod(homeTeam, awayTeam) {
   let plays = [];
-  for (let i = 0; i < 20; i++) { // Simulate 20 "events" in a period
+  for (let i = 0; i < 10; i++) { // Simulate 20 "events" in a period
     const event = Math.random();
     
     if (event < 0.2) {
