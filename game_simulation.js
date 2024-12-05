@@ -95,7 +95,7 @@ function simulatePeriod(teamA, teamB, periodNum, cumulativeScores) {
     let teamBScore = 0;
 
     // Simulate multiple scoring attempts per period
-    const scoringChances = 60; // Average number of scoring chances per period
+    const scoringChances = 10; // Average number of scoring chances per period
     for (let i = 0; i < scoringChances; i++) {
         teamAScore += calculateTeamScore(teamA.players, getGoalieSkill(teamB.players));
         teamBScore += calculateTeamScore(teamB.players, getGoalieSkill(teamA.players));
