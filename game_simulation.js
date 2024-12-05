@@ -63,24 +63,27 @@ function calculateTeamScore(players, goalieSkill) {
     players.forEach(player => {
         if (!player.injured) {
             // Get player skills for scoring calculation
-            const slapShot = player.skills.slapShotAccuracy;
-            const wristShot = player.skills.wristShotAccuracy;
-            const puckControl = player.skills.puckControl;
-            
+            const slapShot = player.skills.slapShotAccuracy || 0;
+            const wristShot = player.skills.wristShotAccuracy || 0;
+            const puckControl = player.skills.puckControl || 0;
+
             // Calculate the player's offensive ability
-            const offense = (slapShot * 0.4 + wristShot * 0.3 + puckControl * 0.1);
+            const offense = (slapShot * 0.4 + wristShot * 0.3 + puckControl * 0.3);
 
-            // Base goal chance and shot success probability
-            const baseGoalChance = 0.1; // Default chance for a goal attempt
-            const shotSuccessChance = (offense / 100) * 0.5; // Player's skill determining shot chance
-            const goalieSaveChance = (100 - goalieSkill) / 100; // Opponent goalie defense
+            // Introduce shot-on-goal mechanism
+            const shotOnGoalChance = (offense / 100) * 0.6; // 60% chance of shot based on offense skill
+            if (Math.random() < shotOnGoalChance) {
+                // If a shot on goal occurs, calculate the chance of scoring
+                const baseGoalChance = 0.05; // Lower base chance for balance
+                const shotSuccessChance = (offense / 100) * 0.4; // Adjust shot skill contribution
+                const goalieSaveChance = (100 - goalieSkill) / 100; // Adjust goalie defense
 
-            // Calculate the actual chance of scoring a goal
-            const goalChance = baseGoalChance + shotSuccessChance * goalieSaveChance;
+                const goalChance = baseGoalChance + shotSuccessChance * goalieSaveChance;
 
-            // If the calculated chance is higher than a random value, score a goal
-            if (Math.random() < goalChance) {
-                score++;
+                // If the calculated chance is higher than a random value, score a goal
+                if (Math.random() < goalChance) {
+                    score++;
+                }
             }
         }
     });
