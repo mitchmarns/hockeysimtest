@@ -68,7 +68,7 @@ function calculateTeamScore(players, goalieSkill) {
             const puckControl = player.skills.puckControl || 0;
 
             // Calculate the player's offensive ability
-            const offense = (slapShot * 0.4 + wristShot * 0.3 + puckControl * 0.2);
+            const offense = (slapShot * 0.3 + wristShot * 0.2 + puckControl * 0.2);
 
             // Introduce shot-on-goal mechanism
             const shotOnGoalChance = (offense / 100) * 0.5; 
