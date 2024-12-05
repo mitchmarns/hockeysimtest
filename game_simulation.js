@@ -64,7 +64,7 @@ function goalieSaveCheck(goalie, shooter) {
 // Simulate period
 function simulatePeriod(homeTeam, awayTeam) {
     let plays = [];
-    for (let i = 0; i < 10; i++) { // Simulate #of "events" in a period
+    for (let i = 0; i < 7; i++) { // Simulate #of "events" in a period
         const event = Math.random();
     
         if (event < 0.2) {
