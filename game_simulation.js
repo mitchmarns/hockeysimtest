@@ -78,6 +78,8 @@ function calculateTeamScore(players, goalieSkill) {
 
             const goalChance = shotSuccessChance * (1 - goalieSaveChance); 
 
+            console.log(`Goal chance for ${player.name}: ${goalChance}, Random number: ${Math.random()}`);
+
             if (Math.random() < goalChance) {  // Check if the goal chance triggers
                 score++;
             }
