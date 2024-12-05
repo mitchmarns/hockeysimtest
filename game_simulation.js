@@ -181,6 +181,50 @@ function simulateOvertime(teamA, teamB) {
     return { teamAScore, teamBScore, log };
 }
 
+function simulateShootout(teamA, teamB) {
+    const log = ["Shootout Start:"];
+    const shootoutAttempts = 5; // Number of attempts for each team
+    let teamAScore = 0;
+    let teamBScore = 0;
+
+    // Helper function to simulate a single shootout attempt
+    function shootoutAttempt(player, goalieSkill) {
+        if (player.injured) return false; // Injured players cannot participate
+        const offense = (player.skills.slapShotAccuracy * 0.4 + player.skills.wristShotAccuracy * 0.4 + player.skills.puckControl * 0.2);
+        const shotChance = (offense / 100) * 0.5; // Offensive skill impact
+        const goalieSaveChance = (100 - goalieSkill) / 100; // Goalie defense impact
+        const goalChance = shotChance * goalieSaveChance;
+        return Math.random() < goalChance; // Return true if the player scores
+    }
+
+    const teamAPlayers = teamA.players.filter(player => !player.injured);
+    const teamBPlayers = teamB.players.filter(player => !player.injured);
+    const teamAGoalieSkill = getGoalieSkill(teamBPlayers);
+    const teamBGoalieSkill = getGoalieSkill(teamAPlayers);
+
+    for (let i = 0; i < shootoutAttempts; i++) {
+        const shooterA = teamAPlayers[i % teamAPlayers.length]; // Rotate through players
+        const shooterB = teamBPlayers[i % teamBPlayers.length];
+
+        if (shootoutAttempt(shooterA, teamAGoalieSkill)) {
+            teamAScore++;
+            log.push(`${shooterA.name} from ${teamA.name} scores in the shootout!`);
+        } else {
+            log.push(`${shooterA.name} from ${teamA.name} misses.`);
+        }
+
+        if (shootoutAttempt(shooterB, teamBGoalieSkill)) {
+            teamBScore++;
+            log.push(`${shooterB.name} from ${teamB.name} scores in the shootout!`);
+        } else {
+            log.push(`${shooterB.name} from ${teamB.name} misses.`);
+        }
+    }
+
+    log.push(`Shootout Ends. ${teamA.name}: ${teamAScore}, ${teamB.name}: ${teamBScore}`);
+    return { teamAScore, teamBScore, log };
+}
+
 // Simulate the game
 function simulateGame() {
     const players = loadPlayersFromStorage();
@@ -222,6 +266,15 @@ function simulateGame() {
         teamAScore += overtimeResult.teamAScore;
         teamBScore += overtimeResult.teamBScore;
         gameLog.push(...overtimeResult.log);
+
+        // If still tied, proceed to shootout
+        if (overtimeResult.teamAScore === 0 && overtimeResult.teamBScore === 0) {
+            gameLog.push("Overtime ended with no goals. Proceeding to a shootout...");
+            const shootoutResult = simulateShootout(teamA, teamB);
+            teamAScore += shootoutResult.teamAScore;
+            teamBScore += shootoutResult.teamBScore;
+            gameLog.push(...shootoutResult.log);
+        }
     }
 
     // Determine the winner 
