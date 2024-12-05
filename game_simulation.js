@@ -26,6 +26,11 @@ function groupPlayersByTeam(players) {
     return teams;  // Return the teams object with grouped players
 }
 
+// Load players and group them by team
+const players = loadPlayersFromStorage();
+const teams = groupPlayersByTeam(players);
+
+
 function getLineAssignments(teamName) {
     const lineAssignments = JSON.parse(localStorage.getItem('lineAssignments'));
     return (lineAssignments && lineAssignments[teamName]) || [];
@@ -85,8 +90,12 @@ function simulatePeriod(homeTeam, awayTeam) {
 
 // Main game simulation
 function simulateGame() {
+  const teamNames = Object.keys(teams);
   const homeTeam = teams[getRandomInt(teams.length)];
   const awayTeam = teams[getRandomInt(teams.length)];
+
+  const homeTeam = teams[homeTeamName];
+  const awayTeam = teams[awayTeamName];
 
   if (homeTeam === awayTeam) return simulateGame(); // Avoid home and away being the same
 
