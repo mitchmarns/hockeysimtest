@@ -28,7 +28,7 @@ function groupPlayersByTeam(players) {
 
 function getLineAssignments(teamName) {
     const lineAssignments = JSON.parse(localStorage.getItem('lineAssignments'));
-    return lineAssignments ? lineAssignments[teamName] : null;
+    return (lineAssignments && lineAssignments[teamName]) || [];
 }
 
     // Setup game: Select two random teams
@@ -54,7 +54,7 @@ function getGoalieSkill(players) {
     
     // If a goalie is found, calculate their average skill
     if (goalie) {
-        return (goalie.skills.glove + goalie.skills.stickHandling + goalie.skills.legs) / 3;
+        return (goalie.skills.glove + goalie.skills.stick + goalie.skills.legs) / 3;
     }
     
     // Return a default skill level if no goalie is found
