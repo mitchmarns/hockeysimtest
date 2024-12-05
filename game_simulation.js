@@ -65,14 +65,22 @@ function simulatePeriod(homeTeam, awayTeam) {
     } else if (event < 0.6) {
       // Goal event
       const scoringTeam = Math.random() < 0.5 ? homeTeam : awayTeam;
-      const scorer = scoringTeam.players[getRandomInt(scoringTeam.players.length)];
-      const assist1 = scoringTeam.players[getRandomInt(scoringTeam.players.length)];
-      const assist2 = scoringTeam.players[getRandomInt(scoringTeam.players.length)];
+        
+      // Check if scoringTeam has players before accessing
+      if (scoringTeam && scoringTeam.players && scoringTeam.players.length > 0) {
+        const scorer = scoringTeam.players[getRandomInt(scoringTeam.players.length)];
+        const assist1 = scoringTeam.players[getRandomInt(scoringTeam.players.length)];
+        const assist2 = scoringTeam.players[getRandomInt(scoringTeam.players.length)];
+          
       plays.push(`Goal scored by ${scorer.name}, assisted by ${assist1.name} and ${assist2.name}`);
-      if (scoringTeam === homeTeam) {
-        scores.home++;
+          
+        if (scoringTeam === homeTeam) {
+          scores.home++;
+        } else {
+          scores.away++;
+        }
       } else {
-        scores.away++;
+        console.error("Scoring team has no players:", scoringTeam);
       }
     } else if (event < 0.7) {
       // Injury event
