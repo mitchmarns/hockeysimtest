@@ -50,6 +50,13 @@ function calculateSkill(player) {
   return (player.skills.glove + player.skills.stick + player.skills.legs + player.skills.speed) / 8;
 }
 
+function goalieSaveCheck(goalie, shooter) {
+  const shooterSkill = (shooter.skills.glove + shooter.skills.stick + shooter.skills.legs + shooter.skills.speed) / 4;
+  const goalieSkill = (goalie.skills.glove + goalie.skills.stick + goalie.skills.legs + goalie.skills.speed) / 4;
+
+  return shooterSkill < goalieSkill; // Goalie's skill is greater than shooter's skill, goalie saves it
+}
+
 // Simulate period
 function simulatePeriod(homeTeam, awayTeam) {
   let plays = [];
@@ -96,7 +103,14 @@ function simulatePeriod(homeTeam, awayTeam) {
                 assist2 = players[getRandomInt(players.length)];
               } while (assist2 === scorer || assist2 === assist1);
             }
+
+            // Now find the goalie
+            const goalie = scoringTeamName === homeTeam.name ? awayTeam.players.find(player => player.position === "Starter") : homeTeam.players.find(player => player.position === "Starter");
         
+            // Goal check (goalie save or goal scored)
+            if (goalieSaveCheck(goalie, scorer)) {
+              plays.push(`Save by ${goalie.name}, no goal scored.`);
+            } else {  
             // Generate play description
             let playDescription = `Goal scored by ${scorer.name}`;
             if (assist1) playDescription += `, assisted by ${assist1.name}`;
