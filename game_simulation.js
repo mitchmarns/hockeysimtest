@@ -49,11 +49,11 @@ function getGoalieSkill(players) {
     
     // If a goalie is found, calculate their average skill
     if (goalie) {
-        return (goalie.skills.glove + goalie.skills.stickHandling + goalie.skills.legs) / 3;
+        return (goalie.skills.glove + goalie.skills.stickHandling + goalie.skills.legs) / 4;
     }
     
     // Return a default skill level if no goalie is found
-    return 50; // Default goalie skill if not defined
+    return 70; // Default goalie skill if not defined
 }
 
 // Calculate team score based on players' offensive stats and the opposing goalie's skill
