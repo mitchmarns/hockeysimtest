@@ -63,9 +63,9 @@ function calculateTeamScore(players, goalieSkill) {
     players.forEach(player => {
         if (!player.injured) {
             // Get player skills for scoring calculation
-            const slapShot = player.skills.slapShotAccuracy || 0;
-            const wristShot = player.skills.wristShotAccuracy || 0;
-            const puckControl = player.skills.puckControl || 0;
+            const slapShot = player.skills.slapShotAccuracy;
+            const wristShot = player.skills.wristShotAccuracy;
+            const puckControl = player.skills.puckControl;
             
             // Calculate the player's offensive ability
             const offense = (slapShot * 0.5 + wristShot * 0.4 + puckControl * 0.1);
