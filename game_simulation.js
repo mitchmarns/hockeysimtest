@@ -6,6 +6,7 @@
     }
     return [];
   };
+  let playersData = { players: [] };
 
 // Group players by team
 function groupPlayersByTeam(players) {
