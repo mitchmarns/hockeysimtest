@@ -123,6 +123,7 @@ function simulatePeriod(homeTeam, awayTeam) {
             } else {
               scores.away++;
             }
+            }
           } else {
             console.warn(`No active line found for team: ${scoringTeamName}`);
           }
