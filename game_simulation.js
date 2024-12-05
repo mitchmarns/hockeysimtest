@@ -74,6 +74,20 @@ function calculateTeamScore(players, goalieSkill) {
     return score;
 }
 
+// Get the goalie skill from a list of players
+function getGoalieSkill(players) {
+    // Find the goalie (player with position "Starter")
+    const goalie = players.find(player => player.position === "Starter");
+    
+    // If a goalie is found, calculate their average skill
+    if (goalie) {
+        return (goalie.skills.glove + goalie.skills.stickHandling + goalie.skills.legs) / 3;
+    }
+    
+    // Return a default skill level if no goalie is found
+    return 50; // Default goalie skill if not defined
+}
+
 // Simulate a period
 function simulatePeriod(teamA, teamB, periodNum, cumulativeScores) {
     const log = [`Period ${periodNum} Start:`];
