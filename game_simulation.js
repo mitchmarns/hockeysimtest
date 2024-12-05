@@ -26,21 +26,21 @@ function groupPlayersByTeam(players) {
     return teams;  // Return the teams object with grouped players
 }
 
-// Setup game: Select two random teams
-function setupGame(teams) {
-    const teamNames = Object.keys(teams);  // Get the names of the teams
-    const teamAName = teamNames[Math.floor(Math.random() * teamNames.length)];  // Randomly select team A
-    let teamBName;
-    do {
-        teamBName = teamNames[Math.floor(Math.random() * teamNames.length)];  // Randomly select team B, ensuring it's not the same as team A
-    } while (teamBName === teamAName);
-
-    // Return both teams with their respective players
-    return { 
-        teamA: { name: teamAName, players: teams[teamAName] },
-        teamB: { name: teamBName, players: teams[teamBName] }
-    };
-}
+    // Setup game: Select two random teams
+    function setupGame(teams) {
+        const teamNames = Object.keys(teams);  // Get the names of the teams
+        const teamAName = teamNames[Math.floor(Math.random() * teamNames.length)];  // Randomly select team A
+        let teamBName;
+        do {
+            teamBName = teamNames[Math.floor(Math.random() * teamNames.length)];  // Randomly select team B, ensuring it's not the same as team A
+        } while (teamBName === teamAName);
+    
+        // Return both teams with their respective players
+        return { 
+            teamA: { name: teamAName, players: teams[teamAName] },
+            teamB: { name: teamBName, players: teams[teamBName] }
+        };
+    }
 
 // Simulate the game
 function simulateGame() {
