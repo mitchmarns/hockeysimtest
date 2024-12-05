@@ -152,6 +152,35 @@ function handleInjuries(team) {
     return injuryLog;
 }
 
+function simulateOvertime(teamA, teamB) {
+    const log = ["Overtime Start:"];
+    let teamAScore = 0;
+    let teamBScore = 0;
+
+    // Single scoring attempt for each team
+    const scoringChances = 3; // Lower number of chances due to shorter overtime
+    for (let i = 0; i < scoringChances; i++) {
+        teamAScore += calculateTeamScore(teamA.players, getGoalieSkill(teamB.players));
+        teamBScore += calculateTeamScore(teamB.players, getGoalieSkill(teamA.players));
+
+        // If either team scores, end overtime
+        if (teamAScore > 0 || teamBScore > 0) {
+            break;
+        }
+    }
+
+    if (teamAScore > 0) {
+        log.push(`${teamA.name} scores in overtime!`);
+    } else if (teamBScore > 0) {
+        log.push(`${teamB.name} scores in overtime!`);
+    } else {
+        log.push("No goals scored in overtime.");
+    }
+
+    log.push("Overtime Ends.");
+    return { teamAScore, teamBScore, log };
+}
+
 // Simulate the game
 function simulateGame() {
     const players = loadPlayersFromStorage();
@@ -184,7 +213,18 @@ function simulateGame() {
         gameLog.push(...injuryLogA, ...injuryLogB);
     }
 
-    // Determine the winner based on the regular period scores
+    gameLog.push(`End of Regulation: ${teamA.name} ${teamAScore} - ${teamBScore} ${teamB.name}`);
+
+    // Check for a tie and simulate overtime
+    if (teamAScore === teamBScore) {
+        gameLog.push("The game is tied! Proceeding to overtime...");
+        const overtimeResult = simulateOvertime(teamA, teamB);
+        teamAScore += overtimeResult.teamAScore;
+        teamBScore += overtimeResult.teamBScore;
+        gameLog.push(...overtimeResult.log);
+    }
+
+    // Determine the winner 
     const winner = teamAScore > teamBScore ? teamA.name : teamB.name;
     gameLog.push(`Final Score: ${teamA.name} ${teamAScore} - ${teamBScore} ${teamB.name}`);
     gameLog.push(`${winner} wins the game!`);
