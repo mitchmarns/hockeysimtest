@@ -119,7 +119,6 @@ function simulatePeriod(homeTeam, awayTeam) {
       } else {
         console.error("No active line found for team:", scoringTeamName);
       }
-    }
     } else if (event < 0.7) {
       // Injury event
       const team = Math.random() < 0.5 ? homeTeam : awayTeam;
