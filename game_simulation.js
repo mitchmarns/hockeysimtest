@@ -69,24 +69,23 @@ function calculateTeamScore(players, goalieSkill) {
         if (!player.injured) {
             // Calculate offensive ability based on weighted stats
             const offense = (player.skills.slapShotAccuracy * 0.6 + 
-                             player.skills.wristShotAccuracy * 0.5 + 
+                             player.skills.wristShotAccuracy * 0.4 + 
                              player.skills.puckControl * 0.3); 
 
             // Adjust the chance of a goal based on the goalie’s skill
-            const baseGoalChance = 0.9;
-            const shotSuccessChance = (offense / 100) * 0.7; 
+            const shotSuccessChance = (offense / 100) * 0.5; 
             const goalieSaveChance = (100 - goalieSkill) / 100;
 
-            const goalChance = baseGoalChance + shotSuccessChance * goalieSaveChance;
+            const goalChance = shotSuccessChance * (1 - goalieSaveChance); 
 
-            if (Math.random() < (baseGoalChance + shotSuccessChance * goalieSaveChance)) {
+            if (Math.random() < goalChance) {  // Check if the goal chance triggers
                 score++;
             }
-                    }
-                });
-            
-                return score;
-            }
+        }
+    });
+
+    return score;
+}
 
 // Handle injuries with a 2% chance per player
 function handleInjuries(team) {
