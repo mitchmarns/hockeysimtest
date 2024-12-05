@@ -14,16 +14,16 @@ const loadPlayersFromStorage = () => {
 
 // Group players by team
 function groupPlayersByTeam(players) {
-    const teams = {};  
-    players.forEach(player => {
-        if (player.team) {  
-            if (!teams[player.team]) {  
-                teams[player.team] = [];
-            }
-            teams[player.team].push(player);  
-        }
-    });
-    return teams;  // Return the teams object with grouped players
+  const teams = {};  
+  players.forEach(player => {
+    if (player.team) {  
+      if (!teams[player.team]) {  
+        teams[player.team] = { name: player.team, players: [] };  // Add 'players' as an array
+      }
+      teams[player.team].players.push(player);  // Add player to the team's 'players' array
+    }
+  });
+  return teams;
 }
 
 // Load players and group them by team
