@@ -26,6 +26,11 @@ function groupPlayersByTeam(players) {
     return teams;  // Return the teams object with grouped players
 }
 
+function getLineAssignments(teamName) {
+    const lineAssignments = JSON.parse(localStorage.getItem("lineAssignments")) || {};
+    return lineAssignments[teamName] || null;
+}
+
     // Setup game: Select two random teams
     function setupGame(teams) {
         const teamNames = Object.keys(teams);  // Get the names of the teams
@@ -58,7 +63,7 @@ function getGoalieSkill(players) {
 
 // Calculate team score based on players' offensive stats and the opposing goalie's skill
 function calculateTeamScore(players, goalieSkill) {
-    let score = 0;
+    let goals = [];
 
     players.forEach(player => {
         if (!player.injured) {
@@ -66,42 +71,68 @@ function calculateTeamScore(players, goalieSkill) {
             const slapShot = player.skills.slapShotAccuracy || 0;
             const wristShot = player.skills.wristShotAccuracy || 0;
             const puckControl = player.skills.puckControl || 0;
-
-            // Calculate the player's offensive ability
             const offense = (slapShot * 0.3 + wristShot * 0.2 + puckControl * 0.2);
 
-            // Introduce shot-on-goal mechanism
+            // shot-on-goals
             const shotOnGoalChance = (offense / 100) * 0.5; 
             if (Math.random() < shotOnGoalChance) {
-                // If a shot on goal occurs, calculate the chance of scoring
                 const baseGoalChance = 0.02; 
                 const shotSuccessChance = (offense / 100) * 0.4;  
                 const goalieSaveChance = (100 - goalieSkill) / 100; 
-
                 const goalChance = baseGoalChance + shotSuccessChance * goalieSaveChance;
 
-                // If the calculated chance is higher than a random value, score a goal
                 if (Math.random() < goalChance) {
-                    score++;
+                    // Goal scored
+                    const goal = { scorer: player.name, assists: [] };
+
+                    // Determine assists using lineAssignments
+                    const line = lineAssignments.find(line => 
+                        Object.values(line).includes(player.id)
+                    );
+                    if (line) {
+                        const teammates = Object.values(line).filter(id => id !== player.id);
+                        if (teammates.length > 0) {
+                            goal.assists.push(players.find(p => p.id === teammates[0])?.name || null);
+                            if (teammates.length > 1) {
+                                goal.assists.push(players.find(p => p.id === teammates[1])?.name || null);
+                            }
+                        }
+                    }
+
+                    goals.push(goal);
                 }
             }
         }
     });
 
-    return score;
+    return goals;
 }
 
 // Simulate a period
 function simulatePeriod(teamA, teamB, periodNum, cumulativeScores) {
     const log = [`Period ${periodNum} Start:`];
-    let teamAScore = 0;
-    let teamBScore = 0;
+    const teamALineAssignments = getLineAssignments(teamA.name);
+    const teamBLineAssignments = getLineAssignments(teamB.name);
 
+    let teamAScore = 0;
+    let teamBScore = 0;   
+    
     // Simulate multiple scoring attempts per period
     const scoringChances = 5; // Average number of scoring chances per period
     for (let i = 0; i < scoringChances; i++) {
-        teamAScore += calculateTeamScore(teamA.players, getGoalieSkill(teamB.players));
-        teamBScore += calculateTeamScore(teamB.players, getGoalieSkill(teamA.players));
+        // Get goals for Team A
+        const teamAGoals = calculateTeamScore(teamA.players, getGoalieSkill(teamB.players), teamALineAssignments);
+        teamAGoals.forEach(goal => {
+            log.push(`${teamA.name} Goal! Scorer: ${goal.scorer}. Assists: ${goal.assists.join(", ") || "None"}`);
+            teamAScore++;
+        });
+
+        // Get goals for Team B
+        const teamBGoals = calculateTeamScore(teamB.players, getGoalieSkill(teamA.players), teamBLineAssignments);
+        teamBGoals.forEach(goal => {
+            log.push(`${teamB.name} Goal! Scorer: ${goal.scorer}. Assists: ${goal.assists.join(", ") || "None"}`);
+            teamBScore++;
+        });
     }
 
     log.push(`${teamA.name} scored ${teamAScore} goals this period.`);
