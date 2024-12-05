@@ -27,8 +27,8 @@ function groupPlayersByTeam(players) {
 }
 
 function getLineAssignments(teamName) {
-    const lineAssignments = JSON.parse(localStorage.getItem("lineAssignments")) || {};
-    return lineAssignments[teamName] || null;
+    const lineAssignments = JSON.parse(localStorage.getItem('lineAssignments'));
+    return lineAssignments ? lineAssignments[teamName] : null;
 }
 
     // Setup game: Select two random teams
