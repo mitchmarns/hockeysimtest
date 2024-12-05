@@ -54,6 +54,7 @@ function goalieSaveCheck(goalie, shooter) {
     const shooterSkill = (shooter.skills.glove + shooter.skills.stick + shooter.skills.legs + shooter.skills.speed) / 4;
     const goalieSkill = (goalie.skills.glove + goalie.skills.stick + goalie.skills.legs + goalie.skills.speed) / 4;
 
+    const saveChance = goalieSkill - shooterSkill;
     // Add some randomness (could be a small chance for a "lucky" save)
     const randomChance = Math.random() * 100;
   
