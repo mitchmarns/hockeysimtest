@@ -128,8 +128,12 @@ function simulatePeriod(homeTeam, awayTeam, isOvertime = false) {
             scores.away++;
           }
 
-          goalScored = true; // A goal has been scored, exit early for overtime
-          break; // Exit the loop, end the overtime
+          periodGoals++;  // Increment period goal counter
+
+          // If it's overtime, end the game after a goal
+          if (isOvertime) {
+            break; // End overtime if a goal is scored
+          }
         }
       } else {
         console.warn(`No active line found for team: ${scoringTeamName}`);
@@ -145,7 +149,8 @@ function simulatePeriod(homeTeam, awayTeam, isOvertime = false) {
       plays.push("A neutral play occurred.");
     }
 
-    if (goalScored) break; // If goal is scored in overtime, break out of the loop
+    // Debugging: check period goal count
+    console.log(`Period ${isOvertime ? "OT" : "Regular"} Event ${i + 1}: Total Goals in Period: ${periodGoals}`);
   }
 
   return plays;
