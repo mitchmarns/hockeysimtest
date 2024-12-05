@@ -51,33 +51,33 @@ function calculateSkill(player) {
 }
 
 function goalieSaveCheck(goalie, shooter) {
-  const shooterSkill = (shooter.skills.glove + shooter.skills.stick + shooter.skills.legs + shooter.skills.speed) / 4;
-  const goalieSkill = (goalie.skills.glove + goalie.skills.stick + goalie.skills.legs + goalie.skills.speed) / 4;
+    const shooterSkill = (shooter.skills.glove + shooter.skills.stick + shooter.skills.legs + shooter.skills.speed) / 4;
+    const goalieSkill = (goalie.skills.glove + goalie.skills.stick + goalie.skills.legs + goalie.skills.speed) / 4;
 
-  const saveChance = goalieSkill - shooterSkill; // Positive means goalie is more likely to save
-  const randomChance = Math.random() * 100; // Random number between 0 and 100
+    // Add some randomness (could be a small chance for a "lucky" save)
+    const randomChance = Math.random() * 100;
   
-  return randomChance < saveChance; // If saveChance is greater than the random value, goalie saves
+    return randomChance < saveChance; 
 }
 
 // Simulate period
 function simulatePeriod(homeTeam, awayTeam) {
-  let plays = [];
-  for (let i = 0; i < 7; i++) { // Simulate #of "events" in a period
-    const event = Math.random();
+    let plays = [];
+    for (let i = 0; i < 10; i++) { // Simulate #of "events" in a period
+        const event = Math.random();
     
-    if (event < 0.2) {
-      // Penalty event
-      const team = Math.random() < 0.5 ? homeTeam : awayTeam;
-      const penalizedPlayer = team.players[getRandomInt(team.players.length)];
-      plays.push(`${penalizedPlayer.name} took a penalty!`);
-      penalties.push(penalizedPlayer);
-    } else if (event < 0.6) {
-      // Goal event
-      const scoringTeamName = Math.random() < 0.5 ? homeTeam.name : awayTeam.name;
-      const lineAssignments = JSON.parse(localStorage.getItem('lineAssignments')) || {};
+        if (event < 0.2) {
+          // Penalty event
+          const team = Math.random() < 0.5 ? homeTeam : awayTeam;
+          const penalizedPlayer = team.players[getRandomInt(team.players.length)];
+          plays.push(`${penalizedPlayer.name} took a penalty!`);
+          penalties.push(penalizedPlayer);
+        } else if (event < 0.6) {
+          // Goal event
+          const scoringTeamName = Math.random() < 0.5 ? homeTeam.name : awayTeam.name;
+          const lineAssignments = JSON.parse(localStorage.getItem('lineAssignments')) || {};
 
-        // Extract players for the first forward line of the scoring team
+          // Extract players for the first forward line of the scoring team
           const lineKeys = ["LW", "C", "RW"].map(
             pos => `${scoringTeamName}-forward-1-${pos}`
           );
