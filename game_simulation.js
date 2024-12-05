@@ -74,7 +74,7 @@ function calculateTeamScore(players, goalieSkill) {
             const shotOnGoalChance = (offense / 100) * 0.5; 
             if (Math.random() < shotOnGoalChance) {
                 // If a shot on goal occurs, calculate the chance of scoring
-                const baseGoalChance = 0.03; 
+                const baseGoalChance = 0.02; 
                 const shotSuccessChance = (offense / 100) * 0.4;  
                 const goalieSaveChance = (100 - goalieSkill) / 100; 
 
