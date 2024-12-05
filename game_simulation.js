@@ -6,6 +6,7 @@
     }
     return [];
   };
+
   let playersData = { players: [] };
 
 // Group players by team
@@ -68,20 +69,19 @@ function calculateTeamScore(players, goalieSkill) {
 
     players.forEach(player => {
         if (!player.injured) {
-            // Calculate offensive ability based on weighted stats
-            const offense = (player.skills.slapShotAccuracy * 0.6 + 
-                             player.skills.wristShotAccuracy * 0.4 + 
-                             player.skills.puckControl * 0.3); 
+            const slapShot = player.skills.slapShotAccuracy || 0;
+            const wristShot = player.skills.wristShotAccuracy || 0;
+            const puckControl = player.skills.puckControl || 0;
+            
+            const offense = (slapShot * 0.6 + wristShot * 0.4 + puckControl * 0.3);
 
-            // Adjust the chance of a goal based on the goalie’s skill
-            const shotSuccessChance = (offense / 100) * 0.5; 
+            const baseGoalChance = 0.9;
+            const shotSuccessChance = (offense / 100) * 0.7;
             const goalieSaveChance = (100 - goalieSkill) / 100;
 
-            const goalChance = shotSuccessChance * (1 - goalieSaveChance); 
+            const goalChance = baseGoalChance + shotSuccessChance * goalieSaveChance;
 
-            console.log(`Goal chance for ${player.name}: ${goalChance}, Random number: ${Math.random()}`);
-
-            if (Math.random() < goalChance) {  // Check if the goal chance triggers
+            if (Math.random() < goalChance) {
                 score++;
             }
         }
