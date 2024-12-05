@@ -90,18 +90,24 @@ function simulatePeriod(homeTeam, awayTeam) {
 
 // Main game simulation
 function simulateGame() {
-  const teamNames = Object.keys(teams);
-  const homeTeam = teams[getRandomInt(teams.length)];
-  const awayTeam = teams[getRandomInt(teams.length)];
+  const teamNames = Object.keys(teams); // Get an array of team names
+  let homeTeamName, awayTeamName;
 
-  if (homeTeam === awayTeam) return simulateGame(); // Avoid home and away being the same
+  // Loop until home and away teams are different
+  do {
+    homeTeamName = teamNames[getRandomInt(teamNames.length)];
+    awayTeamName = teamNames[getRandomInt(teamNames.length)];
+  } while (homeTeamName === awayTeamName);  // Ensure home and away teams are different
 
-  gameLog.push(`Game start: ${homeTeam.name} vs. ${awayTeam.name}`);
+  const homeTeam = teams[homeTeamName];
+  const awayTeam = teams[awayTeamName];
+
+  gameLog.push(`Game start: ${homeTeamName} vs. ${awayTeamName}`);
   for (let i = 1; i <= 3; i++) {
     gameLog.push(`--- Period ${i} ---`);
     gameLog = gameLog.concat(simulatePeriod(homeTeam, awayTeam));
   }
-  gameLog.push(`Final Score: ${homeTeam.name} ${scores.home} - ${scores.away} ${awayTeam.name}`);
+  gameLog.push(`Final Score: ${homeTeamName} ${scores.home} - ${scores.away} ${awayTeamName}`);
   displayGameLog();
 }
 
