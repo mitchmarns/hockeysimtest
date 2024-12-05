@@ -42,6 +42,29 @@ function groupPlayersByTeam(players) {
         };
     }
 
+// Simulate a period
+function simulatePeriod(teamA, teamB, periodNum, cumulativeScores) {
+    const log = [`Period ${periodNum} Start:`];
+    let teamAScore = 0;
+    let teamBScore = 0;
+
+    // Simulate multiple scoring attempts per period
+    const scoringChances = 60; // Average number of scoring chances per period
+    for (let i = 0; i < scoringChances; i++) {
+        teamAScore += calculateTeamScore(teamA.players, getGoalieSkill(teamB.players));
+        teamBScore += calculateTeamScore(teamB.players, getGoalieSkill(teamA.players));
+    }
+
+    log.push(`${teamA.name} scored ${teamAScore} goals this period.`);
+    log.push(`${teamB.name} scored ${teamBScore} goals this period.`);
+
+    // Update cumulative scores
+    cumulativeScores.teamA += teamAScore;
+    cumulativeScores.teamB += teamBScore;
+
+    return { teamAScore, teamBScore, log, cumulativeScores };
+}
+
 // Simulate the game
 function simulateGame() {
     const players = loadPlayersFromStorage();
