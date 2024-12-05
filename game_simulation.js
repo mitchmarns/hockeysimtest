@@ -61,67 +61,6 @@ function getGoalieSkill(players) {
     return goalie ? (goalie.skills.glove + goalie.skills.stick + goalie.skills.legs) / 3 : 50; // Default skill if no goalie
 }
 
-function simulateOvertime(teamA, teamB) {
-    const log = ["Overtime Start:"];
-    const overtimeOutcome = Math.random() * 100;
-    let teamAScore = 0;
-    let teamBScore = 0;
-
-    if (overtimeOutcome < 45) {
-        // Team A wins
-        teamAScore = 1;
-        log.push(`${teamA.name} scores in overtime!`);
-    } else if (overtimeOutcome < 90) {
-        // Team B wins
-        teamBScore = 1;
-        log.push(`${teamB.name} scores in overtime!`);
-    } else {
-        // Shootout needed
-        log.push("Overtime ends in a tie. Proceeding to a shootout.");
-    }
-
-    return { teamAScore, teamBScore, log };
-}
-
-function simulateShootout(teamA, teamB) {
-    const log = ["Shootout Start:"];
-    let teamAScore = 0;
-    let teamBScore = 0;
-
-    // Simulate 3 shootout rounds
-    for (let round = 1; round <= 3; round++) {
-        const teamAShot = Math.random() < 0.3; // 30% chance for a goal
-        const teamBShot = Math.random() < 0.3;
-
-        if (teamAShot) {
-            teamAScore++;
-            log.push(`${teamA.name} scores in shootout round ${round}.`);
-        }
-        if (teamBShot) {
-            teamBScore++;
-            log.push(`${teamB.name} scores in shootout round ${round}.`);
-        }
-    }
-
-    // Sudden death if tied after 3 rounds
-    while (teamAScore === teamBScore) {
-        const teamAShot = Math.random() < 0.3;
-        const teamBShot = Math.random() < 0.3;
-
-        if (teamAShot && !teamBShot) {
-            teamAScore++;
-            log.push(`${teamA.name} scores and wins in sudden death!`);
-            break;
-        } else if (teamBShot && !teamAShot) {
-            teamBScore++;
-            log.push(`${teamB.name} scores and wins in sudden death!`);
-            break;
-        }
-    }
-
-    return { teamAScore, teamBScore, log };
-}
-
 // Calculate team score based on players' offensive stats
 function calculateTeamScore(players, goalieSkill) {
     let score = 0;
@@ -214,6 +153,7 @@ function simulateGame() {
     // Initialize cumulative scores object
     let cumulativeScores = { teamA: 0, teamB: 0 };
 
+    // Simulate 3 periods
     for (let period = 1; period <= 3; period++) {
         const { teamAScore: periodAScore, teamBScore: periodBScore, log, cumulativeScores: updatedCumulativeScores } = simulatePeriod(teamA, teamB, period, cumulativeScores);
         teamAScore += periodAScore;
@@ -227,22 +167,7 @@ function simulateGame() {
         gameLog.push(...injuryLogA, ...injuryLogB);
     }
 
-    // Check for overtime or shootout
-    if (teamAScore === teamBScore) {
-      const overtimeResult = simulateOvertime(teamA, teamB);
-      teamAScore += overtimeResult.teamAScore;
-      teamBScore += overtimeResult.teamBScore;
-      gameLog.push(...overtimeResult.log);
-
-      if (overtimeResult.teamAScore === 0 && overtimeResult.teamBScore === 0) {
-        const shootoutResult = simulateShootout(teamA, teamB);
-        teamAScore += shootoutResult.teamAScore;
-        teamBScore += shootoutResult.teamBScore;
-        gameLog.push(...shootoutResult.log);
-      }
-    }
-
-    // Determine the winner
+    // Determine the winner based on the regular period scores
     const winner = teamAScore > teamBScore ? teamA.name : teamB.name;
     gameLog.push(`Final Score: ${teamA.name} ${teamAScore} - ${teamBScore} ${teamB.name}`);
     gameLog.push(`${winner} wins the game!`);
