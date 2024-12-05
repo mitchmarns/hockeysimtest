@@ -146,6 +146,7 @@ function simulatePeriod(homeTeam, awayTeam) {
 
 // Main game simulation
 function simulateGame() {
+  gameLog = [];  
   const teamNames = Object.keys(teams); // Get an array of team names
   let homeTeamName, awayTeamName;
 
