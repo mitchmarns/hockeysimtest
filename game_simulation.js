@@ -147,6 +147,10 @@ function simulatePeriod(homeTeam, awayTeam) {
 // Main game simulation
 function simulateGame() {
   gameLog = [];  
+    
+  // Reset scores for each new game
+  scores = { home: 0, away: 0 };
+    
   const teamNames = Object.keys(teams); // Get an array of team names
   let homeTeamName, awayTeamName;
 
