@@ -62,7 +62,7 @@ function getGoalieSkill(players) {
 }
 
 // Calculate team score based on players' offensive stats and the opposing goalie's skill
-function calculateTeamScore(players, goalieSkill) {
+function calculateTeamScore(players, goalieSkill, lineAssignments) {
     let goals = [];
 
     players.forEach(player => {
