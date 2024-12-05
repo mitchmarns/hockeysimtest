@@ -111,8 +111,8 @@ function calculateTeamScore(players, goalieSkill) {
 // Simulate a period
 function simulatePeriod(teamA, teamB, periodNum, cumulativeScores) {
     const log = [`Period ${periodNum} Start:`];
-    const teamALineAssignments = getLineAssignments(teamA.name);
-    const teamBLineAssignments = getLineAssignments(teamB.name);
+    const teamALineAssignments = getLineAssignments(teamA.name);  // Get line assignments for Team A
+    const teamBLineAssignments = getLineAssignments(teamB.name);  // Get line assignments for Team B
 
     let teamAScore = 0;
     let teamBScore = 0;   
@@ -120,14 +120,14 @@ function simulatePeriod(teamA, teamB, periodNum, cumulativeScores) {
     // Simulate multiple scoring attempts per period
     const scoringChances = 5; // Average number of scoring chances per period
     for (let i = 0; i < scoringChances; i++) {
-        // Get goals for Team A
+        // Get goals for Team A, passing line assignments
         const teamAGoals = calculateTeamScore(teamA.players, getGoalieSkill(teamB.players), teamALineAssignments);
         teamAGoals.forEach(goal => {
             log.push(`${teamA.name} Goal! Scorer: ${goal.scorer}. Assists: ${goal.assists.join(", ") || "None"}`);
             teamAScore++;
         });
 
-        // Get goals for Team B
+        // Get goals for Team B, passing line assignments
         const teamBGoals = calculateTeamScore(teamB.players, getGoalieSkill(teamA.players), teamBLineAssignments);
         teamBGoals.forEach(goal => {
             log.push(`${teamB.name} Goal! Scorer: ${goal.scorer}. Assists: ${goal.assists.join(", ") || "None"}`);
