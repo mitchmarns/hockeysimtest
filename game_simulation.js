@@ -94,9 +94,6 @@ function simulateGame() {
   const homeTeam = teams[getRandomInt(teams.length)];
   const awayTeam = teams[getRandomInt(teams.length)];
 
-  const homeTeam = teams[homeTeamName];
-  const awayTeam = teams[awayTeamName];
-
   if (homeTeam === awayTeam) return simulateGame(); // Avoid home and away being the same
 
   gameLog.push(`Game start: ${homeTeam.name} vs. ${awayTeam.name}`);
