@@ -136,6 +136,19 @@ function simulatePenalties(teamA, teamB) {
     return "No penalties this period.";
 }
 
+// Handle injuries with a low probability (e.g., 2%)
+function handleInjuries(team) {
+    const injuryLog = [];
+    team.players.forEach(player => {
+        // 2% chance of injury for each player
+        if (!player.injured && Math.random() > 0.98) {
+            player.injured = true; // Mark player as injured
+            injuryLog.push(`${player.name} from ${team.name} is injured.`);
+        }
+    });
+    return injuryLog;
+}
+
 // Simulate the game
 function simulateGame() {
     const players = loadPlayersFromStorage();
