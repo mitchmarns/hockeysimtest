@@ -14,18 +14,17 @@ export const simulateGame = (homeTeam, awayTeam, lineAssignments) => {
   parseLineAssignments(lineAssignments, [homeTeam, awayTeam]);
 
   // Validate goalies
-  const validateGoalies = (team) => {
+const validateGoalies = (team) => {
+  if (!team.lines || !team.lines.goalies) {
+    console.error(`Error: ${team.name} does not have a valid lines structure.`);
+    return false;
+  }
   if (!team.lines.goalies.starter || !team.lines.goalies.backup) {
-    console.error(`Error: ${team.name} does not have a valid goalie.`);
+    console.error(`Error: ${team.name} does not have valid goalies.`);
     return false;
   }
   return true;
 };
-
-  if (!validateGoalies(homeTeam) || !validateGoalies(awayTeam)) {
-  gameLog.push(`Error: ${homeTeam.name} or ${awayTeam.name} does not have a valid goalie.`);
-  return { gameLog, scores };
-}
 
   // Simulate 3 periods
   for (let i = 1; i <= 3; i++) {
