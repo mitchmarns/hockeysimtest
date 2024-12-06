@@ -29,29 +29,32 @@ export const calculateAverageSkill = (player) => {
 export const parseLineAssignments = (lineAssignments, teams) => {
   let assignments;
 
-  if (typeof lineAssignments === "string") {
+  // Check if lineAssignments is already an object
+  if (typeof lineAssignments === 'string') {
     try {
-      console.log("Parsing lineAssignments:", lineAssignments);
       assignments = JSON.parse(lineAssignments);
     } catch (error) {
       console.error("Invalid lineAssignments JSON:", error);
       return;
     }
-  } else if (typeof lineAssignments === "object" && lineAssignments !== null) {
-    console.log("lineAssignments is already an object:", lineAssignments);
+  } else if (typeof lineAssignments === 'object' && lineAssignments !== null) {
     assignments = lineAssignments;
   } else {
-    console.error("Unexpected lineAssignments format:", lineAssignments);
+    console.error("lineAssignments is neither a string nor an object.");
     return;
   }
 
   for (const [key, playerId] of Object.entries(assignments)) {
     const [teamName, lineType, lineNumber, position] = key.split('-');
-    console.log(`Processing: team=${teamName}, lineType=${lineType}, lineNumber=${lineNumber}, position=${position}, playerId=${playerId}`);
-
     const team = teams.find((t) => t.name === teamName);
+
     if (!team) {
       console.warn(`Team ${teamName} not found.`);
+      continue;
+    }
+
+    if (!team.lines) {
+      console.error(`Team ${teamName} does not have a 'lines' structure.`);
       continue;
     }
 
@@ -66,9 +69,8 @@ export const parseLineAssignments = (lineAssignments, teams) => {
     } else if (lineType === 'defense') {
       team.lines.defenseLines[lineNumber - 1][position] = player;
     } else if (lineType === 'goalies') {
-  team.lines.goalies[position.toLowerCase()] = player;
-  console.log(`Assigned goalie: ${player.name} as ${position.toLowerCase()} for ${teamName}`);
-}
+      team.lines.goalies[position.toLowerCase()] = player;
     }
+  }
 };
 
