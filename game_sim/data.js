@@ -12,3 +12,7 @@ export const loadPlayersFromStorage = () => {
   return [];
 };
 
+// Save players to localStorage
+export const savePlayersToStorage = (players) => {
+  localStorage.setItem("playersData", JSON.stringify({ players }));
+};
