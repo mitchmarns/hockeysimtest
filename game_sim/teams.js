@@ -58,7 +58,9 @@ export const parseLineAssignments = (lineAssignments, teams) => {
     } else if (lineType === 'defense') {
       team.lines.defenseLines[lineNumber - 1][position] = player;
     } else if (lineType === 'goalies') {
-      team.lines.goalies[position.toLowerCase()] = player;
+  team.lines.goalies[position.toLowerCase()] = player;
+  console.log(`Assigned goalie: ${player.name} as ${position.toLowerCase()} for ${teamName}`);
+}
     }
   }
 };
