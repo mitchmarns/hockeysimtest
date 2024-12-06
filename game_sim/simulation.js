@@ -7,16 +7,26 @@ export const simulateGame = (homeTeam, awayTeam, lineAssignments) => {
   const gameLog = [];
   const scores = { home: 0, away: 0 };
 
-  // Simulate three periods
+  // Simulate 3 periods
   for (let i = 1; i <= 3; i++) {
     gameLog.push(`--- Period ${i} ---`);
-    // Call helper functions to simulate events
+
+    const numEvents = Math.floor(Math.random() * 10) + 5;
+    for (let j = 0; j < numEvents; j++) {
+      const eventType = Math.random();
+
+      if (eventType < 0.3) {
+        gameLog = handlePenaltyEvent(homeTeam, gameLog);
+      } else if (eventType < 0.6) {
+        gameLog = handleInjuryEvent(awayTeam, gameLog);
+      } else {
+        gameLog.push('A neutral play occurred.');
+      }
+    }
   }
 
-  // Handle tie and overtime
   if (scores.home === scores.away) {
-    gameLog.push("Game is tied, starting overtime!");
-    // Simulate overtime
+    gameLog.push('Game tied! Overtime starts.');
   }
 
   return { gameLog, scores };
