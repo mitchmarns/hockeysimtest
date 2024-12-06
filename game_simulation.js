@@ -81,6 +81,8 @@ function simulatePeriod(homeTeam, awayTeam, isOvertime = false) {
       const scoringTeamName = Math.random() < 0.5 ? homeTeam.name : awayTeam.name;
       const lineAssignments = JSON.parse(localStorage.getItem('lineAssignments')) || {};
 
+      const forwardLineNumber = getRandomInt(4) + 1;  
+
       // Extract players for the first forward line of the scoring team
       const lineKeys = ["LW", "C", "RW"].map(
         pos => `${scoringTeamName}-forward-${forwardLineNumber}-${pos}`
