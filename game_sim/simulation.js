@@ -9,9 +9,6 @@ export const simulateGame = (homeTeam, awayTeam, lineAssignments) => {
   // Define penalized players and injured players storage
   const penalizedPlayers = {};
   const injuredPlayers = {};
-
-  // Parse line assignments and set up teams
-  parseLineAssignments(lineAssignments, [homeTeam, awayTeam]);
   
   // Check if both teams have valid goalies
   if (!validateGoalies(homeTeam) || !validateGoalies(awayTeam)) {
