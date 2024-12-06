@@ -19,15 +19,28 @@ export const calculateAverageSkill = (player) => {
 
 // line assignments
 export const parseLineAssignments = (lineAssignments, teams) => {
-  const assignments = JSON.parse(lineAssignments);
+  let assignments;
+
+  try {
+    assignments = JSON.parse(lineAssignments);
+  } catch (error) {
+    console.error("Invalid lineAssignments JSON:", error);
+    return;
+  }
 
   for (const [key, playerId] of Object.entries(assignments)) {
     const [teamName, lineType, lineNumber, position] = key.split('-');
     const team = teams.find((t) => t.name === teamName);
-    if (!team) continue;
+    if (!team) {
+      console.warn(`Team ${teamName} not found.`);
+      continue;
+    }
 
     const player = team.players.find((p) => p.id === parseInt(playerId, 10));
-    if (!player) continue;
+    if (!player) {
+      console.warn(`Player with ID ${playerId} not found in team ${teamName}.`);
+      continue;
+    }
 
     if (lineType === 'forward') {
       team.lines.forwardLines[lineNumber - 1][position] = player;
