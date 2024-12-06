@@ -85,7 +85,7 @@ const simulateNormalPlay = (homeTeam, awayTeam, gameLog, scores) => {
   }
 
   // Defensive play chance
-  const defenseChance = defender.skills.stick * 0.3 + defender.skills.speed * 0.2;
+  const defenseChance = defender.skills.stickChecking * 0.3 + defender.skills.defense * 0.2;
   const blockOrTurnover = Math.random() < defenseChance / 100;
 
   if (blockOrTurnover) {
@@ -93,9 +93,15 @@ const simulateNormalPlay = (homeTeam, awayTeam, gameLog, scores) => {
     return; // No shot occurs if defense is successful
   }
 
-  // Calculate shot accuracy
-  const shooterSkill = scorer.skills.speed * 0.5 + scorer.skills.stick * 0.5;
-  const goalieSkill = goalie.skills.glove * 0.5 + goalie.skills.legs * 0.5;
+  // Shooter and goalie skills
+  const shooterSkill = scorer.skills.wristShotAccuracy * 0.4 
+                     + scorer.skills.wristShotPower * 0.3 
+                     + scorer.skills.slapShotAccuracy * 0.2 
+                     + scorer.skills.slapShotPower * 0.1;
+  const goalieSkill = goalie.skills.glove * 0.25 
+                    + goalie.skills.legs * 0.25 
+                    + goalie.skills.positioning * 0.25 
+                    + goalie.skills.reboundControl * 0.25;
 
   console.log(`Shooter Skill: ${shooterSkill}`);
   console.log(`Goalie Skill: ${goalieSkill}`);
