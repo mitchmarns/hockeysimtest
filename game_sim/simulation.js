@@ -1,6 +1,6 @@
 import { handlePenaltyEvent } from './penalties.js';
 import { handleInjuryEvent } from './injuries.js';
-import { calculateAverageSkill, parseLineAssignments } from './teams.js';
+import { calculateAverageSkill } from './teams.js';
 
 export const simulateGame = (homeTeam, awayTeam, lineAssignments) => {
   const gameLog = [];
