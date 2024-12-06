@@ -41,6 +41,8 @@ let gameLog = []; // Store play-by-play logs
 let scores = { home: 0, away: 0 }; // Track scores
 let injuries = []; // Track injured players
 let penalties = []; // Track penalties
+let penalizedPlayers = {};  // Track players currently serving penalties
+let injuredPlayers = {};    // Track injured players and their recovery
 
 // Random event helpers
 const getRandomInt = (max) => Math.floor(Math.random() * max);
@@ -60,6 +62,82 @@ const goalieSaveCheck = (goalie, shooter) => {
   
   return randomChance > goalThreshold; 
 };
+
+// Random penalty duration (in seconds)
+function getRandomPenaltyDuration() {
+  return getRandomInt(120) + 60;  // Between 60s and 180s (1 to 3 minutes)
+}
+
+// Penalty event
+function handlePenaltyEvent(team, eventLog) {
+  const penalizedPlayer = team.players[getRandomInt(team.players.length)];
+  
+  // Add the penalized player to the penalized players list with the penalty duration
+  const penaltyDuration = getRandomPenaltyDuration();
+  penalizedPlayers[penalizedPlayer.id] = {
+    player: penalizedPlayer,
+    penaltyEndTime: Date.now() + penaltyDuration * 1000,  // store the end time of the penalty
+  };
+
+  eventLog.push(`${penalizedPlayer.name} took a penalty for ${penaltyDuration / 60} minutes!`);
+  return eventLog;
+}
+
+// Check if a player is still penalized (based on the current game time)
+function checkForPenaltyExpiry() {
+  const currentTime = Date.now();
+  Object.keys(penalizedPlayers).forEach(playerId => {
+    const penalty = penalizedPlayers[playerId];
+    if (currentTime >= penalty.penaltyEndTime) {
+      // The penalty has expired, remove the player from the penalized list
+      const player = penalty.player;
+      delete penalizedPlayers[playerId];
+      console.log(`${player.name}'s penalty has expired, they are now eligible to play again.`);
+    }
+  });
+}
+
+// Injury event with severity
+function handleInjuryEvent(team, eventLog) {
+  const injuredPlayer = team.players[getRandomInt(team.players.length)];
+  
+  // Random injury severity (1: minor, 2: moderate, 3: serious)
+  const injurySeverity = getRandomInt(3) + 1;
+  
+  // Set recovery time based on injury severity
+  let recoveryTime;
+  switch (injurySeverity) {
+    case 1: recoveryTime = 60 * 5;  // 5 minutes for minor injury
+      break;
+    case 2: recoveryTime = 60 * 10;  // 10 minutes for moderate injury
+      break;
+    case 3: recoveryTime = 60 * 20;  // 20 minutes for serious injury
+      break;
+  }
+
+  // Add the injured player to the injured players list with the recovery time
+  injuredPlayers[injuredPlayer.id] = {
+    player: injuredPlayer,
+    recoveryEndTime: Date.now() + recoveryTime * 1000,  // store the end time of the injury
+  };
+
+  eventLog.push(`${injuredPlayer.name} was injured and is out for ${recoveryTime / 60} minutes!`);
+  return eventLog;
+}
+
+// Check if an injured player has recovered (based on the current game time)
+function checkForPlayerRecovery() {
+  const currentTime = Date.now();
+  Object.keys(injuredPlayers).forEach(playerId => {
+    const injury = injuredPlayers[playerId];
+    if (currentTime >= injury.recoveryEndTime) {
+      // The injury recovery is complete, remove the player from the injured list
+      const player = injury.player;
+      delete injuredPlayers[playerId];
+      console.log(`${player.name} has recovered and is available to play again.`);
+    }
+  });
+}
 
 // Handle goal event
 const handleGoalEvent = (scoringTeamName, lineAssignments, homeTeam, awayTeam) => {
@@ -119,11 +197,12 @@ const simulatePeriod = (homeTeam, awayTeam, isOvertime = false) => {
     const event = Math.random();
     
     if (event < 0.2) {
-      // Penalty event
-      const team = Math.random() < 0.5 ? homeTeam : awayTeam;
-      const penalizedPlayer = team.players[getRandomInt(team.players.length)];
-      plays.push(`${penalizedPlayer.name} took a penalty!`);
-      penalties.push(penalizedPlayer);
+      // Handle penalty event
+      if (Math.random() < 0.5) {
+        plays = handlePenaltyEvent(homeTeam, plays);
+      } else {
+        plays = handlePenaltyEvent(awayTeam, plays);
+      }
     } else if (event < 0.5) {
       // Goal event
       const scoringTeamName = Math.random() < 0.5 ? homeTeam.name : awayTeam.name;
@@ -144,15 +223,19 @@ const simulatePeriod = (homeTeam, awayTeam, isOvertime = false) => {
         }
       }
     } else if (event < 0.7) {
-      // Injury event
-      const team = Math.random() < 0.5 ? homeTeam : awayTeam;
-      const injuredPlayer = team.players[getRandomInt(team.players.length)];
-      plays.push(`${injuredPlayer.name} was injured and is out of the game!`);
-      injuries.push(injuredPlayer);
+      // Handle injury event
+      if (Math.random() < 0.5) {
+        plays = handleInjuryEvent(homeTeam, plays);
+      } else {
+        plays = handleInjuryEvent(awayTeam, plays);
+      }
     } else {
       // Neutral play
       plays.push("A neutral play occurred.");
     }
+    // Periodically check for expired penalties or recovered players
+    checkForPenaltyExpiry();
+    checkForPlayerRecovery();
   }
 
   return plays;
