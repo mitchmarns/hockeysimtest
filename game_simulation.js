@@ -56,11 +56,9 @@ const calculateAverageSkill = (player) => {
 const goalieSaveCheck = (goalie, shooter) => {
   const shooterSkill = calculateAverageSkill(shooter);
   const goalieSkill = calculateAverageSkill(goalie);
-  const saveChance = goalieSkill - shooterSkill;
-  const randomChance = Math.random() * 100;
-  const goalThreshold = 50 + (saveChance * 2);  
-  
-  return randomChance > goalThreshold; 
+  const saveChance = goalieSkill / (goalieSkill + scorerSkill);
+    
+  return Math.random() < saveChance; //
 };
 
 // Penalty durations
@@ -83,13 +81,35 @@ const PENALTY_TYPES = [
   "Match"
 ];
 
+// Weighted probabilities for penalties
+const PENALTY_WEIGHTS = {
+  "Minor": 70,       // 70% chance
+  "Double Minor": 15, // 15% chance
+  "Major": 10,       // 10% chance
+  "Misconduct": 3,   // 3% chance
+  "Game Misconduct": 1, // 1% chance
+  "Match": 1         // 1% chance
+};
+
+// Select a penalty type based on the weights
+function getRandomPenaltyType() {
+  const totalWeight = Object.values(PENALTY_WEIGHTS).reduce((sum, weight) => sum + weight, 0);
+  const randomValue = getRandomInt(totalWeight);
+  let cumulativeWeight = 0;
+
+  for (const [penaltyType, weight] of Object.entries(PENALTY_WEIGHTS)) {
+    cumulativeWeight += weight;
+    if (randomValue < cumulativeWeight) {
+      return penaltyType;
+    }
+  }
+  return "Minor"; // Default to Minor if something goes wrong
+}
+
 // Random penalty event
 function handlePenaltyEvent(team, eventLog) {
   const penalizedPlayer = team.players[getRandomInt(team.players.length)];
-  
-  // Randomly select a penalty type from the list
-  const penaltyType = PENALTY_TYPES[getRandomInt(PENALTY_TYPES.length)];
-
+  const penaltyType = getRandomPenaltyType();
   let penaltyDuration = PENALTY_DURATIONS[penaltyType];
   
   // If the penalty is for misconduct or game/match misconduct, the player is ejected
@@ -109,6 +129,11 @@ function handlePenaltyEvent(team, eventLog) {
   }
   
   return eventLog;
+}
+
+// Filter out penalized players when selecting a shooter
+function getEligiblePlayers(team) {
+  return team.players.filter(player => !penalizedPlayers[player.id]);
 }
 
 // Check if a player is still penalized (based on the current game time)
@@ -184,7 +209,7 @@ const handleGoalEvent = (scoringTeamName, lineAssignments, homeTeam, awayTeam) =
   const scoringTeam = scoringTeamName === homeTeam.name ? homeTeam : awayTeam;
   const players = linePlayerIDs
     .map(id => scoringTeam.players.find(player => player.id == id))
-    .filter(player => player);
+    .filter(player => player && !penalizedPlayers[player.id]);
 
   const scorer = players[getRandomInt(players.length)];
   let assist1 = null;
@@ -225,7 +250,7 @@ const simulatePeriod = (homeTeam, awayTeam, isOvertime = false) => {
   for (let i = 0; i < maxEvents; i++) {
     const event = Math.random();
     
-    if (event < 0.2) {
+    if (event < 0.1) {
       // Handle penalty event
       if (Math.random() < 0.5) {
         plays = handlePenaltyEvent(homeTeam, plays);
