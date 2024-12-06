@@ -63,23 +63,51 @@ const goalieSaveCheck = (goalie, shooter) => {
   return randomChance > goalThreshold; 
 };
 
-// Random penalty duration (in seconds)
-function getRandomPenaltyDuration() {
-  return getRandomInt(120) + 60;  // Between 60s and 180s (1 to 3 minutes)
-}
+// Penalty durations
+const PENALTY_DURATIONS = {
+  "Minor": 2 * 60,       // 2 minutes
+  "Major": 5 * 60,       // 5 minutes
+  "Double Minor": 4 * 60, // 4 minutes
+  "Misconduct": 10 * 60,  // 10 minutes
+  "Game Misconduct": -1,  // Player is ejected (no specific time duration)
+  "Match": -1             // Player is ejected (no specific time duration)
+};
 
-// Penalty event
+// possible penalty types
+const PENALTY_TYPES = [
+  "Minor",
+  "Major",
+  "Double Minor",
+  "Misconduct",
+  "Game Misconduct",
+  "Match"
+];
+
+// Random penalty event
 function handlePenaltyEvent(team, eventLog) {
   const penalizedPlayer = team.players[getRandomInt(team.players.length)];
   
-  // Add the penalized player to the penalized players list with the penalty duration
-  const penaltyDuration = getRandomPenaltyDuration();
-  penalizedPlayers[penalizedPlayer.id] = {
-    player: penalizedPlayer,
-    penaltyEndTime: Date.now() + penaltyDuration * 1000,  // store the end time of the penalty
-  };
+  // Randomly select a penalty type from the list
+  const penaltyType = PENALTY_TYPES[getRandomInt(PENALTY_TYPES.length)];
 
-  eventLog.push(`${penalizedPlayer.name} took a penalty for ${penaltyDuration / 60} minutes!`);
+  let penaltyDuration = PENALTY_DURATIONS[penaltyType];
+  
+  // If the penalty is for misconduct or game/match misconduct, the player is ejected
+  if (penaltyType === "Game Misconduct" || penaltyType === "Match") {
+    penalizedPlayers[penalizedPlayer.id] = {
+      player: penalizedPlayer,
+      penaltyEndTime: -1,  // No penalty time; player is ejected
+    };
+    eventLog.push(`${penalizedPlayer.name} took a ${penaltyType} and is ejected from the game!`);
+  } else {
+    // For minor, major, double minor, or misconduct, track penalty duration
+    penalizedPlayers[penalizedPlayer.id] = {
+      player: penalizedPlayer,
+      penaltyEndTime: Date.now() + penaltyDuration * 1000,  // store the end time of the penalty
+    };
+    eventLog.push(`${penalizedPlayer.name} took a ${penaltyType} for ${penaltyDuration / 60} minutes!`);
+  }
+  
   return eventLog;
 }
 
@@ -88,12 +116,13 @@ function checkForPenaltyExpiry() {
   const currentTime = Date.now();
   Object.keys(penalizedPlayers).forEach(playerId => {
     const penalty = penalizedPlayers[playerId];
-    if (currentTime >= penalty.penaltyEndTime) {
+    if (penalty.penaltyEndTime !== -1 && currentTime >= penalty.penaltyEndTime) {
       // The penalty has expired, remove the player from the penalized list
       const player = penalty.player;
       delete penalizedPlayers[playerId];
       console.log(`${player.name}'s penalty has expired, they are now eligible to play again.`);
     }
+    // If the penalty is a game or match misconduct, player is ejected, no time to check for expiry
   });
 }
 
