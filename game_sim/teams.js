@@ -21,11 +21,19 @@ export const calculateAverageSkill = (player) => {
 export const parseLineAssignments = (lineAssignments, teams) => {
   let assignments;
 
-  try {
-    console.log("Parsing lineAssignments:", lineAssignments);
-    assignments = JSON.parse(lineAssignments);
-  } catch (error) {
-    console.error("Invalid lineAssignments JSON:", error);
+  if (typeof lineAssignments === "string") {
+    try {
+      console.log("Parsing lineAssignments:", lineAssignments);
+      assignments = JSON.parse(lineAssignments);
+    } catch (error) {
+      console.error("Invalid lineAssignments JSON:", error);
+      return;
+    }
+  } else if (typeof lineAssignments === "object" && lineAssignments !== null) {
+    console.log("lineAssignments is already an object:", lineAssignments);
+    assignments = lineAssignments;
+  } else {
+    console.error("Unexpected lineAssignments format:", lineAssignments);
     return;
   }
 
@@ -54,3 +62,4 @@ export const parseLineAssignments = (lineAssignments, teams) => {
     }
   }
 };
+
