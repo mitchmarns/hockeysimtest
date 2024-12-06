@@ -1,6 +1,6 @@
 import { handlePenaltyEvent } from './penalties.js';
 import { handleInjuryEvent } from './injuries.js';
-import { calculateAverageSkill } from './teams.js';
+import { calculateAverageSkill, parseLineAssignments } from './teams.js';
 
 export const simulateGame = (homeTeam, awayTeam, lineAssignments) => {
   const gameLog = [];
@@ -10,6 +10,9 @@ export const simulateGame = (homeTeam, awayTeam, lineAssignments) => {
   const penalizedPlayers = {};
   const injuredPlayers = {};
 
+  // Parse line assignments and set up teams
+  parseLineAssignments(lineAssignments, [homeTeam, awayTeam]);
+
   // Simulate 3 periods
   for (let i = 1; i <= 3; i++) {
     gameLog.push(`--- Period ${i} ---`);
@@ -18,7 +21,7 @@ export const simulateGame = (homeTeam, awayTeam, lineAssignments) => {
     for (let j = 0; j < numEvents; j++) {
       const eventType = Math.random();
 
-      if (eventType < 0.1) {
+      if (eventType < 0.2) {
         // Handle Penalty Event
         handlePenaltyEvent(homeTeam, gameLog, penalizedPlayers);
       } else if (eventType < 0.1) {
@@ -45,10 +48,20 @@ const simulateNormalPlay = (homeTeam, awayTeam, gameLog, scores) => {
   const shootingTeam = Math.random() < 0.5 ? homeTeam : awayTeam;
   const defendingTeam = shootingTeam === homeTeam ? awayTeam : homeTeam;
 
+  const goalie = defendingTeam.lines?.goalies?.starter;
+  if (!goalie) {
+    gameLog.push(`Error: ${defendingTeam.name} does not have a valid goalie.`);
+    return;
+  }
+
   // Choose shooter and defender
   const scorer = shootingTeam.players[Math.floor(Math.random() * shootingTeam.players.length)];
   const defender = defendingTeam.players[Math.floor(Math.random() * defendingTeam.players.length)];
-  const goalie = defendingTeam.lines.goalies.starter;
+
+  if (!shooter || !defender) {
+    gameLog.push('Error: Missing shooter or defender.');
+    return;
+  }
 
   // Defensive play chance
   const defenseChance = defender.skills.stick * 0.3 + defender.skills.speed * 0.2;
@@ -67,14 +80,10 @@ const simulateNormalPlay = (homeTeam, awayTeam, gameLog, scores) => {
   const shotOutcome = Math.random() < shotSuccessChance;
 
    if (shotOutcome) {
-      // Goal scored
-      if (shootingTeam === homeTeam) {
-        scores.home += 1;
-      } else {
-        scores.away += 1;
-      }
+      if (shootingTeam === homeTeam) scores.home += 1;
+      else scores.away += 1;
+  
       gameLog.push(`${shooter.name} scores a goal for ${shootingTeam.name}!`);
-      addAssist(shootingTeam, shooter, gameLog); // Add potential assist
     } else {
       gameLog.push(`${shooter.name} took a shot, but ${goalie.name} makes a save!`);
     }
