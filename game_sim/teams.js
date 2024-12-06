@@ -4,7 +4,15 @@ export const groupPlayersByTeam = (players) => {
   players.forEach(player => {
     if (player.team && player.team.trim()) {
       if (!teams[player.team]) {
-        teams[player.team] = { name: player.team, players: [] };
+        teams[player.team] = {
+          name: player.team,
+          players: [],
+          lines: {
+            forwardLines: Array(4).fill(null).map(() => ({ LW: null, C: null, RW: null })),
+            defenseLines: Array(3).fill(null).map(() => ({ LD: null, RD: null })),
+            goalies: { starter: null, backup: null },
+          },
+        };
       }
       teams[player.team].players.push(player);
     }
