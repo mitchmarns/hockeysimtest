@@ -104,9 +104,9 @@ const simulateNormalPlay = (homeTeam, awayTeam, gameLog, scores) => {
       if (shootingTeam === homeTeam) scores.home += 1;
       else scores.away += 1;
   
-      gameLog.push(`${shooter.name} scores a goal for ${shootingTeam.name}!`);
+      gameLog.push(`${scorer.name} scores a goal for ${shootingTeam.name}!`);
     } else {
-      gameLog.push(`${shooter.name} took a shot, but ${goalie.name} makes a save!`);
+      gameLog.push(`${scorer.name} took a shot, but ${goalie.name} makes a save!`);
     }
   };
 
