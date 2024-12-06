@@ -29,7 +29,7 @@ export const calculateAverageSkill = (player) => {
 export const parseLineAssignments = (lineAssignments, teams) => {
   let assignments;
 
-  // Check if lineAssignments is already an object
+  // Check if lineAssignments is a string and parse it, or use it directly if already an object
   if (typeof lineAssignments === 'string') {
     try {
       assignments = JSON.parse(lineAssignments);
@@ -44,6 +44,7 @@ export const parseLineAssignments = (lineAssignments, teams) => {
     return;
   }
 
+  // Loop through each assignment key-value pair
   for (const [key, playerId] of Object.entries(assignments)) {
     const [teamName, lineType, lineNumber, position] = key.split('-');
     const team = teams.find((t) => t.name === teamName);
@@ -54,7 +55,7 @@ export const parseLineAssignments = (lineAssignments, teams) => {
     }
 
     if (!team.lines) {
-      console.error(`Team ${teamName} does not have a 'lines' structure.`);
+      console.error(`Team ${teamName} has no lines property.`);
       continue;
     }
 
@@ -71,6 +72,8 @@ export const parseLineAssignments = (lineAssignments, teams) => {
     } else if (lineType === 'goalies') {
       team.lines.goalies[position.toLowerCase()] = player;
     }
+
+    console.log(`Updated ${teamName}'s lines:`, team.lines);
   }
 };
 
