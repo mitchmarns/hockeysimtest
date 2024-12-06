@@ -56,7 +56,7 @@ const calculateAverageSkill = (player) => {
 const goalieSaveCheck = (goalie, shooter) => {
   const shooterSkill = calculateAverageSkill(shooter);
   const goalieSkill = calculateAverageSkill(goalie);
-  const saveChance = goalieSkill / (goalieSkill + scorerSkill);
+  const saveChance = goalieSkill / (goalieSkill + shooterSkill);
     
   return Math.random() < saveChance; //
 };
