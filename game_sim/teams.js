@@ -15,6 +15,14 @@ export const groupPlayersByTeam = (players) => {
         };
       }
       teams[player.team].players.push(player);
+
+      // Assign goalies if the player's position is 'Starter' or 'Backup'
+      if (player.position === 'Starter') {
+        teams[player.team].lines.goalies.starter = player;
+      }
+      if (player.position === 'Backup') {
+        teams[player.team].lines.goalies.backup = player;
+      }
     }
   });
   return teams;
