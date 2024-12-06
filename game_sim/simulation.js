@@ -13,6 +13,20 @@ export const simulateGame = (homeTeam, awayTeam, lineAssignments) => {
   // Parse line assignments and set up teams
   parseLineAssignments(lineAssignments, [homeTeam, awayTeam]);
 
+  // Validate goalies
+  const validateGoalies = (team) => {
+  if (!team.lines.goalies.starter || !team.lines.goalies.backup) {
+    console.error(`Error: ${team.name} does not have a valid goalie.`);
+    return false;
+  }
+  return true;
+};
+
+  if (!validateGoalies(homeTeam) || !validateGoalies(awayTeam)) {
+  gameLog.push(`Error: ${homeTeam.name} or ${awayTeam.name} does not have a valid goalie.`);
+  return { gameLog, scores };
+}
+
   // Simulate 3 periods
   for (let i = 1; i <= 3; i++) {
     gameLog.push(`--- Period ${i} ---`);
@@ -48,8 +62,9 @@ const simulateNormalPlay = (homeTeam, awayTeam, gameLog, scores) => {
   const shootingTeam = Math.random() < 0.5 ? homeTeam : awayTeam;
   const defendingTeam = shootingTeam === homeTeam ? awayTeam : homeTeam;
 
-  const goalie = defendingTeam.lines?.goalies?.starter;
-  if (!goalie) {
+  
+  const defendingGoalie = defendingTeam.lines.goalies.starter;
+  if (!defendingGoalie) {
     gameLog.push(`Error: ${defendingTeam.name} does not have a valid goalie.`);
     return;
   }
