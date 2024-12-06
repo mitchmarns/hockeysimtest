@@ -18,10 +18,10 @@ export const simulateGame = (homeTeam, awayTeam, lineAssignments) => {
     for (let j = 0; j < numEvents; j++) {
       const eventType = Math.random();
 
-      if (eventType < 0.2) {
+      if (eventType < 0.1) {
         // Handle Penalty Event
         handlePenaltyEvent(homeTeam, gameLog, penalizedPlayers);
-      } else if (eventType < 0.4) {
+      } else if (eventType < 0.1) {
         // Handle Injury Event
         handleInjuryEvent(awayTeam, gameLog, injuredPlayers);
       } else if (eventType < 0.7) {
