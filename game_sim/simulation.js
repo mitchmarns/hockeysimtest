@@ -68,19 +68,16 @@ const simulateNormalPlay = (homeTeam, awayTeam, gameLog, scores) => {
     return;
   }
   
-  const defendingGoalie = defendingTeam.lines.goalies.starter;
-  
-  if (!defendingGoalie) {
-    gameLog.push(`Error: ${defendingTeam.name} does not have a valid goalie.`);
-    return;
-  }
-
-  // Choose shooter and defender
   const scorer = shootingTeam.players[Math.floor(Math.random() * shootingTeam.players.length)];
   const defender = defendingTeam.players[Math.floor(Math.random() * defendingTeam.players.length)];
 
-  if (!scorer || !defender) {
-    gameLog.push('Error: Missing shooter or defender.');
+  if (!scorer?.skills || typeof scorer.skills.wristShotAccuracy !== 'number') {
+    console.error('Invalid scorer or scorer skills:', scorer);
+    return;
+  }
+
+  if (!goalie?.skills || typeof goalie.skills.glove !== 'number') {
+    console.error('Invalid goalie or goalie skills:', goalie);
     return;
   }
 
@@ -106,7 +103,7 @@ const simulateNormalPlay = (homeTeam, awayTeam, gameLog, scores) => {
   console.log(`Shooter Skill: ${shooterSkill}`);
   console.log(`Goalie Skill: ${goalieSkill}`);
 
-  const shotSuccessChance = (shooterSkill + 50) / (shooterSkill + goalieSkill);
+  const shotSuccessChance = shooterSkill / (shooterSkill + goalieSkill);
   const shotOutcome = Math.random() < shotSuccessChance;
 
    if (shotOutcome) {
