@@ -64,8 +64,11 @@ function goalieSaveCheck(goalie, shooter) {
 // Simulate period with early exit for overtime
 function simulatePeriod(homeTeam, awayTeam, isOvertime = false) {
   let plays = [];
- const maxEvents = getRandomInt(15) + 10; // Random number of events between 10 and 25
+  const maxEvents = getRandomInt(15) + 10; // Random number of events between 10 and 25
   let periodGoals = 0; // Track the goals scored in this period
+
+    for (let i = 0; i < maxEvents; i++) {
+    const event = Math.random();
     
     if (event < 0.2) {
       // Penalty event
@@ -73,14 +76,14 @@ function simulatePeriod(homeTeam, awayTeam, isOvertime = false) {
       const penalizedPlayer = team.players[getRandomInt(team.players.length)];
       plays.push(`${penalizedPlayer.name} took a penalty!`);
       penalties.push(penalizedPlayer);
-    } else if (event < 0.6) {
+    } else if (event < 0.5) {
       // Goal event
       const scoringTeamName = Math.random() < 0.5 ? homeTeam.name : awayTeam.name;
       const lineAssignments = JSON.parse(localStorage.getItem('lineAssignments')) || {};
 
       // Extract players for the first forward line of the scoring team
       const lineKeys = ["LW", "C", "RW"].map(
-        pos => `${scoringTeamName}-forward-1-${pos}`
+        pos => `${scoringTeamName}-forward-${forwardLineNumber}-${pos}`
       );
       const linePlayerIDs = lineKeys.map(key => lineAssignments[key]).filter(id => id);
 
