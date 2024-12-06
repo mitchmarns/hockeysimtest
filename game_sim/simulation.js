@@ -7,18 +7,23 @@ export const simulateGame = (homeTeam, awayTeam, lineAssignments) => {
   const gameLog = [];
   const scores = { home: 0, away: 0 };
 
+  // Define penalized players and injured players storage
+  const penalizedPlayers = {};
+  const injuredPlayers = {};
+
   // Simulate 3 periods
   for (let i = 1; i <= 3; i++) {
     gameLog.push(`--- Period ${i} ---`);
 
     const numEvents = Math.floor(Math.random() * 10) + 5;
+    
     for (let j = 0; j < numEvents; j++) {
       const eventType = Math.random();
 
       if (eventType < 0.3) {
-        gameLog = handlePenaltyEvent(homeTeam, gameLog);
+        gameLog = handlePenaltyEvent(homeTeam, gameLog, penalizedPlayers);
       } else if (eventType < 0.6) {
-        gameLog = handleInjuryEvent(awayTeam, gameLog);
+        gameLog = handleInjuryEvent(awayTeam, gameLog, injuredPlayers);
       } else {
         gameLog.push('A neutral play occurred.');
       }
