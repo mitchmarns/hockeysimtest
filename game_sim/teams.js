@@ -10,7 +10,7 @@ export const groupPlayersByTeam = (players) => {
           lines: {
             forwardLines: Array(4).fill(null).map(() => ({ LW: null, C: null, RW: null })),
             defenseLines: Array(3).fill(null).map(() => ({ LD: null, RD: null })),
-            goalies: { starter: null, backup: null },
+            goalies: { Starter: null, Backup: null },
           },
         };
       }
@@ -57,7 +57,7 @@ export const parseLineAssignments = (lineAssignments, teams) => {
         { LD: null, RD: null },
         { LD: null, RD: null }
       ],
-      goalies: { starter: null, backup: null }
+      goalies: { Starter: null, Backup: null }
     };
 
     for (const [key, playerId] of Object.entries(assignments)) {
