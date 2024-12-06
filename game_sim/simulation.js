@@ -105,10 +105,13 @@ const simulateNormalPlay = (homeTeam, awayTeam, gameLog, scores) => {
                      + scorer.skills.wristShotPower * 0.3 
                      + scorer.skills.slapShotAccuracy * 0.2 
                      + scorer.skills.slapShotPower * 0.1;
-  const goalieSkill = goalie.skills.glove * 0.25 
-                    + goalie.skills.legs * 0.25 
-                    + goalie.skills.positioning * 0.25 
-                    + goalie.skills.reboundControl * 0.25;
+                     + scorer.skills.speed * 0.1
+                     + scorer.skills.hockeyIQ * 0.1;
+  const goalieSkill = goalie.skills.glove * 0.2 
+                    + goalie.skills.legs * 0.2 
+                    + goalie.skills.positioning * 0.2 
+                    + goalie.skills.reflexes * 0.2
+                    + goalie.skills.agility * 0.2;
 
   console.log(`Shooter Skill: ${shooterSkill}`);
   console.log(`Goalie Skill: ${goalieSkill}`);
