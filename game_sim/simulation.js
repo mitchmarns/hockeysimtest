@@ -16,14 +16,13 @@ export const simulateGame = (homeTeam, awayTeam, lineAssignments) => {
     gameLog.push(`--- Period ${i} ---`);
 
     const numEvents = Math.floor(Math.random() * 10) + 5;
-    
     for (let j = 0; j < numEvents; j++) {
       const eventType = Math.random();
 
       if (eventType < 0.3) {
-        gameLog = handlePenaltyEvent(homeTeam, gameLog, penalizedPlayers);
+        handlePenaltyEvent(homeTeam, gameLog, penalizedPlayers);
       } else if (eventType < 0.6) {
-        gameLog = handleInjuryEvent(awayTeam, gameLog, injuredPlayers);
+        handleInjuryEvent(awayTeam, gameLog, injuredPlayers);
       } else {
         gameLog.push('A neutral play occurred.');
       }
