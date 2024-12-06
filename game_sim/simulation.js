@@ -6,13 +6,6 @@ export const simulateGame = (homeTeam, awayTeam, lineAssignments) => {
   const gameLog = [];
   const scores = { home: 0, away: 0 };
 
-  if (!homeTeam || !awayTeam) {
-    console.error('One or both teams are undefined.');
-    console.error('Home Team:', homeTeam);
-    console.error('Away Team:', awayTeam);
-    return { gameLog, scores };
-  }
-
   console.log(`Game starting between ${homeTeam.name} and ${awayTeam.name}`);
 
   // Define penalized players and injured players storage
@@ -50,6 +43,19 @@ export const simulateGame = (homeTeam, awayTeam, lineAssignments) => {
         gameLog.push(`${shootingTeam.name} attempts a shot against ${goalie.name}`);
       }
     }
+  }
+
+  // Add final score to the game log
+  gameLog.push(`--- Final Score ---`);
+  gameLog.push(`${homeTeam.name}: ${scores.home}`);
+  gameLog.push(`${awayTeam.name}: ${scores.away}`);
+
+  if (scores.home > scores.away) {
+    gameLog.push(`${homeTeam.name} wins the game!`);
+  } else if (scores.away > scores.home) {
+    gameLog.push(`${awayTeam.name} wins the game!`);
+  } else {
+    gameLog.push(`The game ends in a tie.`);
   }
 
   return { gameLog, scores };
