@@ -61,6 +61,7 @@ const simulateNormalPlay = (homeTeam, awayTeam, gameLog, scores) => {
   
   const shootingTeam = Math.random() < 0.5 ? homeTeam : awayTeam;
   const defendingTeam = shootingTeam === homeTeam ? awayTeam : homeTeam;
+  const goalie = defendingTeam?.lines?.goalies?.starter;
 
   if (!shootingTeam?.players?.length || !defendingTeam?.players?.length) {
     console.error('One of the teams does not have valid players.');
