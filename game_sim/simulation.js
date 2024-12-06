@@ -43,21 +43,48 @@ export const simulateGame = (homeTeam, awayTeam, lineAssignments) => {
 // Simulate normal game events like shots, passes, and goals
 const simulateNormalPlay = (homeTeam, awayTeam, gameLog, scores) => {
   const shootingTeam = Math.random() < 0.5 ? homeTeam : awayTeam;
-  const scoringChance = Math.random();
+  const defendingTeam = shootingTeam === homeTeam ? awayTeam : homeTeam;
 
-  if (scoringChance > 0.7) {
-    const scorer = shootingTeam.players[Math.floor(Math.random() * shootingTeam.players.length)];
-    const goalScored = Math.random() > 0.5;
+  // Choose shooter and defender
+  const scorer = shootingTeam.players[Math.floor(Math.random() * shootingTeam.players.length)];
+  const defender = defendingTeam.players[Math.floor(Math.random() * defendingTeam.players.length)];
+  const goalie = defendingTeam.lines.goalies.starter;
 
-    if (goalScored) {
+  // Defensive play chance
+  const defenseChance = defender.skills.stick * 0.3 + defender.skills.speed * 0.2;
+  const blockOrTurnover = Math.random() < defenseChance / 100;
+
+  if (blockOrTurnover) {
+    gameLog.push(`${defender.name} blocks the shot or forces a turnover!`);
+    return; // No shot occurs if defense is successful
+  }
+
+  // Calculate shot accuracy
+  const shooterSkill = shooter.skills.speed * 0.5 + shooter.skills.stick * 0.5;
+  const goalieSkill = goalie.skills.glove * 0.5 + goalie.skills.legs * 0.5;
+
+  const shotSuccessChance = (shooterSkill - goalieSkill + 50) / 100; // Normalize to 0-1 range
+  const shotOutcome = Math.random() < shotSuccessChance;
+
+   if (shotOutcome) {
+      // Goal scored
       if (shootingTeam === homeTeam) {
         scores.home += 1;
       } else {
         scores.away += 1;
       }
-      gameLog.push(`${scorer.name} scores a goal for ${shootingTeam.name}!`);
+      gameLog.push(`${shooter.name} scores a goal for ${shootingTeam.name}!`);
+      addAssist(shootingTeam, shooter, gameLog); // Add potential assist
     } else {
-      gameLog.push(`${scorer.name} took a shot but missed.`);
+      gameLog.push(`${shooter.name} took a shot, but ${goalie.name} makes a save!`);
     }
+  };
+
+// Helper function to simulate assists
+const addAssist = (team, scorer, gameLog) => {
+  const eligiblePlayers = team.players.filter(player => player.id !== scorer.id);
+  if (eligiblePlayers.length > 0) {
+    const assister = eligiblePlayers[Math.floor(Math.random() * eligiblePlayers.length)];
+    gameLog.push(`${assister.name} assisted on the goal by ${scorer.name}.`);
   }
 };
