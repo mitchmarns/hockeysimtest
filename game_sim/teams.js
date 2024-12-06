@@ -40,7 +40,8 @@ try {
 
   for (const [key, playerId] of Object.entries(assignments)) {
     const [teamName, lineType, lineNumber, position] = key.split('-');
-    const team = teams.find((t) => t.name === teamName);
+    
+    const team = teams[teamName];
 
     if (!team) {
       console.warn(`Team ${teamName} not found.`);
@@ -55,12 +56,27 @@ try {
     }
 
     if (lineType === 'forward') {
-      team.lines.forwardLines[lineNumber - 1][position] = player;
+      const forwardLineIndex = parseInt(lineNumber, 10) - 1;
+      if (forwardLineIndex >= 0 && forwardLineIndex < team.lines.forwardLines.length) {
+        team.lines.forwardLines[forwardLineIndex][position] = player;
+      } else {
+        console.warn(`Invalid forward line number ${lineNumber} for team ${teamName}`);
+      }
     } else if (lineType === 'defense') {
-      team.lines.defenseLines[lineNumber - 1][position] = player;
+      const defenseLineIndex = parseInt(lineNumber, 10) - 1;
+      if (defenseLineIndex >= 0 && defenseLineIndex < team.lines.defenseLines.length) {
+        team.lines.defenseLines[defenseLineIndex][position] = player;
+      } else {
+        console.warn(`Invalid defense line number ${lineNumber} for team ${teamName}`);
+      }
     } else if (lineType === 'goalies') {
-      team.lines.goalies[position.toLowerCase()] = player;
+      if (position.toLowerCase() === 'starter' || position.toLowerCase() === 'backup') {
+        team.lines.goalies[position.toLowerCase()] = player;
+      } else {
+        console.warn(`Invalid goalie position ${position} for team ${teamName}`);
+      }
     }
   }
 };
+
 
