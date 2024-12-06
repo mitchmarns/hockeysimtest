@@ -34,6 +34,7 @@ try {
     assignments = JSON.parse(lineAssignments);
   } catch (error) {
     console.error("Invalid lineAssignments JSON:", error);
+    console.error("Line Assignments Data:", lineAssignments);
     return;
   }
 
