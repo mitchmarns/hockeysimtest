@@ -505,6 +505,14 @@ main {
   overflow-y: scroll;
 }
 
+#log-container p {
+  margin: 5px 0;
+  padding: 5px;
+  background: #e9f5ff;
+  border-left: 4px solid #004080;
+  border-radius: 4px;
+}
+
 /* Footer Styles */
 footer {
   background: #003366;
