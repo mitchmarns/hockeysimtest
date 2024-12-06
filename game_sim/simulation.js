@@ -61,6 +61,3 @@ const simulateNormalPlay = (homeTeam, awayTeam, gameLog, scores) => {
     }
   }
 };
-
-  return { gameLog, scores };
-};
