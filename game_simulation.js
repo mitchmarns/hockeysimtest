@@ -56,9 +56,9 @@ const goalieSaveCheck = (goalie, shooter) => {
   const goalieSkill = calculateAverageSkill(goalie);
   const saveChance = goalieSkill - shooterSkill;
   const randomChance = Math.random() * 100;
-  const goalThreshold = 50 + (saveChance < 0 ? saveChance : 0);  
+  const goalThreshold = 50 + (saveChance * 2);  
   
-  return randomChance < goalThreshold; 
+  return randomChance > goalThreshold; 
 };
 
 // Handle goal event
