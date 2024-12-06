@@ -353,5 +353,3 @@ const displayGameLog = () => {
 // Start the game
 document.getElementById('start-game').addEventListener('click', simulateGame);
 
-// Start the game
-document.getElementById('start-game').addEventListener('click', simulateGame);
