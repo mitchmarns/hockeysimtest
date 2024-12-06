@@ -113,9 +113,6 @@ const simulateNormalPlay = (homeTeam, awayTeam, gameLog, scores) => {
                     + goalie.skills.reflexes * 0.2
                     + goalie.skills.agility * 0.2;
 
-  console.log(`Shooter Skill: ${shooterSkill}`);
-  console.log(`Goalie Skill: ${goalieSkill}`);
-
   const shotSuccessChance = shooterSkill / (shooterSkill + goalieSkill);
   const shotOutcome = Math.random() < shotSuccessChance;
 
