@@ -112,7 +112,7 @@ const handleGoalEvent = (scoringTeamName, lineAssignments, homeTeam, awayTeam) =
 // Simulate period with early exit for overtime
 const simulatePeriod = (homeTeam, awayTeam, isOvertime = false) => {
   let plays = [];
-  const maxEvents = getRandomInt(15) + 10;  // Random number of events between 10 and 25
+  const maxEvents = getRandomInt(6) + 7;  // Random number of events between 10 and 25
   let periodGoals = 0;  // Track the goals scored in this period
 
   for (let i = 0; i < maxEvents; i++) {
