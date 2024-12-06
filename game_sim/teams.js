@@ -27,6 +27,9 @@ export const calculateAverageSkill = (player) => {
 
 // line assignments
 // Parse lineAssignments
+export const parseLineAssignments = (lineAssignments, teams) => {
+  let assignments;
+  
   try {
     if (typeof lineAssignments === 'string') {
       assignments = JSON.parse(lineAssignments);
