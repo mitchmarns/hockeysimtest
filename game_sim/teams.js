@@ -22,6 +22,7 @@ export const parseLineAssignments = (lineAssignments, teams) => {
   let assignments;
 
   try {
+    console.log("Parsing lineAssignments:", lineAssignments);
     assignments = JSON.parse(lineAssignments);
   } catch (error) {
     console.error("Invalid lineAssignments JSON:", error);
@@ -30,6 +31,8 @@ export const parseLineAssignments = (lineAssignments, teams) => {
 
   for (const [key, playerId] of Object.entries(assignments)) {
     const [teamName, lineType, lineNumber, position] = key.split('-');
+    console.log(`Processing: team=${teamName}, lineType=${lineType}, lineNumber=${lineNumber}, position=${position}, playerId=${playerId}`);
+
     const team = teams.find((t) => t.name === teamName);
     if (!team) {
       console.warn(`Team ${teamName} not found.`);
