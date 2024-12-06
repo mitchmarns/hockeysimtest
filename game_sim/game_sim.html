@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hockey Game Simulation</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Hockey Game Simulation</h1>
+    </header>
+
+    <main>
+      <section id="team-selection">
+        <h2>Select Teams</h2>
+        <label for="home-team">Home Team:</label>
+        <select id="home-team">
+          <option value="Rangers">Rangers</option>
+          <option value="Devils">Devils</option>
+          <option value="Islanders">Islanders</option>
+          <option value="Sabres">Sabres</option>
+        </select>
+
+        <label for="away-team">Away Team:</label>
+        <select id="away-team">
+          <option value="Rangers">Rangers</option>
+          <option value="Devils">Devils</option>
+          <option value="Islanders">Islanders</option>
+          <option value="Sabres">Sabres</option>
+        </select>
+
+        <button id="start-game">Start Game</button>
+      </section>
+
+      <section id="game-output">
+        <h2>Game Log</h2>
+        <div id="log-container"></div>
+      </section>
+    </main>
+
+    <footer>
+      <p>© 2024 Hockey Simulation</p>
+    </footer>
+  </div>
+  <script type="module" src="js/game_simulation.js"></script>
+</body>
+</html>
