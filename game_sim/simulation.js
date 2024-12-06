@@ -13,18 +13,28 @@ export const simulateGame = (homeTeam, awayTeam, lineAssignments) => {
   // Parse line assignments and set up teams
   parseLineAssignments(lineAssignments, [homeTeam, awayTeam]);
 
-  // Validate goalies
-const validateGoalies = (team) => {
-  if (!team.lines || !team.lines.goalies) {
-    console.error(`Error: ${team.name} does not have a valid lines structure.`);
-    return false;
+  const validateGoalies = (team) => {
+    if (!team.lines || !team.lines.goalies) {
+      console.error(`Error: ${team.name} does not have a valid lines structure.`);
+      return false;
+    }
+    if (!team.lines.goalies.starter) {
+      console.error(`Error: ${team.name} does not have a starter goalie.`);
+      return false;
+    }
+    if (!team.lines.goalies.backup) {
+      console.error(`Error: ${team.name} does not have a backup goalie.`);
+      return false;
+    }
+    console.log(`${team.name} has valid goalies.`);
+    return true;
+  };
+
+  // Check if both teams have valid goalies
+  if (!validateGoalies(homeTeam) || !validateGoalies(awayTeam)) {
+    console.error('Game cannot proceed without valid goalies.');
+    return { gameLog, scores };
   }
-  if (!team.lines.goalies.starter || !team.lines.goalies.backup) {
-    console.error(`Error: ${team.name} does not have valid goalies.`);
-    return false;
-  }
-  return true;
-};
 
   // Simulate 3 periods
   for (let i = 1; i <= 3; i++) {
@@ -44,13 +54,18 @@ const validateGoalies = (team) => {
         // Simulate Shots/Goals
         simulateNormalPlay(homeTeam, awayTeam, gameLog, scores);
       } else {
-        gameLog.push('A neutral play occurred.');
+        const shootingTeam = Math.random() < 0.5 ? homeTeam : awayTeam;
+        const defendingTeam = shootingTeam === homeTeam ? awayTeam : homeTeam;
+
+        const goalie = defendingTeam.lines.goalies.starter;
+        if (!goalie) {
+          gameLog.push(`Error: ${defendingTeam.name} does not have a valid goalie.`);
+          return { gameLog, scores };
+        }
+
+        gameLog.push(`${shootingTeam.name} attempts a shot against ${goalie.name}`);
       }
     }
-  }
-
-  if (scores.home === scores.away) {
-    gameLog.push('Game tied! Overtime starts.');
   }
 
   return { gameLog, scores };
