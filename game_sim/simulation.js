@@ -67,8 +67,18 @@ const simulateNormalPlay = (homeTeam, awayTeam, gameLog, scores) => {
     console.error('One of the teams does not have valid players.');
     return;
   }
+
+  // Filter eligible shooters (exclude goalies)
+  const eligibleScorers = shootingTeam.players.filter(player => 
+    player.position !== 'Starter' && player.position !== 'Backup'
+  );
+
+  if (!eligibleScorers.length) {
+    console.error(`${shootingTeam.name} has no eligible scorers.`);
+    return;
+  }
   
-  const scorer = shootingTeam.players[Math.floor(Math.random() * shootingTeam.players.length)];
+  const scorer = eligibleScorers[Math.floor(Math.random() * eligibleScorers.length)];
   const defender = defendingTeam.players[Math.floor(Math.random() * defendingTeam.players.length)];
 
   if (!scorer?.skills || typeof scorer.skills.wristShotAccuracy !== 'number') {
