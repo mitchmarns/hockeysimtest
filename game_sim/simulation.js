@@ -9,12 +9,6 @@ export const simulateGame = (homeTeam, awayTeam, lineAssignments) => {
   // Define penalized players and injured players storage
   const penalizedPlayers = {};
   const injuredPlayers = {};
-  
-  // Check if both teams have valid goalies
-  if (!validateGoalies(homeTeam) || !validateGoalies(awayTeam)) {
-    console.error('Game cannot proceed without valid goalies.');
-    return { gameLog, scores };
-  }
 
   // Simulate 3 periods
   for (let i = 1; i <= 3; i++) {
@@ -106,21 +100,4 @@ const addAssist = (team, scorer, gameLog) => {
     gameLog.push(`${assister.name} assisted on the goal by ${scorer.name}.`);
   }
 };
-
-const validateGoalies = (team) => {
-    if (!team.lines || !team.lines.goalies) {
-      console.error(`Error: ${team.name} does not have a valid lines structure.`);
-      return false;
-    }
-    if (!team.lines.goalies.starter) {
-      console.error(`Error: ${team.name} does not have a starter goalie.`);
-      return false;
-    }
-    if (!team.lines.goalies.backup) {
-      console.error(`Error: ${team.name} does not have a backup goalie.`);
-      return false;
-    }
-    console.log(`${team.name} has valid goalies.`);
-    return true;
-  };
 
