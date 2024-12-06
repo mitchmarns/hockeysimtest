@@ -78,7 +78,7 @@ const simulateNormalPlay = (homeTeam, awayTeam, gameLog, scores) => {
   const scorer = shootingTeam.players[Math.floor(Math.random() * shootingTeam.players.length)];
   const defender = defendingTeam.players[Math.floor(Math.random() * defendingTeam.players.length)];
 
-  if (!shooter || !defender) {
+  if (!scorer || !defender) {
     gameLog.push('Error: Missing shooter or defender.');
     return;
   }
@@ -93,7 +93,7 @@ const simulateNormalPlay = (homeTeam, awayTeam, gameLog, scores) => {
   }
 
   // Calculate shot accuracy
-  const shooterSkill = shooter.skills.speed * 0.5 + shooter.skills.stick * 0.5;
+  const shooterSkill = scorer.skills.speed * 0.5 + scorer.skills.stick * 0.5;
   const goalieSkill = goalie.skills.glove * 0.5 + goalie.skills.legs * 0.5;
 
   const shotSuccessChance = (shooterSkill - goalieSkill + 50) / 100; // Normalize to 0-1 range
