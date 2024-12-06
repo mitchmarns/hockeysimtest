@@ -62,6 +62,5 @@ export const parseLineAssignments = (lineAssignments, teams) => {
   console.log(`Assigned goalie: ${player.name} as ${position.toLowerCase()} for ${teamName}`);
 }
     }
-  }
 };
 
