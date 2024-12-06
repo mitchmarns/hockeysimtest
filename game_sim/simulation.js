@@ -6,6 +6,15 @@ export const simulateGame = (homeTeam, awayTeam, lineAssignments) => {
   const gameLog = [];
   const scores = { home: 0, away: 0 };
 
+  if (!homeTeam || !awayTeam) {
+    console.error('One or both teams are undefined.');
+    console.error('Home Team:', homeTeam);
+    console.error('Away Team:', awayTeam);
+    return { gameLog, scores };
+  }
+
+  console.log(`Game starting between ${homeTeam.name} and ${awayTeam.name}`);
+
   // Define penalized players and injured players storage
   const penalizedPlayers = {};
   const injuredPlayers = {};
@@ -15,6 +24,7 @@ export const simulateGame = (homeTeam, awayTeam, lineAssignments) => {
     gameLog.push(`--- Period ${i} ---`);
 
     const numEvents = Math.floor(Math.random() * 10) + 5;
+    
     for (let j = 0; j < numEvents; j++) {
       const eventType = Math.random();
 
@@ -47,11 +57,18 @@ export const simulateGame = (homeTeam, awayTeam, lineAssignments) => {
 
 // Simulate normal game events like shots, passes, and goals
 const simulateNormalPlay = (homeTeam, awayTeam, gameLog, scores) => {
+  if (!homeTeam || !awayTeam) return;
+  
   const shootingTeam = Math.random() < 0.5 ? homeTeam : awayTeam;
   const defendingTeam = shootingTeam === homeTeam ? awayTeam : homeTeam;
 
+  if (!shootingTeam?.players?.length || !defendingTeam?.players?.length) {
+    console.error('One of the teams does not have valid players.');
+    return;
+  }
   
   const defendingGoalie = defendingTeam.lines.goalies.starter;
+  
   if (!defendingGoalie) {
     gameLog.push(`Error: ${defendingTeam.name} does not have a valid goalie.`);
     return;
