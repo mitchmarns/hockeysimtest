@@ -209,8 +209,8 @@ const simulateNormalPlay = (homeTeam, awayTeam, gameLog, scores) => {
   }
 
   // Shooter and goalie skills
-  const shooterSkill = scorer.skills.wristShotAccuracy * 0.4 
-                     + scorer.skills.wristShotPower * 0.4 
+  const shooterSkill = scorer.skills.wristShotAccuracy * 0.3 
+                     + scorer.skills.wristShotPower * 0.3 
                      + scorer.skills.slapShotAccuracy * 0.2 
                      + scorer.skills.slapShotPower * 0.1;
                      + scorer.skills.speed * 0.1
