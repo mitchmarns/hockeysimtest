@@ -6,78 +6,54 @@ export const simulateGame = (homeTeam, awayTeam, lineAssignments) => {
   const gameLog = [];
   const scores = { home: 0, away: 0 };
 
+  // Constants
+  const SHIFT_DURATION = 2; // Shift duration in minutes
+  const PERIOD_DURATION = 20; // Each period is 20 minutes
+  const OVERTIME_DURATION = 5; // Overtime period (sudden death)
+
+  // Helper Variables
+let currentForwardLineHome = 0;
+let currentDefenseLineHome = 0;
+let currentForwardLineAway = 0;
+let currentDefenseLineAway = 0;
+
   console.log(`Game starting between ${homeTeam.name} and ${awayTeam.name}`);
 
   // Define penalized players and injured players storage
   const penalizedPlayers = {};
   const injuredPlayers = {};
 
-  // Simulate 3 periods
-  for (let i = 1; i <= 3; i++) {
-    gameLog.push(`--- Period ${i} ---`);
-
-    const numEvents = Math.floor(Math.random() * 10) + 5;
-    
-    for (let j = 0; j < numEvents; j++) {
-      const eventType = Math.random();
-
-      if (eventType < 0.2) {
-        // Handle Penalty Event
-        handlePenaltyEvent(homeTeam, gameLog, penalizedPlayers);
-      } else if (eventType < 0.1) {
-        // Handle Injury Event
-        handleInjuryEvent(awayTeam, gameLog, injuredPlayers);
-      } else if (eventType < 0.7) {
-        // Simulate Shots/Goals
-        simulateNormalPlay(homeTeam, awayTeam, gameLog, scores);
-      } else {
-        const shootingTeam = Math.random() < 0.5 ? homeTeam : awayTeam;
-        const defendingTeam = shootingTeam === homeTeam ? awayTeam : homeTeam;
-
-        const goalie = defendingTeam.lines.goalies.starter;
-        if (!goalie) {
-          gameLog.push(`Error: ${defendingTeam.name} does not have a valid goalie.`);
-          return { gameLog, scores };
-        }
-
-        gameLog.push(`${shootingTeam.name} attempts a shot against ${goalie.name}`);
-      }
-    }
+  // Simulate regulation periods
+  for (let period = 1; period <= 3; period++) {
+    gameLog.push(`--- Period ${period} ---`);
+    simulatePeriod(
+      homeTeam,
+      awayTeam,
+      PERIOD_DURATION,
+      SHIFT_DURATION,
+      gameLog,
+      scores,
+      penalizedPlayers,
+      injuredPlayers
+    );
   }
+
   // Check for tie after regulation
   if (scores.home === scores.away) {
     gameLog.push(`--- Regulation Ends in a Tie ---`);
     gameLog.push(`Score: ${homeTeam.name} ${scores.home} - ${awayTeam.name} ${scores.away}`);
-    
-    // Simulate Overtime
     gameLog.push(`--- Overtime ---`);
-    let overtimeWinner = null;
-    const maxOvertimeEvents = Math.floor(Math.random() * 5) + 5;
 
-    for (let j = 0; j < maxOvertimeEvents; j++) {
-      const eventType = Math.random();
-
-      if (eventType < 0.2) {
-        handlePenaltyEvent(homeTeam, gameLog, penalizedPlayers);
-      } else if (eventType < 0.1) {
-        handleInjuryEvent(awayTeam, gameLog, injuredPlayers);
-      } else {
-        const result = simulateOvertimePlay(homeTeam, awayTeam, gameLog);
-        if (result.winner) {
-          scores[result.winner === homeTeam ? 'home' : 'away'] += 1;
-          overtimeWinner = result.winner;
-          gameLog.push(`${result.winner.name} scores in overtime to win the game!`);
-          break; // Sudden death
-        }
-      }
-    }
-
-    if (!overtimeWinner) {
+    // Simulate Overtime
+    const result = simulateOvertime(homeTeam, awayTeam, gameLog, scores);
+    if (result.overtimeWinner) {
+      gameLog.push(`${result.overtimeWinner.name} wins the game in overtime!`);
+    } else {
       gameLog.push(`No goals in overtime. The game ends in a tie!`);
     }
   }
-  
-  // Add final score to the game log
+
+  // Final score
   gameLog.push(`--- Final Score ---`);
   gameLog.push(`${homeTeam.name}: ${scores.home}`);
   gameLog.push(`${awayTeam.name}: ${scores.away}`);
@@ -91,6 +67,65 @@ export const simulateGame = (homeTeam, awayTeam, lineAssignments) => {
   }
 
   return { gameLog, scores };
+};
+
+// Simulate a single period
+const simulatePeriod = (homeTeam, awayTeam, periodDuration, shiftDuration, gameLog, scores, penalizedPlayers, injuredPlayers) => {
+  let elapsedTime = 0;
+
+  while (elapsedTime < periodDuration) {
+    const eventDuration = Math.random() * 1.5; // Random event duration (up to 1.5 minutes)
+    elapsedTime += eventDuration;
+
+    // Rotate lines if shift ends
+    if (elapsedTime % shiftDuration < eventDuration) {
+      rotateLines(homeTeam);
+      rotateLines(awayTeam);
+      gameLog.push(`Line changes for both teams at ${elapsedTime.toFixed(2)} minutes.`);
+    }
+
+    // Simulate an event
+    const eventType = Math.random();
+    if (eventType < 0.2) {
+      handlePenaltyEvent(homeTeam, gameLog, penalizedPlayers);
+    } else if (eventType < 0.1) {
+      handleInjuryEvent(awayTeam, gameLog, injuredPlayers);
+    } else {
+      simulateNormalPlay(homeTeam, awayTeam, gameLog, scores);
+    }
+  }
+};
+
+// Simulate overtime (sudden death)
+const simulateOvertime = (homeTeam, awayTeam, gameLog, scores) => {
+  let elapsedTime = 0;
+  const overtimeWinner = null;
+
+  while (elapsedTime < OVERTIME_DURATION) {
+    const eventDuration = Math.random() * 1.5;
+    elapsedTime += eventDuration;
+
+    const eventType = Math.random();
+    if (eventType < 0.2) {
+      handlePenaltyEvent(homeTeam, gameLog, {});
+    } else if (eventType < 0.1) {
+      handleInjuryEvent(awayTeam, gameLog, {});
+    } else {
+      const result = simulateOvertimePlay(homeTeam, awayTeam, gameLog);
+      if (result.winner) {
+        scores[result.winner === homeTeam ? "home" : "away"] += 1;
+        return { overtimeWinner: result.winner };
+      }
+    }
+  }
+
+  return { overtimeWinner: null };
+};
+
+// Rotate lines for a team
+const rotateLines = (team) => {
+  team.currentForwardLine = (team.currentForwardLine + 1) % team.lines.forwardLines.length;
+  team.currentDefenseLine = (team.currentDefenseLine + 1) % team.lines.defenseLines.length;
 };
 
 // Simulate overtime play
