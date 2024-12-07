@@ -120,6 +120,7 @@ const simulateOvertimePlay = (homeTeam, awayTeam, gameLog) => {
 
   if (shotOutcome) {
     gameLog.push(`${scorer.name} shoots and scores!`);
+    addAssist(shootingTeam, scorer, gameLog);
     return { winner: shootingTeam };
   } else {
     gameLog.push(`${scorer.name} shoots, but ${goalie.name} makes a save!`);
@@ -193,6 +194,7 @@ const simulateNormalPlay = (homeTeam, awayTeam, gameLog, scores) => {
       else scores.away += 1;
   
       gameLog.push(`${scorer.name} scores a goal for ${shootingTeam.name}!`);
+      addAssist(shootingTeam, scorer, gameLog);
     } else {
       gameLog.push(`${scorer.name} took a shot, but ${goalie.name} makes a save!`);
     }
