@@ -44,7 +44,39 @@ export const simulateGame = (homeTeam, awayTeam, lineAssignments) => {
       }
     }
   }
+  // Check for tie after regulation
+  if (scores.home === scores.away) {
+    gameLog.push(`--- Regulation Ends in a Tie ---`);
+    gameLog.push(`Score: ${homeTeam.name} ${scores.home} - ${awayTeam.name} ${scores.away}`);
+    
+    // Simulate Overtime
+    gameLog.push(`--- Overtime ---`);
+    let overtimeWinner = null;
+    const maxOvertimeEvents = Math.floor(Math.random() * 5) + 5;
 
+    for (let j = 0; j < maxOvertimeEvents; j++) {
+      const eventType = Math.random();
+
+      if (eventType < 0.2) {
+        handlePenaltyEvent(homeTeam, gameLog, penalizedPlayers);
+      } else if (eventType < 0.1) {
+        handleInjuryEvent(awayTeam, gameLog, injuredPlayers);
+      } else {
+        const result = simulateOvertimePlay(homeTeam, awayTeam, gameLog);
+        if (result.winner) {
+          scores[result.winner === homeTeam ? 'home' : 'away'] += 1;
+          overtimeWinner = result.winner;
+          gameLog.push(`${result.winner.name} scores in overtime to win the game!`);
+          break; // Sudden death
+        }
+      }
+    }
+
+    if (!overtimeWinner) {
+      gameLog.push(`No goals in overtime. The game ends in a tie!`);
+    }
+  }
+  
   // Add final score to the game log
   gameLog.push(`--- Final Score ---`);
   gameLog.push(`${homeTeam.name}: ${scores.home}`);
@@ -59,6 +91,40 @@ export const simulateGame = (homeTeam, awayTeam, lineAssignments) => {
   }
 
   return { gameLog, scores };
+};
+
+// Simulate overtime play
+const simulateOvertimePlay = (homeTeam, awayTeam, gameLog) => {
+  const shootingTeam = Math.random() < 0.5 ? homeTeam : awayTeam;
+  const defendingTeam = shootingTeam === homeTeam ? awayTeam : homeTeam;
+
+  const scorer = shootingTeam.players.find(player => player.position !== 'Starter' && player.position !== 'Backup');
+  const goalie = defendingTeam.lines.goalies.starter;
+
+  if (!scorer || !goalie) {
+    gameLog.push(`Error: Missing players for overtime.`);
+    return { winner: null };
+  }
+
+  const shooterSkill = scorer.skills.wristShotAccuracy * 0.4 
+                     + scorer.skills.wristShotPower * 0.3 
+                     + scorer.skills.speed * 0.2 
+                     + scorer.skills.hockeyIQ * 0.1;
+  const goalieSkill = goalie.skills.glove * 0.3 
+                    + goalie.skills.reflexes * 0.3 
+                    + goalie.skills.positioning * 0.2 
+                    + goalie.skills.agility * 0.2;
+
+  const shotSuccessChance = shooterSkill / (shooterSkill + goalieSkill);
+  const shotOutcome = Math.random() < shotSuccessChance;
+
+  if (shotOutcome) {
+    gameLog.push(`${scorer.name} shoots and scores!`);
+    return { winner: shootingTeam };
+  } else {
+    gameLog.push(`${scorer.name} shoots, but ${goalie.name} makes a save!`);
+    return { winner: null };
+  }
 };
 
 // Simulate normal game events like shots, passes, and goals
