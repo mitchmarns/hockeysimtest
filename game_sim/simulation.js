@@ -169,9 +169,7 @@ const simulateNormalPlay = (homeTeam, awayTeam, gameLog, scores) => {
   
   const shootingTeam = Math.random() < 0.5 ? homeTeam : awayTeam;
   const defendingTeam = shootingTeam === homeTeam ? awayTeam : homeTeam;
-  const forwardLine = shootingTeam.lines.forwardLines[shootingTeam.currentForwardLine];
-  const defenseLine = defendingTeam.lines.defenseLines[defendingTeam.currentDefenseLine];
-  const goalie = defendingTeam.lines.goalies.starter;
+  const goalie = defendingTeam?.lines?.goalies?.starter;
 
   if (!forwardLine || !defenseLine || !goalie) {
     console.error('Missing valid players in active lines.');
