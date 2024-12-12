@@ -200,8 +200,9 @@ const simulateNormalPlay = (homeTeam, awayTeam, gameLog, scores) => {
   }
 
   // Defensive play chance
-  const defenseChance = defender.skills.stickChecking * 0.3 + defender.skills.defense * 0.2;
-  const blockOrTurnover = Math.random() < defenseChance / 100;
+  const defenseSkill = defender.skills.stickChecking * 0.4 + defender.skills.defense * 0.6;
+  const defenseEffectiveness = defenseSkill / 150;
+  const blockOrTurnover = Math.random() < defenseEffectiveness;
 
   if (blockOrTurnover) {
     gameLog.push(`${defender.name} blocks the shot or forces a turnover!`);
@@ -222,6 +223,7 @@ const simulateNormalPlay = (homeTeam, awayTeam, gameLog, scores) => {
                     + goalie.skills.agility * 0.2;
 
   const shotSuccessChance = shooterSkill / (shooterSkill + goalieSkill * 1.5);
+  const baselineSaveChance = 0.2;
   const shotOutcome = Math.random() < shotSuccessChance;
 
    if (shotOutcome) {
