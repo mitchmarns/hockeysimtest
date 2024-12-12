@@ -169,10 +169,12 @@ const simulateNormalPlay = (homeTeam, awayTeam, gameLog, scores) => {
   
   const shootingTeam = Math.random() < 0.5 ? homeTeam : awayTeam;
   const defendingTeam = shootingTeam === homeTeam ? awayTeam : homeTeam;
-  const goalie = defendingTeam?.lines?.goalies?.starter;
+  const forwardLine = shootingTeam.lines.forwardLines[shootingTeam.currentForwardLine];
+  const defenseLine = defendingTeam.lines.defenseLines[defendingTeam.currentDefenseLine];
+  const goalie = defendingTeam.lines.goalies.starter;
 
-  if (!shootingTeam?.players?.length || !defendingTeam?.players?.length) {
-    console.error('One of the teams does not have valid players.');
+  if (!forwardLine || !defenseLine || !goalie) {
+    console.error('Missing valid players in active lines.');
     return;
   }
 
@@ -221,7 +223,7 @@ const simulateNormalPlay = (homeTeam, awayTeam, gameLog, scores) => {
                     + goalie.skills.reflexes * 0.2
                     + goalie.skills.agility * 0.2;
 
-  const shotSuccessChance = shooterSkill / (shooterSkill + goalieSkill);
+  const shotSuccessChance = shooterSkill / (shooterSkill + goalieSkill * 1.5);
   const shotOutcome = Math.random() < shotSuccessChance;
 
    if (shotOutcome) {
