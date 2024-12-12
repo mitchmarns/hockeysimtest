@@ -171,8 +171,8 @@ const simulateNormalPlay = (homeTeam, awayTeam, gameLog, scores) => {
   const defendingTeam = shootingTeam === homeTeam ? awayTeam : homeTeam;
   const goalie = defendingTeam?.lines?.goalies?.starter;
 
-  if (!forwardLine || !defenseLine || !goalie) {
-    console.error('Missing valid players in active lines.');
+  if (!shootingTeam?.players?.length || !defendingTeam?.players?.length) {
+    console.error('One of the teams does not have valid players.');
     return;
   }
 
@@ -243,4 +243,3 @@ const addAssist = (team, scorer, gameLog) => {
     gameLog.push(`${assister.name} assisted on the goal by ${scorer.name}.`);
   }
 };
-
