@@ -149,19 +149,20 @@ const simulateOvertime = (homeTeam, awayTeam, gameLog, scores) => {
 };
 
 // Rotate lines for a team
-const rotateLines = (team) => {
-  const maxForwardLines = team.lines.forwardLines.length;
-  const maxDefenseLines = team.lines.defenseLines.length;
+export const rotateLines = (team) => {
+  const forwardLines = team.lines.forwardLines || [];
+  const defenseLines = team.lines.defenseLines || [];
 
-  // Rotate forward line
-  do {
-    team.currentForwardLine = (team.currentForwardLine + 1) % maxForwardLines;
-  } while (team.lines.forwardLines[team.currentForwardLine].some(player => player?.injured));
+  if (forwardLines.length === 0 || defenseLines.length === 0) {
+    console.error(`Team ${team.name} has no valid lines to rotate.`);
+    return;
+  }
 
-  // Rotate defense line
-  do {
-    team.currentDefenseLine = (team.currentDefenseLine + 1) % maxDefenseLines;
-  } while (team.lines.defenseLines[team.currentDefenseLine].some(player => player?.injured));
+  // Cycle forward and defense lines
+  team.currentForwardLine = (team.currentForwardLine + 1) % forwardLines.length;
+  team.currentDefenseLine = (team.currentDefenseLine + 1) % defenseLines.length;
+
+  console.log(`Rotated lines for ${team.name}: Forward Line ${team.currentForwardLine}, Defense Line ${team.currentDefenseLine}`);
 };
 
 // Simulate overtime play
