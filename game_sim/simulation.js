@@ -176,9 +176,9 @@ const simulateNormalPlay = (homeTeam, awayTeam, gameLog, scores) => {
     return;
   }
 
-  // Filter eligible shooters (exclude goalies)
+  // exclude goalies & injured
   const eligibleScorers = shootingTeam.players.filter(player => 
-    player.position !== 'Starter' && player.position !== 'Backup'
+    player.position !== 'Starter' && player.position !== 'Backup' && !player.injured
   );
 
   if (!eligibleScorers.length) {
