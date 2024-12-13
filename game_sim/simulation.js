@@ -23,9 +23,18 @@ let currentDefenseLineAway = 0;
   const penalizedPlayers = {};
   const injuredPlayers = {};
 
+  // Update injury statuses before the game starts
+  updateInjuryStatuses(homeTeam, gameLog);
+  updateInjuryStatuses(awayTeam, gameLog);
+
   // Simulate regulation periods
   for (let period = 1; period <= 3; period++) {
     gameLog.push(`--- Period ${period} ---`);
+
+    // Update injuries at the start of each period
+    updateInjuryStatuses(homeTeam, gameLog);
+    updateInjuryStatuses(awayTeam, gameLog);
+    
     simulatePeriod(
       homeTeam,
       awayTeam,
@@ -34,7 +43,11 @@ let currentDefenseLineAway = 0;
       gameLog,
       scores,
       penalizedPlayers,
-      injuredPlayers
+      injuredPlayers,
+      currentForwardLineHome,
+      currentDefenseLineHome,
+      currentForwardLineAway,
+      currentDefenseLineAway
     );
   }
 
@@ -45,7 +58,20 @@ let currentDefenseLineAway = 0;
     gameLog.push(`--- Overtime ---`);
 
     // Simulate Overtime
-    const result = simulateOvertime(homeTeam, awayTeam, gameLog, scores);
+    const result = simulateOvertime(
+      homeTeam,
+      awayTeam,
+      OVERTIME_DURATION,
+      gameLog,
+      scores,
+      penalizedPlayers,
+      injuredPlayers,
+      currentForwardLineHome,
+      currentDefenseLineHome,
+      currentForwardLineAway,
+      currentDefenseLineAway
+    );
+
     if (result.overtimeWinner) {
       gameLog.push(`${result.overtimeWinner.name} wins the game in overtime!`);
     } else {
@@ -124,8 +150,18 @@ const simulateOvertime = (homeTeam, awayTeam, gameLog, scores) => {
 
 // Rotate lines for a team
 const rotateLines = (team) => {
-  team.currentForwardLine = (team.currentForwardLine + 1) % team.lines.forwardLines.length;
-  team.currentDefenseLine = (team.currentDefenseLine + 1) % team.lines.defenseLines.length;
+  const maxForwardLines = team.lines.forwardLines.length;
+  const maxDefenseLines = team.lines.defenseLines.length;
+
+  // Rotate forward line
+  do {
+    team.currentForwardLine = (team.currentForwardLine + 1) % maxForwardLines;
+  } while (team.lines.forwardLines[team.currentForwardLine].some(player => player?.injured));
+
+  // Rotate defense line
+  do {
+    team.currentDefenseLine = (team.currentDefenseLine + 1) % maxDefenseLines;
+  } while (team.lines.defenseLines[team.currentDefenseLine].some(player => player?.injured));
 };
 
 // Simulate overtime play
