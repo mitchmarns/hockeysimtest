@@ -118,9 +118,12 @@ export const rotateLines = (team) => {
   const defenseLines = team.lines.defenseLines || [];
 
   if (forwardLines.length > 0) {
+    if (team.currentForwardLine == null) team.currentForwardLine = 0;
     team.currentForwardLine = (team.currentForwardLine + 1) % forwardLines.length;
   }
+
   if (defenseLines.length > 0) {
+    if (team.currentDefenseLine == null) team.currentDefenseLine = 0;
     team.currentDefenseLine = (team.currentDefenseLine + 1) % defenseLines.length;
   }
 
