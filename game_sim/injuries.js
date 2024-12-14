@@ -8,11 +8,11 @@ export const handleInjuryEvent = (team, eventLog) => {
     { type: "Concussion", severity: 4, recoveryRange: [720, 1440] }, // Multi-game
   ];
 
-  // Filter eligible players who are not already injured
+// Filter eligible players who are not already injured
   const eligiblePlayers = team.players.filter(player => !player.injured);
   if (eligiblePlayers.length === 0) {
     eventLog.push(`No eligible players for injury event on ${team.name}.`);
-    return eventLog;
+    return;
   }
 
   // Select a random player and injury type
@@ -26,6 +26,9 @@ export const handleInjuryEvent = (team, eventLog) => {
   injuredPlayer.injured = true;
   injuredPlayer.recoveryTime = Date.now() + recoveryTimeInMinutes * 60 * 1000; // Store as a timestamp
   injuredPlayer.injuryType = injury.type;
+
+  // Add to injuredPlayers map
+  injuredPlayers[injuredPlayer.id] = injuredPlayer;
 
   // Log the injury event
   eventLog.push(
@@ -43,6 +46,10 @@ export const updateInjuryStatuses = (team, eventLog) => {
       player.injured = false;
       delete player.recoveryTime; // Clean up unnecessary properties
       delete player.injuryType;
+      
+      // Remove from injuredPlayers map
+      delete injuredPlayers[player.id];
+      
       eventLog.push(`${player.name} has recovered and is ready to play!`);
     }
   });
