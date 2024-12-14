@@ -76,6 +76,7 @@ const simulatePeriod = (homeTeam, awayTeam, periodDuration, shiftDuration, gameL
     }
 
     // Simulate an event
+    const eventType = Math.random();
     if (eventType < 0.1) { // 10% chance of penalties
       console.log(`Penalty event triggered at ${elapsedTime.toFixed(2)} minutes`);
       handlePenaltyEvent(homeTeam, gameLog, penalizedPlayers);
