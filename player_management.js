@@ -2,8 +2,13 @@
 
 // Load players data from localStorage
 const loadPlayers = () => {
-    const playersData = JSON.parse(localStorage.getItem("playersData"));
-    return playersData ? playersData.players : [];
+    try {
+        const playersData = JSON.parse(localStorage.getItem("playersData"));
+        return playersData && Array.isArray(playersData.players) ? playersData.players : [];
+    } catch (error) {
+        console.error("Error loading player data:", error);
+        return [];
+    }
 };
 
 // Save players data to localStorage
@@ -11,31 +16,50 @@ const savePlayers = (players) => {
     localStorage.setItem("playersData", JSON.stringify({ players }));
 };
 
+// Create a visual badge for injury/healthy scratch status
+const createStatusBadge = (player) => {
+    const badge = document.createElement("span");
+    badge.className = "status-badge";
+
+    if (player.injured) {
+        badge.textContent = "Injured";
+        badge.classList.add("badge-injured");
+    } else if (player.healthyScratch) {
+        badge.textContent = "Healthy Scratch";
+        badge.classList.add("badge-scratch");
+    } else {
+        badge.textContent = "Active";
+        badge.classList.add("badge-active");
+    }
+
+    return badge;
+};
+
 // Create a toggle button for injury and healthy scratch
 const createToggleButton = (player, type, players) => {
     const button = document.createElement("button");
-    button.textContent = type === "injury" ? 
-        (player.injured ? "Mark as Healthy" : "Mark as Injured") : 
-        (player.healthyScratch ? "Remove from Healthy Scratch" : "Add to Healthy Scratch");
+    button.className = "toggle-button";
+    button.textContent = type === "injury" 
+        ? (player.injured ? "Mark as Healthy" : "Mark as Injured")
+        : (player.healthyScratch ? "Remove Healthy Scratch" : "Add to Healthy Scratch");
 
-    // Toggle functionality with confirmation
     button.addEventListener("click", () => {
-        const action = type === "injury" ? 
-            (player.injured ? "healthy" : "injured") : 
-            (player.healthyScratch ? "remove from healthy scratch" : "add to healthy scratch");
+        const action = type === "injury" 
+            ? (player.injured ? "mark as healthy" : "mark as injured")
+            : (player.healthyScratch ? "remove from healthy scratch" : "add to healthy scratch");
 
         const confirmationMessage = `Are you sure you want to ${action} ${player.name}?`;
 
         if (window.confirm(confirmationMessage)) {
-            // If confirmed, toggle the player's status
+            // Toggle status
             if (type === "injury") {
-                player.injured = !player.injured; // Toggle injury status
+                player.injured = !player.injured;
             } else if (type === "healthyScratch") {
-                player.healthyScratch = !player.healthyScratch; // Toggle healthy scratch status
+                player.healthyScratch = !player.healthyScratch;
             }
 
-            savePlayers(players); // Save updated player data
-            renderPlayerList(); // Re-render the player list with updated statuses
+            savePlayers(players); // Save updated data
+            renderPlayerList(); // Re-render list
         }
     });
 
@@ -44,24 +68,29 @@ const createToggleButton = (player, type, players) => {
 
 // Render the player list
 const renderPlayerList = () => {
-    const players = loadPlayers();  // Load players here, so we have the latest state
+    const players = loadPlayers();
     const playersList = document.getElementById("players-list");
-    playersList.innerHTML = ""; // Clear current list
+    playersList.innerHTML = ""; // Clear the list
 
     players.forEach(player => {
         const playerDiv = document.createElement("div");
         playerDiv.classList.add("player-item");
 
+        // Player information
         const playerInfoDiv = document.createElement("div");
         playerInfoDiv.classList.add("player-info");
         playerInfoDiv.innerHTML = `<strong>${player.name}</strong> (ID: ${player.id})`;
 
-        // Create buttons for toggling injury and healthy scratch states
+        // Create status badge
+        const statusBadge = createStatusBadge(player);
+
+        // Create toggle buttons
         const injuryButton = createToggleButton(player, "injury", players);
         const healthyScratchButton = createToggleButton(player, "healthyScratch", players);
 
-        // Append buttons to the player div
+        // Append elements to the player div
         playerDiv.appendChild(playerInfoDiv);
+        playerDiv.appendChild(statusBadge);
         playerDiv.appendChild(injuryButton);
         playerDiv.appendChild(healthyScratchButton);
 
