@@ -125,7 +125,8 @@ footer {
   display: flex;
   flex-wrap: wrap;
   gap: 15px;
-  justify-content: space-around;
+  padding: 10px;
+  justify-content: space-evenly;
 }
 
 .player {
@@ -137,6 +138,9 @@ footer {
   text-align: center;
   width: 150px;
   transition: background-color 0.3s ease;
+  flex: 1 1 calc(25% - 30px);
+  max-width: 200px;
+  box-sizing: border-box;
 }
 
 .player:hover {
