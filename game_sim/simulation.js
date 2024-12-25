@@ -24,9 +24,6 @@ export const simulateGame = (homeTeam, awayTeam) => {
   // Simulate regulation periods
   for (let period = 1; period <= 3; period++) {
     gameLog.push(`--- Period ${period} ---`);
-    updateInjuryStatuses(homeTeam, gameLog);
-    updateInjuryStatuses(awayTeam, gameLog);
-
     simulatePeriod(homeTeam, awayTeam, PERIOD_DURATION, SHIFT_DURATION, gameLog, scores, penalizedPlayers, injuredPlayers);
   }
 
@@ -120,13 +117,11 @@ export const rotateLines = (team) => {
   const defenseLines = team.lines.defenseLines || [];
 
   if (forwardLines.length > 0) {
-    if (team.currentForwardLine == null) team.currentForwardLine = 0;
-    team.currentForwardLine = (team.currentForwardLine + 1) % forwardLines.length;
+    team.currentForwardLine = (team.currentForwardLine + 1) % forwardLines.length || 0;
   }
 
   if (defenseLines.length > 0) {
-    if (team.currentDefenseLine == null) team.currentDefenseLine = 0;
-    team.currentDefenseLine = (team.currentDefenseLine + 1) % defenseLines.length;
+    team.currentDefenseLine = (team.currentDefenseLine + 1) % defenseLines.length || 0;
   }
 
   console.log(`Rotated lines for ${team.name}: Forward Line ${team.currentForwardLine}, Defense Line ${team.currentDefenseLine}`);
