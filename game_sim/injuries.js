@@ -27,9 +27,6 @@ export const handleInjuryEvent = (team, eventLog) => {
   injuredPlayer.recoveryTime = Date.now() + recoveryTimeInMinutes * 60 * 1000; // Store as a timestamp
   injuredPlayer.injuryType = injury.type;
 
-  // Add to injuredPlayers map
-  injuredPlayers[injuredPlayer.id] = injuredPlayer;
-
   // Log the injury event
   eventLog.push(
     `${injuredPlayer.name} suffered a ${injury.type} (Severity ${injury.severity}) and will be out for ${recoveryTimeInMinutes} minutes!`
