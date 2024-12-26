@@ -62,7 +62,7 @@ const simulatePeriod = (homeTeam, awayTeam, periodDuration, shiftDuration, gameL
   let elapsedTime = 0;
 
   while (elapsedTime < periodDuration) {
-    const eventDuration = Math.random() * 1.5; // Random event duration (up to 1.5 minutes)
+    const eventDuration = Math.random() * 2.5; // Random event duration (up to 1.5 minutes)
     elapsedTime += eventDuration;
 
     // Rotate lines if shift ends
@@ -73,13 +73,14 @@ const simulatePeriod = (homeTeam, awayTeam, periodDuration, shiftDuration, gameL
     }
 
     const eventType = Math.random();
-    if (eventType < 0.1) {
+    if (eventType < 0.08) { // Adjusted for fewer penalties
       handlePenaltyEvent(homeTeam, gameLog, penalizedPlayers);
-    } else if (eventType < 0.15) {
+    } else if (eventType < 0.12) { // Adjusted for fewer injuries
       handleInjuryEvent(awayTeam, gameLog);
-      saveTeamData(awayTeam); // Persist changes
-    } else {
-      simulateNormalPlay(homeTeam, awayTeam, gameLog, scores);
+      saveTeamData(awayTeam);
+    } else if (eventType < 0.5) { // Reduced scoring frequency
+      const defenseSkill = calculateAverageSkill(defendingTeam, 'defense'); // Calculate team defense skill
+      simulateNormalPlay(homeTeam, awayTeam, gameLog, scores, defenseSkill);
     }
   }
 };
