@@ -123,7 +123,7 @@ footer {
 
 .players-container {
   display: flex;
-  flex-wrap: wrap;
+  flex-flow: row wrap;
   gap: 15px;
   padding: 10px;
   justify-content: space-evenly;
