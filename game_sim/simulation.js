@@ -72,14 +72,12 @@ const simulatePeriod = (homeTeam, awayTeam, periodDuration, shiftDuration, gameL
       gameLog.push(`Line changes for both teams at ${elapsedTime.toFixed(2)} minutes.`);
     }
 
-    // Simulate an event
     const eventType = Math.random();
-    if (eventType < 0.1) { // 10% chance of penalties
-      console.log(`Penalty event triggered at ${elapsedTime.toFixed(2)} minutes`);
+    if (eventType < 0.1) {
       handlePenaltyEvent(homeTeam, gameLog, penalizedPlayers);
-    } else if (eventType < 0.15) { // 5% chance of injuries
-      console.log(`Injury event triggered at ${elapsedTime.toFixed(2)} minutes`);
+    } else if (eventType < 0.15) {
       handleInjuryEvent(awayTeam, gameLog);
+      saveTeamData(awayTeam); // Persist changes
     } else {
       simulateNormalPlay(homeTeam, awayTeam, gameLog, scores);
     }
