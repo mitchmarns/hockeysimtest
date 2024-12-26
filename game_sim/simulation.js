@@ -62,7 +62,7 @@ const simulatePeriod = (homeTeam, awayTeam, periodDuration, shiftDuration, gameL
   let elapsedTime = 0;
 
   while (elapsedTime < periodDuration) {
-    const eventDuration = Math.random() * 3; // Random event duration up to 2.5 minutes
+    const eventDuration = Math.random() * 4; // Random event duration up to 2.5 minutes
     elapsedTime += eventDuration;
 
     // Rotate lines if a shift ends
@@ -73,9 +73,9 @@ const simulatePeriod = (homeTeam, awayTeam, periodDuration, shiftDuration, gameL
     }
 
     const eventType = Math.random();
-    if (eventType < 0.05) {
+    if (eventType < 0.01) {
       handlePenaltyEvent(homeTeam, gameLog, penalizedPlayers); // Home team penalty
-    } else if (eventType < 0.08) {
+    } else if (eventType < 0.02) {
       handleInjuryEvent(awayTeam, gameLog); // Away team injury
       saveTeamData(awayTeam); // Persist changes for injuries
     } else {
