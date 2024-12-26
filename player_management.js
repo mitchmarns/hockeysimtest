@@ -1,19 +1,55 @@
 // player_management.js
 
-// Load players data from localStorage
+// Load players and merge injury data from teams in localStorage
 const loadPlayers = () => {
     try {
         const playersData = JSON.parse(localStorage.getItem("playersData"));
-        return playersData && Array.isArray(playersData.players) ? playersData.players : [];
+        const teamsData = JSON.parse(localStorage.getItem("teams"));
+
+        if (!playersData || !Array.isArray(playersData.players) || !Array.isArray(teamsData)) {
+            return [];
+        }
+
+        // Sync injury and healthy scratch statuses from teams
+        teamsData.forEach(team => {
+            team.players.forEach(teamPlayer => {
+                const player = playersData.players.find(p => p.id === teamPlayer.id);
+                if (player) {
+                    player.injured = teamPlayer.injured;
+                    player.healthyScratch = teamPlayer.healthyScratch;
+                }
+            });
+        });
+
+        return playersData.players;
     } catch (error) {
         console.error("Error loading player data:", error);
         return [];
     }
 };
-
-// Save players data to localStorage
+// Save players and update injury/healthy scratch status in teams
 const savePlayers = (players) => {
-    localStorage.setItem("playersData", JSON.stringify({ players }));
+    try {
+        const teamsData = JSON.parse(localStorage.getItem("teams"));
+
+        if (Array.isArray(teamsData)) {
+            teamsData.forEach(team => {
+                team.players.forEach(teamPlayer => {
+                    const player = players.find(p => p.id === teamPlayer.id);
+                    if (player) {
+                        teamPlayer.injured = player.injured;
+                        teamPlayer.healthyScratch = player.healthyScratch;
+                    }
+                });
+            });
+
+            localStorage.setItem("teams", JSON.stringify(teamsData));
+        }
+
+        localStorage.setItem("playersData", JSON.stringify({ players }));
+    } catch (error) {
+        console.error("Error saving player data:", error);
+    }
 };
 
 // Create a visual badge for injury/healthy scratch status
