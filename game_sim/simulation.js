@@ -62,7 +62,7 @@ const simulatePeriod = (homeTeam, awayTeam, periodDuration, shiftDuration, gameL
   let elapsedTime = 0;
 
   while (elapsedTime < periodDuration) {
-    const eventDuration = Math.random() * 4; // Random event duration up to 2.5 minutes
+    const eventDuration = Math.random() * 2.5; // Random event duration up to 2.5 minutes
     elapsedTime += eventDuration;
 
     // Rotate lines if a shift ends
@@ -73,17 +73,29 @@ const simulatePeriod = (homeTeam, awayTeam, periodDuration, shiftDuration, gameL
     }
 
     const eventType = Math.random();
-    if (eventType < 0.03) {
-      handlePenaltyEvent(homeTeam, gameLog, penalizedPlayers); // Home team penalty
-    } else if (eventType < 0.04) {
-      handleInjuryEvent(awayTeam, gameLog); // Away team injury
-      saveTeamData(awayTeam); // Persist changes for injuries
-    } else {
-      // Simulate normal play
-      simulateNormalPlay(homeTeam, awayTeam, gameLog, scores); // Handle scoring events
+    if (eventType < 0.1) { // 10% chance of penalty
+      console.log(`Penalty event for ${homeTeam.name} at ${elapsedTime.toFixed(2)} minutes.`);
+      handlePenaltyEvent(homeTeam, gameLog, penalizedPlayers);
+    } else if (eventType < 0.15) { // 5% chance of injury
+      console.log(`Injury event for ${awayTeam.name} at ${elapsedTime.toFixed(2)} minutes.`);
+      handleInjuryEvent(awayTeam, gameLog);
+      saveTeamData(awayTeam);
+    } else { // Remaining chance for normal play
+      console.log(`Normal play at ${elapsedTime.toFixed(2)} minutes.`);
+      simulateNormalPlay(homeTeam, awayTeam, gameLog, scores);
     }
+
+    // Check penalty expiry
+    Object.keys(penalizedPlayers).forEach(playerId => {
+      const penaltyInfo = penalizedPlayers[playerId];
+      if (penaltyInfo.penaltyEndTime !== -1 && Date.now() >= penaltyInfo.penaltyEndTime) {
+        delete penalizedPlayers[playerId];
+        gameLog.push(`${penaltyInfo.player.name}'s penalty has expired.`);
+      }
+    });
   }
 };
+
 
 // Simulate overtime (sudden death)
 const simulateOvertime = (homeTeam, awayTeam, overtimeDuration, gameLog, scores, penalizedPlayers, injuredPlayers) => {
