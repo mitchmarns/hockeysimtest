@@ -1,12 +1,23 @@
 // Handle injury event
 export const handleInjuryEvent = (team, eventLog) => {
-  // Define injury types and recovery ranges (in games)
-  const injuryTypes = [
-    { type: "Bruise", severity: 1, recoveryRange: [1, 2] }, // Short-term
-    { type: "Sprain", severity: 2, recoveryRange: [3, 5] }, // Medium-term
-    { type: "Fracture", severity: 3, recoveryRange: [6, 10] }, // Long-term
-    { type: "Concussion", severity: 4, recoveryRange: [11, 20] }, // Multi-game
-  ];
+// Define injury types and recovery ranges (in games)
+const injuryTypes = [
+  { type: "Bruised Ribs", severity: 1, recoveryRange: [1, 2], weight: 30 },
+  { type: "Charley Horse", severity: 1, recoveryRange: [1, 2], weight: 25 },
+  { type: "Cut or Laceration", severity: 1, recoveryRange: [1, 3], weight: 20 },
+  { type: "Sprained Ankle", severity: 2, recoveryRange: [3, 5], weight: 15 },
+  { type: "Shoulder Strain", severity: 2, recoveryRange: [3, 6], weight: 10 },
+  { type: "Hip Pointer", severity: 2, recoveryRange: [3, 5], weight: 10 },
+  { type: "Fractured Finger", severity: 3, recoveryRange: [6, 8], weight: 8 },
+  { type: "Broken Nose", severity: 3, recoveryRange: [6, 10], weight: 7 },
+  { type: "MCL Sprain", severity: 3, recoveryRange: [7, 10], weight: 6 },
+  { type: "Concussion", severity: 4, recoveryRange: [11, 20], weight: 5 },
+  { type: "Separated Shoulder", severity: 4, recoveryRange: [12, 18], weight: 4 },
+  { type: "Broken Collarbone", severity: 4, recoveryRange: [14, 20], weight: 3 },
+  { type: "ACL Tear", severity: 5, recoveryRange: [20, 82], weight: 2 },
+  { type: "Achilles Rupture", severity: 5, recoveryRange: [30, 82], weight: 1 },
+  { type: "Fractured Vertebrae", severity: 5, recoveryRange: [40, 82], weight: 1 }
+];
 
   // Filter eligible players who are not already injured
   const eligiblePlayers = team.players.filter(player => !player.injured);
