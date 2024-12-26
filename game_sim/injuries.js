@@ -23,9 +23,12 @@ export const handleInjuryEvent = (team, eventLog) => {
   const recoveryGames = Math.floor(
     Math.random() * (injury.recoveryRange[1] - injury.recoveryRange[0]) + injury.recoveryRange[0]
   );
+  
   injuredPlayer.injured = true;
-  injuredPlayer.recoveryGames = recoveryGames; // Store number of games the player is out
+  injuredPlayer.recoveryGames = recoveryGames; 
   injuredPlayer.injuryType = injury.type;
+
+  console.log(`[DEBUG] Injured Player:`, injuredPlayer);
 
   // Persist updated team data to localStorage
   saveTeamData(team);
