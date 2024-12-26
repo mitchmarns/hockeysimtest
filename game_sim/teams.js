@@ -29,8 +29,11 @@ export const groupPlayersByTeam = (players) => {
 };
 
 // Calculate player skill
-export const calculateAverageSkill = (player) => {
-  return (player.skills.glove + player.skills.stick + player.skills.legs + player.skills.speed) / 4;
+export const calculateAverageSkill = (team, skillType) => {
+  const totalSkill = team.players.reduce((sum, player) => {
+    return sum + (player.skills[skillType] || 0);
+  }, 0);
+  return totalSkill / team.players.length;
 };
 
 
