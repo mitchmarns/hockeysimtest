@@ -64,7 +64,7 @@ export const updateInjuryStatuses = (team, eventLog) => {
 };
 
 // Save updated team data to localStorage
-const saveTeamData = (team) => {
+export const saveTeamData = (team) => {
   const teams = JSON.parse(localStorage.getItem("teams")) || [];
   const teamIndex = teams.findIndex(t => t.name === team.name);
   if (teamIndex !== -1) {
