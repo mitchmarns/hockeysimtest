@@ -73,9 +73,9 @@ const simulatePeriod = (homeTeam, awayTeam, periodDuration, shiftDuration, gameL
     }
 
     const eventType = Math.random();
-    if (eventType < 0.01) {
+    if (eventType < 0.03) {
       handlePenaltyEvent(homeTeam, gameLog, penalizedPlayers); // Home team penalty
-    } else if (eventType < 0.02) {
+    } else if (eventType < 0.04) {
       handleInjuryEvent(awayTeam, gameLog); // Away team injury
       saveTeamData(awayTeam); // Persist changes for injuries
     } else {
