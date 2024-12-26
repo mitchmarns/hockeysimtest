@@ -62,10 +62,10 @@ const simulatePeriod = (homeTeam, awayTeam, periodDuration, shiftDuration, gameL
   let elapsedTime = 0;
 
   while (elapsedTime < periodDuration) {
-    const eventDuration = Math.random() * 2.5; // Random event duration (up to 1.5 minutes)
+    const eventDuration = Math.random() * 2.5; // Random event duration up to 2.5 minutes
     elapsedTime += eventDuration;
 
-    // Rotate lines if shift ends
+    // Rotate lines if a shift ends
     if (Math.floor(elapsedTime / shiftDuration) > Math.floor((elapsedTime - eventDuration) / shiftDuration)) {
       rotateLines(homeTeam);
       rotateLines(awayTeam);
@@ -73,14 +73,14 @@ const simulatePeriod = (homeTeam, awayTeam, periodDuration, shiftDuration, gameL
     }
 
     const eventType = Math.random();
-    if (eventType < 0.08) { // Adjusted for fewer penalties
-      handlePenaltyEvent(homeTeam, gameLog, penalizedPlayers);
-    } else if (eventType < 0.12) { // Adjusted for fewer injuries
-      handleInjuryEvent(awayTeam, gameLog);
-      saveTeamData(awayTeam);
-    } else if (eventType < 0.5) { // Reduced scoring frequency
-      const defenseSkill = calculateAverageSkill(defendingTeam, 'defense'); // Calculate team defense skill
-      simulateNormalPlay(homeTeam, awayTeam, gameLog, scores, defenseSkill);
+    if (eventType < 0.08) {
+      handlePenaltyEvent(homeTeam, gameLog, penalizedPlayers); // Home team penalty
+    } else if (eventType < 0.12) {
+      handleInjuryEvent(awayTeam, gameLog); // Away team injury
+      saveTeamData(awayTeam); // Persist changes for injuries
+    } else {
+      // Simulate normal play
+      simulateNormalPlay(homeTeam, awayTeam, gameLog, scores); // Handle scoring events
     }
   }
 };
@@ -161,8 +161,6 @@ const simulateNormalPlay = (homeTeam, awayTeam, gameLog, scores) => {
     gameLog.push('Error: Missing players for normal play.');
     return;
   }
-
-  const defenseSkill = calculateAverageSkill(defendingTeam, 'defense');
 
   const shotSuccess = calculateShotOutcome(scorer, goalie);
   if (shotSuccess) {
