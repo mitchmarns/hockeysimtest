@@ -62,7 +62,7 @@ const simulatePeriod = (homeTeam, awayTeam, periodDuration, shiftDuration, gameL
   let elapsedTime = 0;
 
   while (elapsedTime < periodDuration) {
-    const eventDuration = Math.random() * 2.5; // Random event duration up to 2.5 minutes
+    const eventDuration = Math.random() * 3; // Random event duration up to 2.5 minutes
     elapsedTime += eventDuration;
 
     // Rotate lines if a shift ends
@@ -73,9 +73,9 @@ const simulatePeriod = (homeTeam, awayTeam, periodDuration, shiftDuration, gameL
     }
 
     const eventType = Math.random();
-    if (eventType < 0.08) {
+    if (eventType < 0.05) {
       handlePenaltyEvent(homeTeam, gameLog, penalizedPlayers); // Home team penalty
-    } else if (eventType < 0.12) {
+    } else if (eventType < 0.08) {
       handleInjuryEvent(awayTeam, gameLog); // Away team injury
       saveTeamData(awayTeam); // Persist changes for injuries
     } else {
@@ -96,7 +96,7 @@ const simulateOvertime = (homeTeam, awayTeam, overtimeDuration, gameLog, scores,
     const eventType = Math.random();
     if (eventType < 0.1) {
       handlePenaltyEvent(homeTeam, gameLog, penalizedPlayers);
-    } else if (eventType < 0.05) {
+    } else if (eventType < 0.03) {
       handleInjuryEvent(awayTeam, gameLog, injuredPlayers);
     } else {
       const result = simulateOvertimePlay(homeTeam, awayTeam, gameLog);
