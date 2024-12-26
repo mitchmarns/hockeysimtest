@@ -162,6 +162,8 @@ const simulateNormalPlay = (homeTeam, awayTeam, gameLog, scores) => {
     return;
   }
 
+  const defenseSkill = calculateAverageSkill(defendingTeam, 'defense');
+
   const shotSuccess = calculateShotOutcome(scorer, goalie);
   if (shotSuccess) {
     if (shootingTeam === homeTeam) scores.home += 1;
