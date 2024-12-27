@@ -11,8 +11,8 @@ import { groupPlayersByTeam, calculateAverageSkill } from './teams.js';
 // Simulate one period of the game
 const simulatePeriod = (homeTeam, awayTeam, gameLog, penalizedPlayers, gameState) => {
   let periodLog = [];
-  let homeGoals = 0;  // Declare homeGoals once
-  let awayGoals = 0;  // Declare awayGoals once
+  let homeGoals = 0;
+  let awayGoals = 0;
 
   let eventLog = [];
 
@@ -37,7 +37,7 @@ const simulatePeriod = (homeTeam, awayTeam, gameLog, penalizedPlayers, gameState
     if (simulateShotOutcome(homeTeam, awayTeam)) {
       homeGoals++;  // Increment home goals
       handleGoal(scorer, homeTeam, gameLog, { home: homeGoals, away: awayGoals }); // Pass the updated score
-      addAssist(homeTeam, homeGoals, gameLog);
+      addAssist(homeTeam, scorer, gameLog);  // Corrected: pass scorer, not homeGoals
     }
   }
 
@@ -47,17 +47,13 @@ const simulatePeriod = (homeTeam, awayTeam, gameLog, penalizedPlayers, gameState
     if (simulateShotOutcome(awayTeam, homeTeam)) {
       awayGoals++;  // Increment away goals
       handleGoal(scorer, awayTeam, gameLog, { home: homeGoals, away: awayGoals }); // Pass the updated score
-      addAssist(awayTeam, awayGoals, gameLog);
+      addAssist(awayTeam, scorer, gameLog);  // Corrected: pass scorer, not awayGoals
     }
   }
 
   periodLog.push(`${homeTeam.name} scored ${homeGoals} goals.`);
   periodLog.push(`${awayTeam.name} scored ${awayGoals} goals.`);
 
-  console.log("Home Team Lines:", homeTeam.lines);
-  console.log("Away Team Lines:", awayTeam.lines);
-  console.log("Penalized Players:", penalizedPlayers);
-  console.log("Game Log Before Special Teams Adjust:", gameLog);
   // Handle special teams (adjust for penalties)
   adjustForSpecialTeams(homeTeam, penalizedPlayers, gameLog);
   adjustForSpecialTeams(awayTeam, penalizedPlayers, gameLog);
