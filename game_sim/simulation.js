@@ -31,18 +31,20 @@ const simulatePeriod = (homeTeam, awayTeam, gameLog, penalizedPlayers, gameState
   let awayGoals = 0;
 
   // Simulate shots on goal
-  for (let i = 0; i < homeShots; i++) {
+for (let i = 0; i < homeShots; i++) {
+    const scorer = homeTeam.players[Math.floor(Math.random() * homeTeam.players.length)]; // Example scorer selection
     if (simulateShotOutcome(homeTeam, awayTeam)) {
       homeGoals++;
-      handleGoal(scorer, team, gameLog, scores);
+      handleGoal(scorer, homeTeam, gameLog, scores);
       addAssist(homeTeam, homeGoals, gameLog);
     }
   }
 
   for (let i = 0; i < awayShots; i++) {
+    const scorer = awayTeam.players[Math.floor(Math.random() * awayTeam.players.length)]; // Example scorer selection
     if (simulateShotOutcome(awayTeam, homeTeam)) {
       awayGoals++;
-      handleGoal(scorer, team, gameLog, scores);
+      handleGoal(scorer, awayTeam, gameLog, scores);
       addAssist(awayTeam, awayGoals, gameLog);
     }
   }
@@ -51,7 +53,8 @@ const simulatePeriod = (homeTeam, awayTeam, gameLog, penalizedPlayers, gameState
   periodLog.push(`${awayTeam.name} scored ${awayGoals} goals.`);
 
   // Handle special teams (adjust for penalties)
-  adjustForSpecialTeams(homeTeam, awayTeam, penalizedPlayers, gameLog);
+  adjustForSpecialTeams(homeTeam, penalizedPlayers, gameLog);
+  adjustForSpecialTeams(awayTeam, penalizedPlayers, gameLog);
 
   // Handle empty net situations
   handleEmptyNet(homeTeam, awayTeam, gameLog);
@@ -63,7 +66,8 @@ const simulatePeriod = (homeTeam, awayTeam, gameLog, penalizedPlayers, gameState
 
 // Simulate a full game between two teams
 export const simulateGame = (homeTeam, awayTeam) => {
-  const scores = { home: 0, away: 0 };
+  let homeScore = 0;
+  let awayScore = 0;
   const gameLog = [];
   const penalizedPlayers = {}; // Keep track of penalized players
   const gameState = new GameState(); // Manage game state (score, time, etc.)
