@@ -3,7 +3,10 @@ export const displayGameLog = (gameLog) => {
   gameOutput.innerHTML = gameLog.map(play => `<p>${play}</p>`).join('');
 };
 
-export const startGameSimulation = (teams, lineAssignments) => {
-  // Setup home and away teams
-  // Run simulation and display log
+export const startGameSimulation = (homeTeam, awayTeam) => {
+  // Run the simulation
+  const gameLog = simulateGame(homeTeam, awayTeam);  // Get game log from simulateGame
+
+  // Display the game log
+  displayGameLog(gameLog);
 };
