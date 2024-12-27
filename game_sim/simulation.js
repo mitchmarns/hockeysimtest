@@ -1,3 +1,4 @@
+import { loadTeamsFromStorage } from './data.js';
 import { handleInjuryEvent, updateInjuryStatuses } from './injuries.js';
 import { handlePenaltyEvent, updatePenaltyStatuses } from './penalties.js';
 import { handleGoal, addAssist } from './goals.js';
@@ -9,7 +10,11 @@ import { GameState } from './gamestate.js';
 import { groupPlayersByTeam, calculateAverageSkill } from './teams.js';
 
 // Parse the localStorage data
-const teams = JSON.parse(localStorage.getItem('teams') || '[]');
+const teams = loadTeamsFromStorage();
+teams.forEach(team => {
+  console.log(`Team: ${team.name}`);
+  console.log('Lines:', team.lines);
+});
 const lineAssignments = JSON.parse(localStorage.getItem('lineAssignments') || '{}');
 const allPlayers = JSON.parse(localStorage.getItem('players') || '[]'); // Assuming 'players' contains all player data
 
