@@ -10,11 +10,6 @@ import { GameState } from './gamestate.js';
 import { groupPlayersByTeam, calculateAverageSkill } from './teams.js';
 
 // Parse the localStorage data
-export const loadTeamsFromStorage = () => {
-  const savedTeams = JSON.parse(localStorage.getItem('teams') || '[]');  // or another default value if nothing is found
-  console.log(savedTeams);  // Check what is being loaded
-  return savedTeams;
-};
 const lineAssignments = JSON.parse(localStorage.getItem('lineAssignments') || '{}');
 const allPlayers = JSON.parse(localStorage.getItem('players') || '[]'); // Assuming 'players' contains all player data
 
