@@ -9,17 +9,28 @@ import { GameState } from './gamestate.js';
 import { groupPlayersByTeam, calculateAverageSkill } from './teams.js';
 
 // Parse the localStorage data
-const lineAssignments = JSON.parse(localStorage.getItem('lineAssignments'));
-let playersData = JSON.parse(localStorage.getItem('playersData'));
-const teams = JSON.parse(localStorage.getItem('teams'));
+const teams = JSON.parse(localStorage.getItem('teams') || '[]');
+const lineAssignments = JSON.parse(localStorage.getItem('lineAssignments') || '{}');
+const allPlayers = JSON.parse(localStorage.getItem('players') || '[]'); // Assuming 'players' contains all player data
 
-// Check if playersData exists and is an object
-if (playersData && playersData.players && Array.isArray(playersData.players)) {
-  const groupedTeams = groupPlayersByTeam(playersData.players);
-  console.log(groupedTeams);
-} else {
-  console.error('playersData is not properly formatted or is missing the "players" array');
-}
+// Populate teams with assigned players
+teams.forEach(team => {
+  team.players = []; // Clear any existing players
+
+  // Loop through lineAssignments and find players for this team
+  for (const [lineKey, playerId] of Object.entries(lineAssignments)) {
+    const [teamName] = lineKey.split('-');
+    if (teamName === team.name) {
+      const player = allPlayers.find(p => p.id === parseInt(playerId));
+      if (player) {
+        team.players.push(player); // Add player object to the team
+      }
+    }
+  }
+});
+
+// Save updated teams back to localStorage
+localStorage.setItem('teams', JSON.stringify(teams));
 
 // Simulate one period of the game
 const simulatePeriod = (homeTeam, awayTeam, gameLog, penalizedPlayers, gameState) => {
