@@ -7,7 +7,6 @@ import { adjustForSpecialTeams } from './specialteams.js';
 import { handleEmptyNet } from './emptynet.js';
 import { GameState } from './gamestate.js';
 import { groupPlayersByTeam, calculateAverageSkill } from './teams.js';
-import { startGameSimulation } from './ui.js';
 
 // Simulate one period of the game
 const simulatePeriod = (homeTeam, awayTeam, gameLog, penalizedPlayers, gameState) => {
