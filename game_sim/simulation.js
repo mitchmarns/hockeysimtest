@@ -67,8 +67,7 @@ export const simulateGame = (homeTeam, awayTeam) => {
   const penalizedPlayers = {}; // Keep track of penalized players
   const gameState = new GameState(); // Manage game state (score, time, etc.)
 
-  let homeScore = 0;
-  let awayScore = 0;
+  const scores = { team1: 0, team2: 0 };
 
   // Simulate 3 periods
   for (let i = 1; i <= 3; i++) {
