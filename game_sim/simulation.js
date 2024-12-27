@@ -103,10 +103,41 @@ export const simulateGame = (homeTeam, awayTeam) => {
   const penalizedPlayers = {}; // Keep track of penalized players
   const gameState = new GameState(); // Manage game state (score, time, etc.)
 
+  // Populate teams with assigned players from localStorage lineAssignments
+  const lineAssignments = JSON.parse(localStorage.getItem('lineAssignments') || '{}');
+  const allPlayers = JSON.parse(localStorage.getItem('players') || '[]'); // Assuming 'players' contains all player data
+
+  // Populate teams with assigned players based on lineAssignments
+  homeTeam.players = [];
+  awayTeam.players = [];
+  
+  // Loop through lineAssignments and find players for the home team
+  for (const [lineKey, playerId] of Object.entries(lineAssignments)) {
+    const [teamName] = lineKey.split('-');
+    if (teamName === homeTeam.name) {
+      const player = allPlayers.find(p => p.id === parseInt(playerId));
+      if (player) {
+        homeTeam.players.push(player); // Add player to home team
+      }
+    } else if (teamName === awayTeam.name) {
+      const player = allPlayers.find(p => p.id === parseInt(playerId));
+      if (player) {
+        awayTeam.players.push(player); // Add player to away team
+      }
+    }
+  }
+
+  // Ensure teams are grouped correctly
+  const groupedTeams = groupPlayersByTeam([...homeTeam.players, ...awayTeam.players]);
+
+  // Update the teams with their lines and positions
+  homeTeam.lines = groupedTeams[homeTeam.name].lines;
+  awayTeam.lines = groupedTeams[awayTeam.name].lines;
+
   // Simulate 3 periods
   for (let i = 1; i <= 3; i++) {
     gameLog.push(`\n--- Period ${i} ---`);
-    
+
     // Destructure the return from simulatePeriod and use `gameLog` as the updated log
     const { homeGoals, awayGoals, gameLog: newGameLog } = simulatePeriod(
       homeTeam,
