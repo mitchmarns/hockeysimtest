@@ -21,23 +21,6 @@ if (playersData && playersData.players && Array.isArray(playersData.players)) {
   console.error('playersData is not properly formatted or is missing the "players" array');
 }
 
-// Function to group players by their teams
-function groupPlayersByTeam(players) {
-  const grouped = {};
-
-  // Loop through players and group them by team
-  players.forEach(player => {
-    if (player.team) {
-      if (!grouped[player.team]) {
-        grouped[player.team] = [];
-      }
-      grouped[player.team].push(player);
-    }
-  });
-
-  return grouped;
-}
-
 // Simulate one period of the game
 const simulatePeriod = (homeTeam, awayTeam, gameLog, penalizedPlayers, gameState) => {
   let periodLog = [];
