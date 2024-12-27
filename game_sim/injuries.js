@@ -23,7 +23,7 @@ const injuryTypes = [
   const eligiblePlayers = team.players.filter(player => !player.injured);
   if (eligiblePlayers.length === 0) {
     eventLog.push(`No eligible players for injury event on ${team.name}.`);
-    return;
+    return eventLog;
   }
 
   // Select a random player and injury type
@@ -52,10 +52,7 @@ const injuryTypes = [
   return eventLog;
 };
 
-// Update injury statuses and handle player recovery
-export const updateInjuryStatuses = (team, eventLog) => {
-  if (!eventLog) eventLog = [];  // Fallback check, though initializing in the calling function is preferred
-  
+export const updateInjuryStatuses = (team, eventLog = []) => {  // Default to an empty array
   team.players.forEach(player => {
     if (player.injured) {
       player.recoveryGames -= 1;
