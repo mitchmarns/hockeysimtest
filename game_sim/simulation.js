@@ -79,10 +79,21 @@ export const simulateGame = (homeTeam, awayTeam) => {
   // Simulate 3 periods
   for (let i = 1; i <= 3; i++) {
     gameLog.push(`\n--- Period ${i} ---`);
-    const { homeGoals, awayGoals, newGameLog } = simulatePeriod(homeTeam, awayTeam, gameLog, penalizedPlayers, gameState);
+    
+    // Destructure the return from simulatePeriod and use `gameLog` as the updated log
+    const { homeGoals, awayGoals, gameLog: newGameLog } = simulatePeriod(
+      homeTeam,
+      awayTeam,
+      gameLog,
+      penalizedPlayers,
+      gameState
+    );
 
     homeScore += homeGoals;
     awayScore += awayGoals;
+
+    // Update the gameLog with the newGameLog from the current period
+    gameLog = newGameLog;
 
     // Update injury statuses after each period
     gameLog.push(...updateInjuryStatuses(homeTeam, newGameLog));
