@@ -86,6 +86,11 @@ footer {
   text-align: center;
 }
 
+.player-image {
+  width: 150px;
+  height: auto;
+}
+
 /* ================= TEAM LIST ================= */
 
 .team-container {
