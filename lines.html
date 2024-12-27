@@ -3,248 +3,204 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hockey Line Assignment</title>
+  <title>Team Line Assignments</title>
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-  <h1>Hockey Line Assignment</h1>
-  
-  <h2>Available Players</h2>
-    <div id="players" class="players-container">
-    <!-- The available players will be dynamically injected here -->
-    </div>
+  <h1>Team Line Assignments</h1>
 
-<h2>Assign to Lines</h2>
-
-<!-- Team container with team name in data attribute -->
-<div id="container"> 
-<div id="team" data-team-name="Rangers">
-    <h2>Rangers</h2>
-    <h3>Forward Lines</h3>
-        <h3>Line 1</h3>
-    <div class="line">
-        <div class="line-slot" data-position="Rangers-forward-1-LW">LW</div>
-        <div class="line-slot" data-position="Rangers-forward-1-C">C</div>
-        <div class="line-slot" data-position="Rangers-forward-1-RW">RW</div>
-    </div>
-
-      <h3>Line 2</h3>
-    <div class="line">
-      <div class="line-slot" data-position="Rangers-forward-2-LW">LW</div>
-      <div class="line-slot" data-position="Rangers-forward-2-C">C</div>
-      <div class="line-slot" data-position="Rangers-forward-2-RW">RW</div>
-    </div>
-
-      <h3>Line 3</h3>
-    <div class="line">
-      <div class="line-slot" data-position="Rangers-forward-3-LW">LW</div>
-      <div class="line-slot" data-position="Rangers-forward-3-C">C</div>
-      <div class="line-slot" data-position="Rangers-forward-3-RW">RW</div>
-    </div>
-
-      <h3>Line 4</h3>
-    <div class="line">
-      <div class="line-slot" data-position="Rangers-forward-4-LW">LW</div>
-      <div class="line-slot" data-position="Rangers-forward-4-C">C</div>
-      <div class="line-slot" data-position="Rangers-forward-4-RW">RW</div>
-    </div>
-  <h3>Defensive Lines</h3>
-      <h3>Line 1</h3>
-    <div class="line">
-      <div class="line-slot" data-position="Rangers-defense-1-LD">LD</div>
-      <div class="line-slot" data-position="Rangers-defense-1-RD">RD</div>
-    </div>
-
-      <h3>Line 2</h3>
-    <div class="line">
-      <div class="line-slot" data-position="Rangers-defense-2-LD">LD</div>
-      <div class="line-slot" data-position="Rangers-defense-2-RD">RD</div>
-    </div>
-        
-      <h3>Line 3</h3>
-    <div class="line">
-      <div class="line-slot" data-position="Rangers-defense-3-LD">LD</div>
-      <div class="line-slot" data-position="Rangers-defense-3-RD">RD</div>
-    </div>
-
-      <h3>Goalies</h3>
-    <div class="line">
-      <div class="line-slot" data-position="Rangers-goalies-1-Starter">Starter</div>
-      <div class="line-slot" data-position="Rangers-goalies-2-Backup">Backup</div>
-    </div>
+  <!-- Team Selector -->
+  <div class="team-selector">
+    <label for="team">Select Team:</label>
+    <select id="team">
+      <option value="Rangers">Rangers</option>
+      <option value="Devils">Devils</option>
+      <option value="Islanders">Islanders</option>
+      <option value="Sabres">Sabres</option>
+    </select>
   </div>
 
-<div id="team" data-team-name="Devils">
-    <h2>Devils</h2>
-    <h3>Forward Lines</h3>
-        <h3>Line 1</h3>
-    <div class="line">
-      <div class="line-slot" data-position="Devils-forward-1-LW">LW</div>
-      <div class="line-slot" data-position="Devils-forward-1-C">C</div>
-      <div class="line-slot" data-position="Devils-forward-1-RW">RW</div>
+  <div id="lines-container">
+
+    <!-- Rangers Team Lineup -->
+    <div id="Rangers" class="team-lineup">
+      <h2>Rangers Team Lineup</h2>
+
+      <!-- Forwards -->
+      <h3>Rangers Forwards</h3>
+      <div class="line-slot" data-position="Rangers-forwards-1-LW">
+        <div class="slot-content"><span>Line 1 - LW</span></div>
+      </div>
+      <div class="line-slot" data-position="Rangers-forwards-1-C">
+        <div class="slot-content"><span>Line 1 - C</span></div>
+      </div>
+      <div class="line-slot" data-position="Rangers-forwards-1-RW">
+        <div class="slot-content"><span>Line 1 - RW</span></div>
+      </div>
+
+      <div class="line-slot" data-position="Rangers-forwards-2-LW">
+        <div class="slot-content"><span>Line 2 - LW</span></div>
+      </div>
+      <div class="line-slot" data-position="Rangers-forwards-2-C">
+        <div class="slot-content"><span>Line 2 - C</span></div>
+      </div>
+      <div class="line-slot" data-position="Rangers-forwards-2-RW">
+        <div class="slot-content"><span>Line 2 - RW</span></div>
+      </div>
+
+      <div class="line-slot" data-position="Rangers-forwards-3-LW">
+        <div class="slot-content"><span>Line 3 - LW</span></div>
+      </div>
+      <div class="line-slot" data-position="Rangers-forwards-3-C">
+        <div class="slot-content"><span>Line 3 - C</span></div>
+      </div>
+      <div class="line-slot" data-position="Rangers-forwards-3-RW">
+        <div class="slot-content"><span>Line 3 - RW</span></div>
+      </div>
+
+      <div class="line-slot" data-position="Rangers-forwards-4-LW">
+        <div class="slot-content"><span>Line 4 - LW</span></div>
+      </div>
+      <div class="line-slot" data-position="Rangers-forwards-4-C">
+        <div class="slot-content"><span>Line 4 - C</span></div>
+      </div>
+      <div class="line-slot" data-position="Rangers-forwards-4-RW">
+        <div class="slot-content"><span>Line 4 - RW</span></div>
+      </div>
+
+      <!-- Defense -->
+      <h3>Rangers Defense</h3>
+      <div class="line-slot" data-position="Rangers-defense-1-LD">
+        <div class="slot-content"><span>Line 1 - LD</span></div>
+      </div>
+      <div class="line-slot" data-position="Rangers-defense-1-RD">
+        <div class="slot-content"><span>Line 1 - RD</span></div>
+      </div>
+
+      <div class="line-slot" data-position="Rangers-defense-2-LD">
+        <div class="slot-content"><span>Line 2 - LD</span></div>
+      </div>
+      <div class="line-slot" data-position="Rangers-defense-2-RD">
+        <div class="slot-content"><span>Line 2 - RD</span></div>
+      </div>
+
+      <div class="line-slot" data-position="Rangers-defense-3-LD">
+        <div class="slot-content"><span>Line 3 - LD</span></div>
+      </div>
+      <div class="line-slot" data-position="Rangers-defense-3-RD">
+        <div class="slot-content"><span>Line 3 - RD</span></div>
+      </div>
     </div>
 
-      <h3>Line 2</h3>
-    <div class="line">
-      <div class="line-slot" data-position="Devils-forward-2-LW">LW</div>
-      <div class="line-slot" data-position="Devils-forward-2-C">C</div>
-      <div class="line-slot" data-position="Devils-forward-2-RW">RW</div>
+    <!-- Repeat the structure for other teams (Devils, Islanders, Sabres) -->
+
+    <div id="Devils" class="team-lineup">
+      <h2>Devils Team Lineup</h2>
+
+      <!-- Forwards -->
+      <h3>Devils Forwards</h3>
+      <div class="line-slot" data-position="Devils-forwards-1-LW"><span>Line 1 - LW</span></div>
+      <div class="line-slot" data-position="Devils-forwards-1-C"><span>Line 1 - C</span></div>
+      <div class="line-slot" data-position="Devils-forwards-1-RW"><span>Line 1 - RW</span></div>
+
+      <div class="line-slot" data-position="Devils-forwards-2-LW"><span>Line 2 - LW</span></div>
+      <div class="line-slot" data-position="Devils-forwards-2-C"><span>Line 2 - C</span></div>
+      <div class="line-slot" data-position="Devils-forwards-2-RW"><span>Line 2 - RW</span></div>
+
+      <div class="line-slot" data-position="Devils-forwards-3-LW"><span>Line 3 - LW</span></div>
+      <div class="line-slot" data-position="Devils-forwards-3-C"><span>Line 3 - C</span></div>
+      <div class="line-slot" data-position="Devils-forwards-3-RW"><span>Line 3 - RW</span></div>
+
+      <div class="line-slot" data-position="Devils-forwards-4-LW"><span>Line 4 - LW</span></div>
+      <div class="line-slot" data-position="Devils-forwards-4-C"><span>Line 4 - C</span></div>
+      <div class="line-slot" data-position="Devils-forwards-4-RW"><span>Line 4 - RW</span></div>
+
+      <!-- Defense -->
+      <h3>Devils Defense</h3>
+      <div class="line-slot" data-position="Devils-defense-1-LD"><span>Line 1 - LD</span></div>
+      <div class="line-slot" data-position="Devils-defense-1-RD"><span>Line 1 - RD</span></div>
+
+      <div class="line-slot" data-position="Devils-defense-2-LD"><span>Line 2 - LD</span></div>
+      <div class="line-slot" data-position="Devils-defense-2-RD"><span>Line 2 - RD</span></div>
+
+      <div class="line-slot" data-position="Devils-defense-3-LD"><span>Line 3 - LD</span></div>
+      <div class="line-slot" data-position="Devils-defense-3-RD"><span>Line 3 - RD</span></div>
     </div>
 
-      <h3>Line 3</h3>
-    <div class="line">
-      <div class="line-slot" data-position="Devils-forward-3-LW">LW</div>
-      <div class="line-slot" data-position="Devils-forward-3-C">C</div>
-      <div class="line-slot" data-position="Devils-forward-3-RW">RW</div>
-    </div>
+    <div id="Islanders" class="team-lineup">
+  <h2>Islanders Team Lineup</h2>
 
-      <h3>Line 4</h3>
-    <div class="line">
-      <div class="line-slot" data-position="Devils-forward-4-LW">LW</div>
-      <div class="line-slot" data-position="Devils-forward-4-C">C</div>
-      <div class="line-slot" data-position="Devils-forward-4-RW">RW</div>
-    </div>
-  <h3>Defensive Lines</h3>
-      <h3>Line 1</h3>
-    <div class="line">
-      <div class="line-slot" data-position="Devils-defense-1-LD">LD</div>
-      <div class="line-slot" data-position="Devils-defense-1-RD">RD</div>
-    </div>
+  <!-- Forwards -->
+  <h3>Islanders Forwards</h3>
+  <div class="line-slot" data-position="Islanders-forwards-1-LW"><span>Line 1 - LW</span></div>
+  <div class="line-slot" data-position="Islanders-forwards-1-C"><span>Line 1 - C</span></div>
+  <div class="line-slot" data-position="Islanders-forwards-1-RW"><span>Line 1 - RW</span></div>
 
-      <h3>Line 2</h3>
-    <div class="line">
-      <div class="line-slot" data-position="Devils-defense-2-LD">LD</div>
-      <div class="line-slot" data-position="Devils-defense-2-RD">RD</div>
-    </div>
-        
-      <h3>Line 3</h3>
-    <div class="line">
-      <div class="line-slot" data-position="Devils-defense-3-LD">LD</div>
-      <div class="line-slot" data-position="Devils-defense-3-RD">RD</div>
-    </div>
+  <div class="line-slot" data-position="Islanders-forwards-2-LW"><span>Line 2 - LW</span></div>
+  <div class="line-slot" data-position="Islanders-forwards-2-C"><span>Line 2 - C</span></div>
+  <div class="line-slot" data-position="Islanders-forwards-2-RW"><span>Line 2 - RW</span></div>
 
-      <h3>Goalies</h3>
-    <div class="line">
-      <div class="line-slot-row">
-      <div class="line-slot" data-position="Devils-goalies-1-Starter">Starter</div>
-      <div class="line-slot" data-position="Devils-goalies-2-Backup">Backup</div>
-    </div>
-  </div>
+  <div class="line-slot" data-position="Islanders-forwards-3-LW"><span>Line 3 - LW</span></div>
+  <div class="line-slot" data-position="Islanders-forwards-3-C"><span>Line 3 - C</span></div>
+  <div class="line-slot" data-position="Islanders-forwards-3-RW"><span>Line 3 - RW</span></div>
 
-  <div id="team" data-team-name="Islanders">
-    <h2>Islanders</h2>
-    <h3>Forward Lines</h3>
-        <h3>Line 1</h3>
-      <div class="line">
-        <div class="line-slot" data-position="Islanders-forward-1-LW">LW</div>
-        <div class="line-slot" data-position="Islanders-forward-1-C">C</div>
-        <div class="line-slot" data-position="Islanders-forward-1-RW">RW</div>
-    </div>
+  <div class="line-slot" data-position="Islanders-forwards-4-LW"><span>Line 4 - LW</span></div>
+  <div class="line-slot" data-position="Islanders-forwards-4-C"><span>Line 4 - C</span></div>
+  <div class="line-slot" data-position="Islanders-forwards-4-RW"><span>Line 4 - RW</span></div>
 
-      <h3>Line 2</h3>
-    <div class="line">
-      <div class="line-slot" data-position="Islanders-forward-2-LW">LW</div>
-      <div class="line-slot" data-position="Islanders-forward-2-C">C</div>
-      <div class="line-slot" data-position="Islanders-forward-2-RW">RW</div>
-    </div>
+  <!-- Defense -->
+  <h3>Islanders Defense</h3>
+  <div class="line-slot" data-position="Islanders-defense-1-LD"><span>Line 1 - LD</span></div>
+  <div class="line-slot" data-position="Islanders-defense-1-RD"><span>Line 1 - RD</span></div>
 
-      <h3>Line 3</h3>
-    <div class="line">
-      <div class="line-slot" data-position="Islanders-forward-3-LW">LW</div>
-      <div class="line-slot" data-position="Islanders-forward-3-C">C</div>
-      <div class="line-slot" data-position="Islanders-forward-3-RW">RW</div>
-    </div>
+  <div class="line-slot" data-position="Islanders-defense-2-LD"><span>Line 2 - LD</span></div>
+  <div class="line-slot" data-position="Islanders-defense-2-RD"><span>Line 2 - RD</span></div>
 
-      <h3>Line 3</h3>
-    <div class="line">
-      <div class="line-slot" data-position="Islanders-forward-4-LW">LW</div>
-      <div class="line-slot" data-position="Islanders-forward-4-C">C</div>
-      <div class="line-slot" data-position="Islanders-forward-4-RW">RW</div>
-    </div>
-  <h3>Defensive Lines</h3>
-
-      <h3>Line 1</h3>
-    <div class="line">
-      <div class="line-slot" data-position="Islanders-defense-1-LD">LD</div>
-      <div class="line-slot" data-position="Islanders-defense-1-RD">RD</div>
-    </div>
-
-
-      <h3>Line 2</h3>
-    <div class="line">
-      <div class="line-slot" data-position="Islanders-defense-2-LD">LD</div>
-      <div class="line-slot" data-position="Islanders-defense-2-RD">RD</div>
-    </div>
-        
-
-      <h3>Line 3</h3>
-    <div class="line">
-      <div class="line-slot" data-position="Islanders-defense-3-LD">LD</div>
-      <div class="line-slot" data-position="Islanders-defense-3-RD">RD</div>
-    </div>
-
-      <h3>Goalies</h3>
-    <div class="line">
-      <div class="line-slot" data-position="Islanders-goalies-1-Starter">Starter</div>
-      <div class="line-slot" data-position="Islanders-goalies-2-Backup">Backup</div>
-    </div>
-  </div>
-  <div id="team" data-team-name="Sabres">
-    <h2>Sabres</h2>
-    <h3>Forward Lines</h3>
-        <h3>Line 1</h3>
-    <div class="line">
-        <div class="line-slot" data-position="Sabres-forward-1-LW">LW</div>
-        <div class="line-slot" data-position="Sabres-forward-1-C">C</div>
-        <div class="line-slot" data-position="Sabres-forward-1-RW">RW</div>
-    </div>
-
-      <h3>Line 2</h3>
-     <div class="line">
-      <div class="line-slot" data-position="Sabres-forward-2-LW">LW</div>
-      <div class="line-slot" data-position="Sabres-forward-2-C">C</div>
-      <div class="line-slot" data-position="Sabres-forward-2-RW">RW</div>
-    </div>
-
-      <h3>Line 3</h3>
-    <div class="line">
-      <div class="line-slot" data-position="Sabres-forward-3-LW">LW</div>
-      <div class="line-slot" data-position="Sabres-forward-3-C">C</div>
-      <div class="line-slot" data-position="Sabres-forward-3-RW">RW</div>
-    </div>
-
-      <h3>Line 3</h3>
-    <div class="line">
-      <div class="line-slot" data-position="Sabres-forward-4-LW">LW</div>
-      <div class="line-slot" data-position="Sabres-forward-4-C">C</div>
-      <div class="line-slot" data-position="Sabres-forward-4-RW">RW</div>
-    </div>
-  <h3>Defensive Lines</h3>
-      <h3>Line 1</h3>
-    <div class="line">
-      <div class="line-slot" data-position="Sabres-defense-1-LD">LD</div>
-      <div class="line-slot" data-position="Sabres-defense-1-RD">RD</div>
-    </div>
-
-      <h3>Line 2</h3>
-    <div class="line">
-      <div class="line-slot" data-position="Sabres-defense-2-LD">LD</div>
-      <div class="line-slot" data-position="Sabres-defense-2-RD">RD</div>
-    </div>
-        
-      <h3>Line 3</h3>
-    <div class="line">
-      <div class="line-slot" data-position="Sabres-defense-3-LD">LD</div>
-      <div class="line-slot" data-position="Sabres-defense-3-RD">RD</div>
-    </div>
-
-      <h3>Goalies</h3>
-    <div class="line">
-      <div class="line-slot" data-position="Sabres-goalies-1-Starter">Starter</div>
-      <div class="line-slot" data-position="Sabres-goalies-2-Backup">Backup</div>
-    </div>
-  </div>
+  <div class="line-slot" data-position="Islanders-defense-3-LD"><span>Line 3 - LD</span></div>
+  <div class="line-slot" data-position="Islanders-defense-3-RD"><span>Line 3 - RD</span></div>
 </div>
+
+    <div id="Sabres" class="team-lineup">
+  <h2>Sabres Team Lineup</h2>
+
+  <!-- Forwards -->
+  <h3>Sabres Forwards</h3>
+  <div class="line-slot" data-position="Sabres-forwards-1-LW"><span>Line 1 - LW</span></div>
+  <div class="line-slot" data-position="Sabres-forwards-1-C"><span>Line 1 - C</span></div>
+  <div class="line-slot" data-position="Sabres-forwards-1-RW"><span>Line 1 - RW</span></div>
+
+  <div class="line-slot" data-position="Sabres-forwards-2-LW"><span>Line 2 - LW</span></div>
+  <div class="line-slot" data-position="Sabres-forwards-2-C"><span>Line 2 - C</span></div>
+  <div class="line-slot" data-position="Sabres-forwards-2-RW"><span>Line 2 - RW</span></div>
+
+  <div class="line-slot" data-position="Sabres-forwards-3-LW"><span>Line 3 - LW</span></div>
+  <div class="line-slot" data-position="Sabres-forwards-3-C"><span>Line 3 - C</span></div>
+  <div class="line-slot" data-position="Sabres-forwards-3-RW"><span>Line 3 - RW</span></div>
+
+  <div class="line-slot" data-position="Sabres-forwards-4-LW"><span>Line 4 - LW</span></div>
+  <div class="line-slot" data-position="Sabres-forwards-4-C"><span>Line 4 - C</span></div>
+  <div class="line-slot" data-position="Sabres-forwards-4-RW"><span>Line 4 - RW</span></div>
+
+  <!-- Defense -->
+  <h3>Sabres Defense</h3>
+  <div class="line-slot" data-position="Sabres-defense-1-LD"><span>Line 1 - LD</span></div>
+  <div class="line-slot" data-position="Sabres-defense-1-RD"><span>Line 1 - RD</span></div>
+
+  <div class="line-slot" data-position="Sabres-defense-2-LD"><span>Line 2 - LD</span></div>
+  <div class="line-slot" data-position="Sabres-defense-2-RD"><span>Line 2 - RD</span></div>
+
+  <div class="line-slot" data-position="Sabres-defense-3-LD"><span>Line 3 - LD</span></div>
+  <div class="line-slot" data-position="Sabres-defense-3-RD"><span>Line 3 - RD</span></div>
+</div>
+
+  </div>
+
+  <!-- Available Players Section -->
+  <div id="players">
+    <h2>Available Players</h2>
+    <!-- Dynamic list of players will be populated here -->
+  </div>
+  
   <script src="lines.js"></script>
 </body>
 </html>
