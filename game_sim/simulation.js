@@ -29,9 +29,6 @@ const simulatePeriod = (homeTeam, awayTeam, gameLog, penalizedPlayers, gameState
   const homeShots = Math.floor(Math.random() * 10) + homeTeamAverageSkill;  // Random shots adjusted by team skill
   const awayShots = Math.floor(Math.random() * 10) + awayTeamAverageSkill;
 
-  let homeGoals = 0;
-  let awayGoals = 0;
-
   // Simulate shots on goal
 for (let i = 0; i < homeShots; i++) {
     const scorer = homeTeam.players[Math.floor(Math.random() * homeTeam.players.length)]; // Example scorer selection
