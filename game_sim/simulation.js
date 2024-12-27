@@ -8,6 +8,10 @@ import { handleEmptyNet } from './emptynet.js';
 import { GameState } from './gamestate.js';
 import { groupPlayersByTeam, calculateAverageSkill } from './teams.js';
 
+const lineAssignments = JSON.parse(localStorage.getItem('lineAssignments'));
+const playersData = JSON.parse(localStorage.getItem('playersData'));
+const teams = JSON.parse(localStorage.getItem('teams'));
+
 // Simulate one period of the game
 const simulatePeriod = (homeTeam, awayTeam, gameLog, penalizedPlayers, gameState) => {
   let periodLog = [];
