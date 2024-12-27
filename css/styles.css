@@ -172,6 +172,20 @@ footer {
   opacity: 0.8;
 }
 
+.assigned-player {
+  width: 100px; /* Adjust the width */
+  height: auto; /* Maintain aspect ratio */
+  border-radius: 10px; /* Optional: rounded corners */
+  border: 2px solid #4CAF50; /* Green border for assigned players */
+  box-shadow: 0px 0px 5px rgba(0, 128, 0, 0.5); /* Green glow effect */
+  transition: transform 0.3s ease; /* Smooth transition on hover */
+}
+
+/* Optional: Add hover effect */
+.assigned-player:hover {
+  transform: scale(1.1); /* Slight zoom effect on hover */
+}
+
 /* ================= LINES AND SLOTS ================= */
 
 .lines-container {
