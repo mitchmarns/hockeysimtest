@@ -8,31 +8,35 @@ import { handleEmptyNet } from './emptynet.js';
 import { GameState } from './gamestate.js';
 import { groupPlayersByTeam, calculateAverageSkill } from './teams.js';
 
+// Parse the localStorage data
 const lineAssignments = JSON.parse(localStorage.getItem('lineAssignments'));
-const playersData = JSON.parse(localStorage.getItem('playersData'));
+let playersData = JSON.parse(localStorage.getItem('playersData'));
 const teams = JSON.parse(localStorage.getItem('teams'));
 
-if (Array.isArray(playersData)) {
-  // If valid, group players by team
-  const groupedTeams = groupPlayersByTeam(playersData);
-  console.log(groupedTeams);  // Log the grouped teams to the console
+// Check if playersData exists and is an object
+if (playersData && playersData.players && Array.isArray(playersData.players)) {
+  const groupedTeams = groupPlayersByTeam(playersData.players);
+  console.log(groupedTeams);
 } else {
-  // Handle the case where playersData is not an array
-  console.error('playersData is not an array or is malformed. Please check localStorage.');
+  console.error('playersData is not properly formatted or is missing the "players" array');
 }
 
-// Ensure 'teams' is correctly retrieved (fallback to an empty object if invalid)
-let validTeams = {};
-if (teams && typeof teams === 'object') {
-  validTeams = teams;  // If 'teams' is an object, use it
-} else {
-  console.error('Teams data is missing or malformed. Please check localStorage.');
-  validTeams = {};  // Fallback to an empty object if invalid
-}
+// Function to group players by their teams
+function groupPlayersByTeam(players) {
+  const grouped = {};
 
-// Now you can use 'groupedTeams' and 'validTeams' in the simulation
-// Example of how you might use it:
-console.log(validTeams);
+  // Loop through players and group them by team
+  players.forEach(player => {
+    if (player.team) {
+      if (!grouped[player.team]) {
+        grouped[player.team] = [];
+      }
+      grouped[player.team].push(player);
+    }
+  });
+
+  return grouped;
+}
 
 // Simulate one period of the game
 const simulatePeriod = (homeTeam, awayTeam, gameLog, penalizedPlayers, gameState) => {
