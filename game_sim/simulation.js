@@ -14,10 +14,12 @@ const simulatePeriod = (homeTeam, awayTeam, gameLog, penalizedPlayers, gameState
   let homeGoals = 0;  // Declare homeGoals once
   let awayGoals = 0;  // Declare awayGoals once
 
+  let eventLog = [];
+
   // Handle injuries and penalties
-  periodLog = handleInjuryEvent(homeTeam, periodLog);
-  periodLog = handleInjuryEvent(awayTeam, periodLog);
-  
+  eventLog = handleInjuryEvent(homeTeam, eventLog);
+  eventLog = handleInjuryEvent(awayTeam, eventLog);
+
   // Handle penalties
   periodLog = handlePenaltyEvent(homeTeam, periodLog, penalizedPlayers);
   periodLog = handlePenaltyEvent(awayTeam, periodLog, penalizedPlayers);
