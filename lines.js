@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const slots = document.querySelectorAll(".line-slot");
   const teamName = document.getElementById("team").textContent;
 
-  // Load saved assignments
+  // Load saved assignments from localStorage
   const assignments = JSON.parse(localStorage.getItem("lineAssignments")) || {};
 
   // Load players from localStorage
