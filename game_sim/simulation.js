@@ -10,10 +10,13 @@ import { groupPlayersByTeam, calculateAverageSkill } from './teams.js';
 
 const lineAssignments = JSON.parse(localStorage.getItem('lineAssignments'));
 const playersData = JSON.parse(localStorage.getItem('playersData'));
+  if (Array.isArray(playersData)) {
+    const groupedTeams = groupPlayersByTeam(playersData);
+    console.log(groupedTeams);
+  } else {
+    console.error('playersData is not an array');
+  }
 const teams = JSON.parse(localStorage.getItem('teams'));
-
-const groupedTeams = groupPlayersByTeam(playersData);  
-console.log(groupedTeams);
 
 // Simulate one period of the game
 const simulatePeriod = (homeTeam, awayTeam, gameLog, penalizedPlayers, gameState) => {
