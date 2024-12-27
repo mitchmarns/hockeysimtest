@@ -1,12 +1,17 @@
 export const adjustForSpecialTeams = (team, penalizedPlayers) => {
-  // Ensure penalizedPlayers is an object and check for active penalties for the team
-  const activePenalties = Object.values(penalizedPlayers).filter(p => p.player && p.player.team === team.name);
-
+  // Get the list of active penalized players for the current team
+  const activePenalties = Object.values(penalizedPlayers).filter(p => p.player.team === team.name);
+  
+  // If there are any active penalties, use the penalty kill units
   if (activePenalties.length > 0) {
-    // There are active penalties, return the first penalty kill unit
-    return team.lines.penaltyKillUnits[0]; // Example: Use the first penalty kill unit
+    return team.lines.penaltyKillUnits.map(unit => {
+      // Check if any player is assigned to each slot
+      return unit; // Return the unit (you can add specific logic for which unit to use based on the situation)
+    });
   } else {
-    // No active penalties, return the first forward line
-    return team.lines.forwardLines[0]; // Example: Use the first forward line
+    // If there are no penalties, use the powerplay units (example: powerplay unit 2)
+    return team.lines.powerplayUnits.map(unit => {
+      return unit; // Return the powerplay unit (again, adjust this as per your logic)
+    });
   }
 };
