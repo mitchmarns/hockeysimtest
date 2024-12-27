@@ -234,7 +234,7 @@ footer {
   background-color: #e0e0e0;
   cursor: pointer;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   height: 120px;
   justify-content: center;
   padding: 10px;
@@ -243,6 +243,14 @@ footer {
 
 .special-team-slot:hover {
   background-color: #b3d8ff;
+}
+
+.special-team-slot .assigned-player {
+  width: 50px;  /* Control image width */
+  height: 50px; /* Control image height */
+  object-fit: cover; /* Keep aspect ratio while filling the space */
+  border-radius: 5px; /* Optional: rounded corners */
+  border: 2px solid #4CAF50; /* Optional: green border for assigned player */
 }
 
 /* ================= LOG SECTION ================= */
