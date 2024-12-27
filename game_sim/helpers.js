@@ -34,3 +34,11 @@ export const simulateShotOutcome = (homeTeam, awayTeam, isHomeAttacking) => {
 
   return shotOutcome;
 };
+
+const collectPlayersFromTeam = (team) => {
+  return [
+    ...team.lines.forwardLines.flatMap(line => Object.values(line)),
+    ...team.lines.defenseLines.flatMap(line => Object.values(line)),
+    team.lines.goalies.starter,
+  ];
+};
