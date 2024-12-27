@@ -62,6 +62,8 @@ const collectPlayersFromTeam = (team) => {
   return players.filter(Boolean);  // Remove any null/undefined values
 };
 
-  return players.filter(Boolean);  // Remove any null/undefined values
+// Helper function to get a player by ID from localStorage
+const getPlayerById = (id) => {
+  const playersData = JSON.parse(localStorage.getItem("playersData"));
+  return playersData ? playersData.players.find((player) => player.id === parseInt(id)) : null;
 };
-
