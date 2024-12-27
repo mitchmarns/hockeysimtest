@@ -1,16 +1,29 @@
 export const simulateShotOutcome = (attackingTeam, defendingTeam) => {
-  // Flatten players from all lines into a single array for selection
+  if (!attackingTeam.lines || !attackingTeam.lines.forwardLines) {
+    console.error('Error: Lines are not properly set up for', attackingTeam.name);
+    return false;
+  }
+  if (!defendingTeam.lines || !defendingTeam.lines.forwardLines) {
+    console.error('Error: Lines are not properly set up for', defendingTeam.name);
+    return false;
+  }
+
   const attackingPlayers = [
     ...attackingTeam.lines.forwardLines.flatMap(line => Object.values(line)),
     ...attackingTeam.lines.defenseLines.flatMap(line => Object.values(line)),
     attackingTeam.lines.goalies.starter,
-  ].filter(Boolean); // Filter out any null values
+  ].filter(Boolean);
 
   const defendingPlayers = [
     ...defendingTeam.lines.forwardLines.flatMap(line => Object.values(line)),
     ...defendingTeam.lines.defenseLines.flatMap(line => Object.values(line)),
     defendingTeam.lines.goalies.starter,
   ].filter(Boolean);
+
+  if (!attackingPlayers.length || !defendingPlayers.length) {
+    console.error('Error: No players available in lines.');
+    return false;
+  }
 
   const randomAttacker = attackingPlayers[Math.floor(Math.random() * attackingPlayers.length)];
   const randomDefender = defendingPlayers[Math.floor(Math.random() * defendingPlayers.length)];
