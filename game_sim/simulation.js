@@ -52,6 +52,10 @@ const simulatePeriod = (homeTeam, awayTeam, gameLog, penalizedPlayers, gameState
   periodLog.push(`${homeTeam.name} scored ${homeGoals} goals.`);
   periodLog.push(`${awayTeam.name} scored ${awayGoals} goals.`);
 
+  console.log("Home Team Lines:", homeTeam.lines);
+  console.log("Away Team Lines:", awayTeam.lines);
+  console.log("Penalized Players:", penalizedPlayers);
+  console.log("Game Log Before Special Teams Adjust:", gameLog);
   // Handle special teams (adjust for penalties)
   adjustForSpecialTeams(homeTeam, penalizedPlayers, gameLog);
   adjustForSpecialTeams(awayTeam, penalizedPlayers, gameLog);
