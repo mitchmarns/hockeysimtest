@@ -1,4 +1,4 @@
-import { handlePenaltyEvent } from './penalties.js';
+import { handlePenaltyEvent, updatePenaltyStatuses } from './penalties.js';
 import { handleInjuryEvent, updateInjuryStatuses, saveTeamData } from './injuries.js';
 import { calculateAverageSkill } from './teams.js';
 
@@ -14,7 +14,10 @@ export const simulateGame = (homeTeam, awayTeam) => {
   console.log(`Game starting between ${homeTeam.name} and ${awayTeam.name}`);
 
   // Track penalized and injured players
-  const penalizedPlayers = {};
+  const penalizedPlayers = {
+    home: {},
+    away: {}
+  };
   const injuredPlayers = {};
 
   // Update injury statuses before the game
@@ -74,25 +77,17 @@ const simulatePeriod = (homeTeam, awayTeam, periodDuration, shiftDuration, gameL
 
     const eventType = Math.random();
     if (eventType < 0.1) { // 10% chance of penalty
-      console.log(`Penalty event for ${homeTeam.name} at ${elapsedTime.toFixed(2)} minutes.`);
-      handlePenaltyEvent(homeTeam, gameLog, penalizedPlayers);
+      handlePenaltyEvent(homeTeam, gameLog, penalizedPlayers.home);
     } else if (eventType < 0.15) { // 5% chance of injury
-      console.log(`Injury event for ${awayTeam.name} at ${elapsedTime.toFixed(2)} minutes.`);
       handleInjuryEvent(awayTeam, gameLog);
       saveTeamData(awayTeam);
     } else { // Remaining chance for normal play
-      console.log(`Normal play at ${elapsedTime.toFixed(2)} minutes.`);
       simulateNormalPlay(homeTeam, awayTeam, gameLog, scores);
     }
 
-    // Check penalty expiry
-    Object.keys(penalizedPlayers).forEach(playerId => {
-      const penaltyInfo = penalizedPlayers[playerId];
-      if (penaltyInfo.penaltyEndTime !== -1 && Date.now() >= penaltyInfo.penaltyEndTime) {
-        delete penalizedPlayers[playerId];
-        gameLog.push(`${penaltyInfo.player.name}'s penalty has expired.`);
-      }
-    });
+    // Update penalties
+    updatePenaltyStatuses(penalizedPlayers.home, gameLog);
+    updatePenaltyStatuses(penalizedPlayers.away, gameLog);
   }
 };
 
@@ -105,9 +100,9 @@ const simulateOvertime = (homeTeam, awayTeam, overtimeDuration, gameLog, scores,
     const eventDuration = Math.random() * 1.5;
     elapsedTime += eventDuration;
 
-    const eventType = Math.random();
+const eventType = Math.random();
     if (eventType < 0.1) {
-      handlePenaltyEvent(homeTeam, gameLog, penalizedPlayers);
+      handlePenaltyEvent(homeTeam, gameLog, penalizedPlayers.home);
     } else if (eventType < 0.03) {
       handleInjuryEvent(awayTeam, gameLog, injuredPlayers);
     } else {
@@ -176,9 +171,7 @@ const simulateNormalPlay = (homeTeam, awayTeam, gameLog, scores) => {
 
   const shotSuccess = calculateShotOutcome(scorer, goalie);
   if (shotSuccess) {
-    if (shootingTeam === homeTeam) scores.home += 1;
-    else scores.away += 1;
-
+    scores[shootingTeam === homeTeam ? 'home' : 'away'] += 1;
     gameLog.push(`${scorer.name} scores for ${shootingTeam.name}!`);
     addAssist(shootingTeam, scorer, gameLog);
   } else {
@@ -214,5 +207,15 @@ const addAssist = (team, scorer, gameLog) => {
   if (eligiblePlayers.length > 0) {
     const assister = eligiblePlayers[Math.floor(Math.random() * eligiblePlayers.length)];
     gameLog.push(`${assister.name} assisted on the goal by ${scorer.name}.`);
+  }
+};
+
+const adjustLinesForSpecialTeams = (team, penalizedPlayers) => {
+  const activePenalties = Object.values(penalizedPlayers).filter(p => p.player.team === team.name);
+  if (activePenalties.length > 0) {
+    // Use penalty kill lines for the team with active penalties
+    return team.lines.penaltyKillUnits[0]; // Example: Use the first penalty kill unit
+  } else {
+    return team.lines.forwardLines[0]; // Example: Use the first forward line
   }
 };
