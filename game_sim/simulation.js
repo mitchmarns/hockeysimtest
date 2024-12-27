@@ -41,6 +41,15 @@ export const simulateGame = (homeTeam, awayTeam) => {
       gameLog.push(`${overtimeResult.overtimeWinner.name} wins the game in overtime!`);
     } else {
       gameLog.push(`No goals in overtime. The game ends in a tie!`);
+      // Add the shootout after a tie in overtime
+      const shootoutResult = simulateShootout(homeTeam, awayTeam);
+      gameLog.push(`Shootout results:`);
+      gameLog.push(`${homeTeam.name} ${shootoutResult.homeGoals} - ${awayTeam.name} ${shootoutResult.awayGoals}`);
+      if (shootoutResult.winner) {
+        gameLog.push(`${shootoutResult.winner} wins the shootout and the game!`);
+      } else {
+        gameLog.push(`The shootout ends in a tie!`);
+      }
     }
   }
 
@@ -321,3 +330,53 @@ const handleEmptyNet = (team, gameTime, scores, gameLog) => {
     gameLog.push(`${team.name} pulls their goalie for an extra attacker!`);
   }
 };
+
+const simulateShootout = (homeTeam, awayTeam) => {
+  const maxRounds = 5; // The maximum rounds for the shootout
+  let homeGoals = 0;
+  let awayGoals = 0;
+
+  let round = 0;
+  
+  // Function to simulate a player's shot on goal
+  const simulateShot = (player) => {
+    // A simple random chance to determine if the shot is a goal, based on player's shooting skill
+    const skill = player.skills.shot; // Assume skill has a "shot" attribute
+    const chance = Math.random() * 100; // Random number between 0 and 100
+    
+    return chance < skill; // If the random number is less than the player's skill, it's a goal
+  };
+
+  // Alternate shots between home and away teams
+  while (round < maxRounds && homeGoals === awayGoals) {
+    // Home team shot
+    const homePlayer = homeTeam.players[Math.floor(Math.random() * homeTeam.players.length)];
+    if (simulateShot(homePlayer)) {
+      homeGoals++;
+    }
+
+    // Away team shot
+    const awayPlayer = awayTeam.players[Math.floor(Math.random() * awayTeam.players.length)];
+    if (simulateShot(awayPlayer)) {
+      awayGoals++;
+    }
+
+    round++;
+  }
+
+  // Determine the winner
+  let winner = null;
+  if (homeGoals > awayGoals) {
+    winner = homeTeam.name;
+  } else if (awayGoals > homeGoals) {
+    winner = awayTeam.name;
+  }
+
+  // Output the results of the shootout
+  return {
+    homeGoals,
+    awayGoals,
+    winner
+  };
+};
+
