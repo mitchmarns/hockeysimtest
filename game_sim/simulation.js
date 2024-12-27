@@ -9,7 +9,7 @@ import { GameState } from './gamestate.js';
 import { groupPlayersByTeam, calculateAverageSkill } from './teams.js';
 
 // Simulate one period of the game
-const simulatePeriod = (homeTeam, awayTeam, eventLog, penalizedPlayers, gameState) => {
+const simulatePeriod = (homeTeam, awayTeam, gameLog, penalizedPlayers, gameState) => {
   let periodLog = [];
 
   // Handle injuries and penalties
@@ -35,7 +35,7 @@ const simulatePeriod = (homeTeam, awayTeam, eventLog, penalizedPlayers, gameStat
     if (simulateShotOutcome(homeTeam, awayTeam)) {
       homeGoals++;
       handleGoal(scorer, team, gameLog, scores);
-      addAssist(homeTeam, homeGoals, eventLog);
+      addAssist(homeTeam, homeGoals, gameLog);
     }
   }
 
@@ -43,7 +43,7 @@ const simulatePeriod = (homeTeam, awayTeam, eventLog, penalizedPlayers, gameStat
     if (simulateShotOutcome(awayTeam, homeTeam)) {
       awayGoals++;
       handleGoal(scorer, team, gameLog, scores);
-      addAssist(awayTeam, awayGoals, eventLog);
+      addAssist(awayTeam, awayGoals, gameLog);
     }
   }
 
@@ -51,14 +51,14 @@ const simulatePeriod = (homeTeam, awayTeam, eventLog, penalizedPlayers, gameStat
   periodLog.push(`${awayTeam.name} scored ${awayGoals} goals.`);
 
   // Handle special teams (adjust for penalties)
-  adjustForSpecialTeams(homeTeam, awayTeam, penalizedPlayers, eventLog);
+  adjustForSpecialTeams(homeTeam, awayTeam, penalizedPlayers, gameLog);
 
   // Handle empty net situations
-  handleEmptyNet(homeTeam, awayTeam, eventLog);
+  handleEmptyNet(homeTeam, awayTeam, gameLog);
 
-  eventLog.push(...periodLog);
+  gameLog.push(...periodLog);
 
-  return { homeGoals, awayGoals, eventLog };
+  return { homeGoals, awayGoals, gameLog };
 };
 
 // Simulate a full game between two teams
@@ -70,25 +70,25 @@ export const simulateGame = (homeTeam, awayTeam) => {
 
   // Simulate 3 periods
   for (let i = 1; i <= 3; i++) {
-    eventLog.push(`\n--- Period ${i} ---`);
-    const { homeGoals, awayGoals, newEventLog } = simulatePeriod(homeTeam, awayTeam, eventLog, penalizedPlayers, gameState);
+    gameLog.push(`\n--- Period ${i} ---`);
+    const { homeGoals, awayGoals, newGameLog } = simulatePeriod(homeTeam, awayTeam, gameLog, penalizedPlayers, gameState);
 
     homeScore += homeGoals;
     awayScore += awayGoals;
 
     // Update injury statuses after each period
-    eventLog.push(...updateInjuryStatuses(homeTeam, newEventLog));
-    eventLog.push(...updateInjuryStatuses(awayTeam, newEventLog));
+    gameLog.push(...updateInjuryStatuses(homeTeam, newGameLog));
+    gameLog.push(...updateInjuryStatuses(awayTeam, newGameLog));
 
     // Update penalty statuses after each period
-    eventLog.push(...updatePenaltyStatuses(penalizedPlayers, newEventLog));
+    gameLog.push(...updatePenaltyStatuses(penalizedPlayers, newGameLog));
   }
 
   // Final score and game log
-  eventLog.push(`\nFinal Score: ${homeTeam.name} ${homeScore} - ${awayTeam.name} ${awayScore}`);
+  gameLog.push(`\nFinal Score: ${homeTeam.name} ${homeScore} - ${awayTeam.name} ${awayScore}`);
   
   // Handle random event (e.g., fight, fan interference)
-  eventLog.push(getRandomEvent());
+  gameLog.push(getRandomEvent());
 
-  return eventLog;
+  return gameLog;
 };
