@@ -1,3 +1,5 @@
+import { simulateGame } from './game_sim.js';
+
 export const displayGameLog = (gameLog) => {
   const gameLogOutput = document.getElementById('game-log-output');
   gameLogOutput.innerHTML = gameLog.map(play => `<p>${play}</p>`).join('');
