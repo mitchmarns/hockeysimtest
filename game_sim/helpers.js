@@ -1,13 +1,4 @@
 export const simulateShotOutcome = (attackingTeam, defendingTeam) => {
-  if (!attackingTeam.lines || !attackingTeam.lines.forwardLines) {
-    console.error('Error: Lines are not properly set up for', attackingTeam.name);
-    return false;
-  }
-  if (!defendingTeam.lines || !defendingTeam.lines.forwardLines) {
-    console.error('Error: Lines are not properly set up for', defendingTeam.name);
-    return false;
-  }
-
   const attackingPlayers = [
     ...attackingTeam.lines.forwardLines.flatMap(line => Object.values(line)),
     ...attackingTeam.lines.defenseLines.flatMap(line => Object.values(line)),
