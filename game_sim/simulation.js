@@ -11,8 +11,8 @@ import { groupPlayersByTeam, calculateAverageSkill } from './teams.js';
 // Simulate one period of the game
 const simulatePeriod = (homeTeam, awayTeam, gameLog, penalizedPlayers, gameState) => {
   let periodLog = [];
-  let homeGoals = 0;
-  let awayGoals = 0;
+  let homeGoals = 0;  // Declare homeGoals once
+  let awayGoals = 0;  // Declare awayGoals once
 
   // Handle injuries and penalties
   periodLog = handleInjuryEvent(homeTeam, periodLog);
@@ -29,21 +29,22 @@ const simulatePeriod = (homeTeam, awayTeam, gameLog, penalizedPlayers, gameState
   const homeShots = Math.floor(Math.random() * 10) + homeTeamAverageSkill;  // Random shots adjusted by team skill
   const awayShots = Math.floor(Math.random() * 10) + awayTeamAverageSkill;
 
-  // Simulate shots on goal
-for (let i = 0; i < homeShots; i++) {
+  // Simulate shots on goal for home team
+  for (let i = 0; i < homeShots; i++) {
     const scorer = homeTeam.players[Math.floor(Math.random() * homeTeam.players.length)]; // Example scorer selection
     if (simulateShotOutcome(homeTeam, awayTeam)) {
-      homeGoals++;
-      handleGoal(scorer, homeTeam, gameLog, scores);
+      homeGoals++;  // Increment home goals
+      handleGoal(scorer, homeTeam, gameLog, { home: homeGoals, away: awayGoals }); // Pass the updated score
       addAssist(homeTeam, homeGoals, gameLog);
     }
   }
 
+  // Simulate shots on goal for away team
   for (let i = 0; i < awayShots; i++) {
     const scorer = awayTeam.players[Math.floor(Math.random() * awayTeam.players.length)]; // Example scorer selection
     if (simulateShotOutcome(awayTeam, homeTeam)) {
-      awayGoals++;
-      handleGoal(scorer, awayTeam, gameLog, scores);
+      awayGoals++;  // Increment away goals
+      handleGoal(scorer, awayTeam, gameLog, { home: homeGoals, away: awayGoals }); // Pass the updated score
       addAssist(awayTeam, awayGoals, gameLog);
     }
   }
