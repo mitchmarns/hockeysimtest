@@ -39,31 +39,34 @@ export const simulateShotOutcome = (homeTeam, awayTeam, isHomeAttacking) => {
 };
 
 const collectPlayersFromTeam = (team) => {
-  if (!team || !team.lines) {
-    console.error('Invalid team data:', team);
-    return [];
-  }
-
   const players = [];
 
-  // Collect forwards from all lines
-  team.lines.forwardLines.forEach((line) => {
-    if (line.LW) players.push(line.LW);
-    if (line.C) players.push(line.C);
-    if (line.RW) players.push(line.RW);
+  // Loop through localStorage keys to find players assigned to the given team
+  Object.keys(localStorage).forEach((key) => {
+    if (key.startsWith(`${team.name}-`)) {
+      const position = key.split('-')[1];  // Extract position (e.g., "forward", "defense")
+      const lineNumber = key.split('-')[2];  // Extract line number (e.g., "1", "2", etc.)
+      const playerPosition = key.split('-')[3];  // Extract specific position (e.g., "RW", "LD")
+
+      const playerId = localStorage.getItem(key);  // Get the player ID from localStorage
+
+      // Find the player data using the playerId
+      const player = getPlayerById(playerId);
+      if (player) {
+        player.position = playerPosition;  // Attach position to the player object
+        players.push(player);  // Add player to the list
+      }
+    }
   });
 
-  // Collect defensemen from all lines
-  team.lines.defenseLines.forEach((line) => {
-    if (line.LD) players.push(line.LD);
-    if (line.RD) players.push(line.RD);
-  });
+  return players.filter(Boolean);  // Remove any null/undefined values
+};
 
-  // Collect the starter goalie
-  if (team.lines.goalies && team.lines.goalies.starter) {
-    players.push(team.lines.goalies.starter);
-  }
-
+// Helper function to get a player by ID from localStorage
+const getPlayerById = (id) => {
+  const playersData = JSON.parse(localStorage.getItem("playersData"));
+  return playersData ? playersData.players.find((player) => player.id === parseInt(id)) : null;
+};
   // Return only valid players
   return players.filter(Boolean); // Filter out any null/undefined values
 };
