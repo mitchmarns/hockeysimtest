@@ -1,6 +1,7 @@
 import { handlePenaltyEvent, updatePenaltyStatuses } from './penalties.js';
 import { handleInjuryEvent, updateInjuryStatuses, saveTeamData } from './injuries.js';
 import { calculateAverageSkill } from './teams.js';
+import { handleGoal } from './goals.js';
 
 export const simulateGame = (homeTeam, awayTeam) => {
   const gameLog = [];
