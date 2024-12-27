@@ -75,12 +75,20 @@ const simulatePeriod = (homeTeam, awayTeam, periodDuration, shiftDuration, gameL
       gameLog.push(`Line changes for both teams at ${elapsedTime.toFixed(2)} minutes.`);
     }
 
-    const eventType = Math.random();
+const eventType = Math.random();
     if (eventType < 0.1) { // 10% chance of penalty
       handlePenaltyEvent(homeTeam, gameLog, penalizedPlayers.home);
     } else if (eventType < 0.15) { // 5% chance of injury
       handleInjuryEvent(awayTeam, gameLog);
       saveTeamData(awayTeam);
+    } else if (eventType < 0.25) { // 10% chance for a turnover
+      if (handleTurnover(homeTeam, awayTeam, gameLog)) {
+        continue; // Skip the rest of the event if a turnover occurs
+      }
+    } else if (eventType < 0.35) { // 10% chance for a hit
+      simulateHit(homeTeam, gameLog);
+    } else if (eventType < 0.45) { // 10% chance for a breakaway
+      simulateBreakaway(homeTeam, awayTeam, gameLog, scores);
     } else { // Remaining chance for normal play
       simulateNormalPlay(homeTeam, awayTeam, gameLog, scores);
     }
@@ -88,6 +96,10 @@ const simulatePeriod = (homeTeam, awayTeam, periodDuration, shiftDuration, gameL
     // Update penalties
     updatePenaltyStatuses(penalizedPlayers.home, gameLog);
     updatePenaltyStatuses(penalizedPlayers.away, gameLog);
+
+    // Handle empty net scenario if applicable
+    handleEmptyNet(homeTeam, elapsedTime, scores, gameLog);
+    handleEmptyNet(awayTeam, elapsedTime, scores, gameLog);
   }
 };
 
@@ -100,11 +112,15 @@ const simulateOvertime = (homeTeam, awayTeam, overtimeDuration, gameLog, scores,
     const eventDuration = Math.random() * 1.5;
     elapsedTime += eventDuration;
 
-const eventType = Math.random();
+    const eventType = Math.random();
     if (eventType < 0.1) {
       handlePenaltyEvent(homeTeam, gameLog, penalizedPlayers.home);
     } else if (eventType < 0.03) {
       handleInjuryEvent(awayTeam, gameLog, injuredPlayers);
+    } else if (eventType < 0.1) { // 10% chance for a breakaway
+      simulateBreakaway(homeTeam, awayTeam, gameLog, scores);
+    } else if (eventType < 0.2) { // 10% chance for a faceoff
+      simulateFaceoff(homeTeam, awayTeam, gameLog);
     } else {
       const result = simulateOvertimePlay(homeTeam, awayTeam, gameLog);
       if (result.winner) {
@@ -112,6 +128,10 @@ const eventType = Math.random();
         return { overtimeWinner: result.winner };
       }
     }
+
+    // Handle empty net situation
+    handleEmptyNet(homeTeam, elapsedTime, scores, gameLog);
+    handleEmptyNet(awayTeam, elapsedTime, scores, gameLog);
   }
 
   return { overtimeWinner: null };
@@ -169,6 +189,9 @@ const simulateNormalPlay = (homeTeam, awayTeam, gameLog, scores) => {
     return;
   }
 
+  // Check for breakaway
+  simulateBreakaway(shootingTeam, defendingTeam, gameLog, scores);
+
   const shotSuccess = calculateShotOutcome(scorer, goalie);
   if (shotSuccess) {
     scores[shootingTeam === homeTeam ? 'home' : 'away'] += 1;
@@ -177,14 +200,18 @@ const simulateNormalPlay = (homeTeam, awayTeam, gameLog, scores) => {
   } else {
     gameLog.push(`${scorer.name} shoots, but ${goalie.name} makes the save!`);
   }
+
+  // Handle empty net scenario
+  handleEmptyNet(homeTeam, 0, scores, gameLog); // Use 0 for time as we're in normal play
+  handleEmptyNet(awayTeam, 0, scores, gameLog);
 };
 
 // Calculate shot outcome
-const calculateShotOutcome = (scorer, goalie) => {
+const calculateShotOutcome = (scorer, goalie, isBreakaway = false) => {
   const shooterSkill = scorer.skills.wristShotAccuracy * 0.3
     + scorer.skills.wristShotPower * 0.2
-    + scorer.skills.speed * 0.2
-    + scorer.skills.hockeyIQ * 0.1;
+    + scorer.skills.speed * 0.3 // Increased weight for speed on breakaways
+    + (isBreakaway ? scorer.skills.deking * 0.2 : scorer.skills.hockeyIQ * 0.1);
 
   const goalieSkill = goalie.skills.glove * 0.3
     + goalie.skills.reflexes * 0.3
@@ -217,5 +244,80 @@ const adjustLinesForSpecialTeams = (team, penalizedPlayers) => {
     return team.lines.penaltyKillUnits[0]; // Example: Use the first penalty kill unit
   } else {
     return team.lines.forwardLines[0]; // Example: Use the first forward line
+  }
+};
+
+const handleTurnover = (teamWithPuck, defendingTeam, gameLog) => {
+  const turnoverChance = Math.random(); // Random chance for a turnover
+  if (turnoverChance < 0.2) { // 20% chance of turnover
+    const playerLosingPuck = getRandomEligiblePlayer(teamWithPuck);
+    const playerGainingPuck = getRandomEligiblePlayer(defendingTeam);
+
+    if (playerLosingPuck && playerGainingPuck) {
+      gameLog.push(`${playerLosingPuck.name} loses the puck to ${playerGainingPuck.name}.`);
+      return true; // Turnover occurred
+    }
+  }
+  return false; // No turnover
+};
+
+const simulateHit = (defendingTeam, gameLog) => {
+  const hitChance = Math.random();
+  if (hitChance < 0.1) { // 10% chance of a hit
+    const hitter = getRandomEligiblePlayer(defendingTeam);
+    const target = getRandomEligiblePlayer(defendingTeam); // Could target opponent or mishit
+    if (hitter && target) {
+      gameLog.push(`${hitter.name} delivers a hit to ${target.name}.`);
+      if (Math.random() < 0.05) { // 5% chance of penalty due to hit
+        handlePenaltyEvent(defendingTeam, gameLog, penalizedPlayers);
+      }
+    }
+  }
+};
+
+const simulateFaceoff = (homeTeam, awayTeam, gameLog) => {
+  const homeCenter = homeTeam.lines.forwardLines[0].C; // Current center
+  const awayCenter = awayTeam.lines.forwardLines[0].C;
+
+  if (!homeCenter || !awayCenter) {
+    gameLog.push("Error: Missing players for faceoff.");
+    return homeTeam; // Default possession
+  }
+
+  const homeFaceoffSkill = homeCenter.skills.faceoffs || 50;
+  const awayFaceoffSkill = awayCenter.skills.faceoffs || 50;
+
+  const homeWinChance = homeFaceoffSkill / (homeFaceoffSkill + awayFaceoffSkill);
+  const winner = Math.random() < homeWinChance ? homeTeam : awayTeam;
+
+  gameLog.push(`${winner.name} wins the faceoff.`);
+  return winner;
+};
+
+const simulateBreakaway = (shootingTeam, defendingTeam, gameLog, scores) => {
+  const breakawayChance = Math.random();
+  if (breakawayChance < 0.05) { // 5% chance of breakaway
+    const scorer = getRandomEligiblePlayer(shootingTeam);
+    const goalie = defendingTeam?.lines?.goalies?.starter;
+
+    if (scorer && goalie) {
+      gameLog.push(`${scorer.name} breaks away for a one-on-one with ${goalie.name}!`);
+      const shotSuccess = calculateShotOutcome(scorer, goalie, true); // True for breakaway modifier
+      if (shotSuccess) {
+        scores[shootingTeam === homeTeam ? 'home' : 'away'] += 1;
+        gameLog.push(`${scorer.name} scores on the breakaway!`);
+        addAssist(shootingTeam, scorer, gameLog);
+      } else {
+        gameLog.push(`${goalie.name} makes a spectacular save on the breakaway!`);
+      }
+    }
+  }
+};
+
+const handleEmptyNet = (team, gameTime, scores, gameLog) => {
+  if (gameTime >= 58 && scores[team === homeTeam ? 'home' : 'away'] < scores[team === homeTeam ? 'away' : 'home']) {
+    team.lines.goalies.starter = null; // Pull goalie
+    team.extraAttacker = getRandomEligiblePlayer(team); // Add extra attacker
+    gameLog.push(`${team.name} pulls their goalie for an extra attacker!`);
   }
 };
