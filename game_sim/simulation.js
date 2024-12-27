@@ -11,6 +11,8 @@ import { groupPlayersByTeam, calculateAverageSkill } from './teams.js';
 // Simulate one period of the game
 const simulatePeriod = (homeTeam, awayTeam, gameLog, penalizedPlayers, gameState) => {
   let periodLog = [];
+  let homeGoals = 0;
+  let awayGoals = 0;
 
   // Handle injuries and penalties
   periodLog = handleInjuryEvent(homeTeam, periodLog);
