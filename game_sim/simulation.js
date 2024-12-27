@@ -10,13 +10,29 @@ import { groupPlayersByTeam, calculateAverageSkill } from './teams.js';
 
 const lineAssignments = JSON.parse(localStorage.getItem('lineAssignments'));
 const playersData = JSON.parse(localStorage.getItem('playersData'));
-  if (Array.isArray(playersData)) {
-    const groupedTeams = groupPlayersByTeam(playersData);
-    console.log(groupedTeams);
-  } else {
-    console.error('playersData is not an array');
-  }
 const teams = JSON.parse(localStorage.getItem('teams'));
+
+if (Array.isArray(playersData)) {
+  // If valid, group players by team
+  const groupedTeams = groupPlayersByTeam(playersData);
+  console.log(groupedTeams);  // Log the grouped teams to the console
+} else {
+  // Handle the case where playersData is not an array
+  console.error('playersData is not an array or is malformed. Please check localStorage.');
+}
+
+// Ensure 'teams' is correctly retrieved (fallback to an empty object if invalid)
+let validTeams = {};
+if (teams && typeof teams === 'object') {
+  validTeams = teams;  // If 'teams' is an object, use it
+} else {
+  console.error('Teams data is missing or malformed. Please check localStorage.');
+  validTeams = {};  // Fallback to an empty object if invalid
+}
+
+// Now you can use 'groupedTeams' and 'validTeams' in the simulation
+// Example of how you might use it:
+console.log(validTeams);
 
 // Simulate one period of the game
 const simulatePeriod = (homeTeam, awayTeam, gameLog, penalizedPlayers, gameState) => {
