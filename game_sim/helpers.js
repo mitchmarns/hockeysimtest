@@ -50,18 +50,6 @@ const collectPlayersFromTeam = (team) => {
 
       const playerId = localStorage.getItem(key);  // Get the player ID from localStorage
 
-      const collectPlayersFromTeam = (team) => {
-  const players = [];
-
-  // Loop through localStorage keys to find players assigned to the given team
-  Object.keys(localStorage).forEach((key) => {
-    if (key.startsWith(`${team.name}-`)) {
-      const position = key.split('-')[1];  // Extract position (e.g., "forward", "defense")
-      const lineNumber = key.split('-')[2];  // Extract line number (e.g., "1", "2", etc.)
-      const playerPosition = key.split('-')[3];  // Extract specific position (e.g., "RW", "LD")
-
-      const playerId = localStorage.getItem(key);  // Get the player ID from localStorage
-
       // Find the player data using the playerId
       const player = getPlayerById(playerId);
       if (player) {
@@ -70,6 +58,9 @@ const collectPlayersFromTeam = (team) => {
       }
     }
   });
+
+  return players.filter(Boolean);  // Remove any null/undefined values
+};
 
   return players.filter(Boolean);  // Remove any null/undefined values
 };
