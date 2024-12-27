@@ -18,6 +18,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Apply the assignment to the player and update the stored players data
   const updatePlayerAssignment = (playerId, slotPosition) => {
     const playersData = JSON.parse(localStorage.getItem("playersData"));
+    const teamsData = JSON.parse(localStorage.getItem("teams"));
     
     // Ensure players data exists
     if (!playersData || !playersData.players) {
@@ -31,9 +32,24 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
     });
     
-  // Update localStorage with the modified players data
+  // Update the `lines` in the corresponding team
+  const [teamName, lineType, lineNumber, position] = slotPosition.split("-");
+  const team = teamsData.find((t) => t.name === teamName);
+
+  if (team && team.lines[lineType]) {
+    const lineIndex = parseInt(lineNumber) - 1;
+    const line = team.lines[lineType][lineIndex];
+
+    if (line) {
+      line[position] = parseInt(playerId); // Assign the player to the slot
+    }
+  }
+
+  // Save the updated data back to localStorage
   localStorage.setItem("playersData", JSON.stringify(playersData));
+  localStorage.setItem("teams", JSON.stringify(teamsData));
 };
+
 
   // Get players from localStorage
   const players = loadPlayers();
@@ -140,12 +156,8 @@ const applyAssignmentsToSlots = (players) => {
         return;  // Prevent the player from being dropped
       }
 
-        // Extract relevant information from data-position
-        const positionParts = slot.dataset.position.split('-');
-        const slotTeam = positionParts[0];   // 'Rangers'
-        const slotLineType = positionParts[1];  // 'forward'
-        const slotLineNumber = positionParts[2]; // '1'
-        const slotPosition = positionParts[3];  // 'LW'
+        const slotPosition = slot.dataset.position;
+        const [slotTeam, slotLineType, slotLineNumber, slotPositionType] = slotPosition.split("-");
 
         // Validate if the player's position and team match the slot's position
         if (player.team === slotTeam && 
@@ -173,24 +185,15 @@ const applyAssignmentsToSlots = (players) => {
         assignments[slot.dataset.position] = playerId;
         localStorage.setItem("lineAssignments", JSON.stringify(assignments));
 
-          // Mark player as assigned
-          players.forEach((p) => {
-            if (p.id === parseInt(playerId)) {
-              p.lineAssigned = slot.dataset.position; 
-            }
-          });
-        
-        localStorage.setItem("playersData", JSON.stringify({ players }));
+          // Update player and team data
+        updatePlayerAssignment(playerId, slotPosition);
 
-        // Refresh available players
-        populateAvailablePlayers(players);
-      } else {
-        alert("The player cannot be assigned to this slot because either the position or team does not match.");
-        }
-      });
-    });
-  };
-
+    // Refresh available players
+    populateAvailablePlayers(players);
+  } else {
+    alert("The player cannot be assigned to this slot because either the position or team does not match.");
+  }
+});
 // Initialize the page
   const init = () => {
     populateAvailablePlayers(players);
