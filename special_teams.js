@@ -107,7 +107,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             // Update the slot content to show the player's details
             droppedSlot.innerHTML = `
                 <div class="slot-content">
-                    <img src="${player.image}" alt="${player.name}" class="player-image assigned-player">
+                    <img src="${player.image}" alt="${player.name}" class="player-image">
                     <span>${player.name}</span>
                 </div>
             `;
@@ -139,7 +139,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     // Populate the slot with the assigned player
                     slot.innerHTML = `
                         <div class="slot-content">
-                            <img src="${assignedPlayer.image}" alt="${assignedPlayer.name}" class="player-image">
+                            <img src="${assignedPlayer.image}" alt="${assignedPlayer.name}" class="player-image assigned-player">
                             <span>${assignedPlayer.name}</span>
                         </div>
                     `;
@@ -164,7 +164,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     // Populate the slot with the assigned player
                     slot.innerHTML = `
                         <div class="slot-content">
-                            <img src="${assignedPlayer.image}" alt="${assignedPlayer.name}" class="player-image">
+                            <img src="${assignedPlayer.image}" alt="${assignedPlayer.name}" class="player-image assigned-player">
                             <span>${assignedPlayer.name}</span>
                         </div>
                     `;
