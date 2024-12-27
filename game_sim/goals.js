@@ -5,6 +5,8 @@ export const handleGoal = (scorer, team, gameLog, scores) => {
     return;
   }
 
+  console.log(`Scorer: ${scorer.name}, Team: ${team.name}`); // Debugging line
+
   // Update the score for the home or away team
   if (team === 'home') {
     scores.home += 1;
@@ -22,6 +24,8 @@ export const handleGoal = (scorer, team, gameLog, scores) => {
 export const addAssist = (team, scorer, gameLog) => {
   // Ensure team object has players and filter out the scorer
   const eligiblePlayers = team.players.filter(player => player.id !== scorer.id);
+
+  console.log(`Eligible Assisters: ${eligiblePlayers.map(p => p.name).join(', ')}`); // Debugging line
   
   if (eligiblePlayers.length > 0) {
     // Pick a random player to be the assister
