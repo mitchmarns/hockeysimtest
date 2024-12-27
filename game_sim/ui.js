@@ -1,4 +1,4 @@
-import { simulateGame } from './game_sim.js';
+import { simulateGame } from './simulation.js';
 
 export const displayGameLog = (gameLog) => {
   const gameLogOutput = document.getElementById('game-log-output');
