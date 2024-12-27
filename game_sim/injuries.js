@@ -54,12 +54,14 @@ const injuryTypes = [
 
 // Update injury statuses and handle player recovery
 export const updateInjuryStatuses = (team, eventLog) => {
+  if (!eventLog) eventLog = [];  // Fallback check, though initializing in the calling function is preferred
+  
   team.players.forEach(player => {
     if (player.injured) {
-      player.recoveryGames -= 1; // Decrement recovery games after each game
+      player.recoveryGames -= 1;
       if (player.recoveryGames <= 0) {
         player.injured = false;
-        delete player.recoveryGames; // Clean up unnecessary properties
+        delete player.recoveryGames;
         delete player.injuryType;
 
         // Log recovery event
@@ -68,9 +70,7 @@ export const updateInjuryStatuses = (team, eventLog) => {
     }
   });
 
-  // Persist updated team data to localStorage
   saveTeamData(team);
-
   return eventLog;
 };
 
