@@ -1,21 +1,17 @@
-export const simulateShotOutcome = (attackingTeam, defendingTeam) => {
-  const attackingPlayers = [
-    ...attackingTeam.lines.forwardLines.flatMap(line => Object.values(line)),
-    ...attackingTeam.lines.defenseLines.flatMap(line => Object.values(line)),
-    attackingTeam.lines.goalies.starter,
-  ].filter(Boolean);
+export const simulateShotOutcome = (homeTeam, awayTeam, isHomeAttacking) => {
+  const attackingTeam = isHomeAttacking ? homeTeam : awayTeam;
+  const defendingTeam = isHomeAttacking ? awayTeam : homeTeam;
 
-  const defendingPlayers = [
-    ...defendingTeam.lines.forwardLines.flatMap(line => Object.values(line)),
-    ...defendingTeam.lines.defenseLines.flatMap(line => Object.values(line)),
-    defendingTeam.lines.goalies.starter,
-  ].filter(Boolean);
+  // Collect players from attacking and defending teams
+  const attackingPlayers = collectPlayersFromTeam(attackingTeam).filter(Boolean);
+  const defendingPlayers = collectPlayersFromTeam(defendingTeam).filter(Boolean);
 
   if (!attackingPlayers.length || !defendingPlayers.length) {
     console.error('Error: No players available in lines.');
     return false;
   }
 
+  // Select random attacker and defender
   const randomAttacker = attackingPlayers[Math.floor(Math.random() * attackingPlayers.length)];
   const randomDefender = defendingPlayers[Math.floor(Math.random() * defendingPlayers.length)];
 
@@ -29,6 +25,7 @@ export const simulateShotOutcome = (attackingTeam, defendingTeam) => {
     return false;
   }
 
+  // Calculate shot chance
   const shotSkill = randomAttacker.skills.slapShotAccuracy + randomAttacker.skills.speed;
   const saveSkill = randomDefender.skills.glove + randomDefender.skills.reflexes;
 
