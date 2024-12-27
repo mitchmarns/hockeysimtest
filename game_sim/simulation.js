@@ -12,6 +12,9 @@ const lineAssignments = JSON.parse(localStorage.getItem('lineAssignments'));
 const playersData = JSON.parse(localStorage.getItem('playersData'));
 const teams = JSON.parse(localStorage.getItem('teams'));
 
+const groupedTeams = groupPlayersByTeam(playersData);  
+console.log(groupedTeams);
+
 // Simulate one period of the game
 const simulatePeriod = (homeTeam, awayTeam, gameLog, penalizedPlayers, gameState) => {
   let periodLog = [];
