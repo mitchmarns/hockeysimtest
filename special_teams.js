@@ -107,7 +107,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             // Update the slot content to show the player's details
             droppedSlot.innerHTML = `
                 <div class="slot-content">
-                    <img src="${player.image}" alt="${player.name}" class="player-image">
+                    <img src="${player.image}" alt="${player.name}" class="player-image assigned-player">
                     <span>${player.name}</span>
                 </div>
             `;
